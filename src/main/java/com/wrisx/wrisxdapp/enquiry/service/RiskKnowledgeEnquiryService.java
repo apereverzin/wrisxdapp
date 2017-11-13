@@ -6,6 +6,8 @@ import com.wrisx.wrisxdapp.domain.Client;
 import com.wrisx.wrisxdapp.domain.ClientDao;
 import com.wrisx.wrisxdapp.domain.EnquiryBid;
 import com.wrisx.wrisxdapp.domain.EnquiryBidDao;
+import com.wrisx.wrisxdapp.domain.RiskExpert;
+import com.wrisx.wrisxdapp.domain.RiskExpertDao;
 import com.wrisx.wrisxdapp.domain.RiskKnowledgeEnquiry;
 import com.wrisx.wrisxdapp.domain.RiskKnowledgeEnquiryDao;
 import org.slf4j.Logger;
@@ -28,14 +30,17 @@ public class RiskKnowledgeEnquiryService {
 
     private final RiskKnowledgeEnquiryDao riskKnowledgeEnquiryDao;
     private final ClientDao clientDao;
+    private final RiskExpertDao riskExpertDao;
     private final EnquiryBidDao enquiryBidDao;
 
     @Autowired
     public RiskKnowledgeEnquiryService(RiskKnowledgeEnquiryDao riskKnowledgeEnquiryDao,
                                        ClientDao clientDao,
+                                       RiskExpertDao riskExpertDao,
                                        EnquiryBidDao enquiryBidDao) {
         this.riskKnowledgeEnquiryDao = riskKnowledgeEnquiryDao;
         this.clientDao = clientDao;
+        this.riskExpertDao = riskExpertDao;
         this.enquiryBidDao = enquiryBidDao;
     }
 
@@ -51,11 +56,13 @@ public class RiskKnowledgeEnquiryService {
         return new RiskKnowledgeEnquiryData(riskKnowledgeEnquiryDao.save(riskKnowledgeEnquiry));
     }
 
-    public List<RiskKnowledgeEnquiryData> getClientEnquiries(String address) {
-        Client client = clientDao.findByAddress(address);
+    public List<RiskKnowledgeEnquiryData> getClientEnquiries(String clientAddress) {
+        Client client = clientDao.findByAddress(clientAddress);
         if (client == null) {
-            throw new RuntimeException(MessageFormat.format("Client not found {0}", address));
+            throw new RuntimeException(
+                    MessageFormat.format("Client not found {0}", clientAddress));
         }
+
         return getListFromIterable(riskKnowledgeEnquiryDao.findByClient(client)).stream().
                 sorted(comparing(RiskKnowledgeEnquiry::getTimestamp).reversed()).
                 map(enquiry -> new RiskKnowledgeEnquiryData(enquiry)).
@@ -68,6 +75,12 @@ public class RiskKnowledgeEnquiryService {
 
     public List<RiskKnowledgeEnquiryData> findExpertEnquiries(String expertAddress,
                                                               String keywords) {
+        RiskExpert riskExpert = riskExpertDao.findByAddress(expertAddress);
+        if (riskExpert == null) {
+            throw new RuntimeException(
+                    MessageFormat.format("Risk expert not found {0}", expertAddress));
+        }
+
         List<String> keywordList = getKeywordList(keywords);
         List<RiskKnowledgeEnquiry> riskKnowledgeEnquiries =
                 getListFromIterable(riskKnowledgeEnquiryDao.findAll());

@@ -18,6 +18,10 @@
         $( function() {
             $( "#tabs, #roleClient, #roleRiskExpert" ).tabs();
         } )
+        $(document).ready(function() {
+            clientRiskKnowledgeClicked()
+            riskExpertEnquiriesClicked()
+        })
     </script>
 </head>
 <body>
@@ -64,7 +68,6 @@
         </div>
     </div>
 </div>
-
 
 </body>
 </html>

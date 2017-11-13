@@ -183,8 +183,8 @@ function showClientEnquiries(data) {
         '</tr>\n'
         );
     });
-    items.concat('</tbody></table>')
-    items.concat('<p id="clientRiskKnowledgeEnquiryBids"/>')
+    items = items.concat('</tbody></table>')
+    items = items.concat('<p id="clientRiskKnowledgeEnquiryBids"/>')
     document.getElementById('clientRiskKnowledgeEnquiries').innerHTML=items
     //showBalance(clientAddress)
 }
