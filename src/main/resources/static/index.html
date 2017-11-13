@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Wrisx</title>
+    <link rel="stylesheet" href="./css/jquery-ui.css">
+    <link rel="stylesheet" href="./css/bootstrap.min.css">
+    <script type="text/javascript" src="./js/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="./js/jquery-ui.js"></script>
+    <script type="text/javascript" src="./js/web3.js"></script>
+    <script type="text/javascript" src="./js/wrisx.js"></script>
+    <script type="text/javascript" src="./js/main.js"></script>
+    <script type="text/javascript" src="./js/client.js"></script>
+    <script type="text/javascript" src="./js/expert.js"></script>
+
+    <script>
+        $( function() {
+            $( "#tabs, #roleClient, #roleRiskExpert" ).tabs();
+        } )
+    </script>
+</head>
+<body>
+
+<div id="tabs">
+    <ul>
+        <li><a href="#roleClient">Client</a></li>
+        <li><a href="#roleRiskExpert">Risk Expert</a></li>
+    </ul>
+    <div id="roleClient">
+        <ul>
+            <li><a href="#clientRiskKnowledge" onclick="clientRiskKnowledgeClicked()">Risk Knowledge</a></li>
+            <li><a href="#clientPurchases" onclick="clientPurchasesClicked()">Purchases</a></li>
+            <li><a href="#clientEnquiries" onclick="clientEnquiriesClicked()">Enquiries</a></li>
+        </ul>
+        <div id="clientRiskKnowledge">
+            <p>clientRiskKnowledge</p>
+        </div>
+        <div id="clientPurchases">
+            <p>clientPurchases</p>
+        </div>
+        <div id="clientEnquiries">
+            <p>clientEnquiries</p>
+        </div>
+    </div>
+    <div id="roleRiskExpert">
+        <ul>
+            <li><a href="#riskExpertEnquiries" onclick="riskExpertEnquiriesClicked()">Enquiries</a></li>
+            <li><a href="#riskExpertRiskKnowledge" onclick="riskExpertRiskKnowledgeClicked()">Risk Knowledge</a></li>
+            <li><a href="#riskExpertPurchases" onclick="riskExpertPurchasesClicked()">Purchases</a></li>
+            <li><a href="#riskExpertBids" onclick="riskExpertBidsClicked()">Bids</a></li>
+        </ul>
+        <div id="riskExpertEnquiries">
+            <p>riskExpertEnquiries</p>
+        </div>
+        <div id="riskExpertRiskKnowledge">
+            <p id="expertRiskKnowledgeItems"/>
+        </div>
+        <div id="riskExpertPurchases">
+            <p>riskExpertPurchases</p>
+        </div>
+        <div id="riskExpertBids">
+            <p>riskExpertBids</p>
+        </div>
+    </div>
+</div>
+
+
+</body>
+</html>
