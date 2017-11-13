@@ -2,15 +2,15 @@ var enquiryBids
 var globalEnquiryId
 
 function clientRiskKnowledgeClicked() {
-    console.log('clientRiskKnowledge')
+    getClientRiskKnowledgeItems()
 }
 
 function clientPurchasesClicked() {
-    console.log('clientPurchasesClicked')
+    getClientPurchases()
 }
 
 function clientEnquiriesClicked() {
-    console.log('clientEnquiriesClicked')
+    getClientEnquiries()
 }
 
 function registerClient() {
@@ -161,8 +161,8 @@ function showClientRiskKnowledgeItems(data) {
         )
     })
     items.concat('</tbody></table>')
-    document.getElementById('riskKnowledgeItems').innerHTML=items
-    showBalance(clientAddress)
+    document.getElementById('clientRiskKnowledgeItems').innerHTML=items
+    //showBalance(clientAddress)
 }
 
 function showClientEnquiries(data) {
@@ -184,8 +184,9 @@ function showClientEnquiries(data) {
         );
     });
     items.concat('</tbody></table>')
-    document.getElementById('clientEnquiries').innerHTML=items
-    showBalance(clientAddress)
+    items.concat('<p id="clientRiskKnowledgeEnquiryBids"/>')
+    document.getElementById('clientRiskKnowledgeEnquiries').innerHTML=items
+    //showBalance(clientAddress)
 }
 
 function showClientPurchases(data) {
@@ -263,10 +264,10 @@ function showEnquiryBids(enquiryId, keywords, description, data) {
     if (!submitted) {
         items = items.concat('<a href="#" onclick="placeEnquiry()" class="btn btn-primary">Submit</a>')
     }
-    document.getElementById('clientEnquiries').innerHTML=items
+    document.getElementById('clientRiskKnowledgeEnquiryBids').innerHTML=items
     globalEnquiryId = enquiryId
     globalKeywords = keywords
-    showBalance(clientAddress)
+    //showBalance(clientAddress)
 }
 
 function postEnquiry() {
@@ -366,14 +367,24 @@ function getEnquiryBids(enquiryId, keywords, description) {
 }
 
 function searchRiskKnowledgeItems() {
-    address = getAddress(clientAddress);
-    keywords = $("#keywords").val();
+    address = getAddress(defaultAddress)
+    keywords = $("#keywords").val()
 
     $.get("/riskKnowledge/client/" + address + "/keywords/" + keywords,
         function(data) {
             showClientRiskKnowledgeItems(data)
         }
-    );
+    )
+}
+
+function getClientRiskKnowledgeItems() {
+    address = getAddress(defaultAddress)
+
+    $.get("/riskKnowledge/client/" + address + "/keywords",
+        function(data) {
+            showClientRiskKnowledgeItems(data)
+        }
+    )
 }
 
 function getClientEnquiries() {

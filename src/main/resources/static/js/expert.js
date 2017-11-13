@@ -1,18 +1,17 @@
 function riskExpertEnquiriesClicked() {
-    console.log('riskExpertEnquiriesClicked')
+    getExpertEnquiries()
 }
 
 function riskExpertRiskKnowledgeClicked() {
-    console.log('riskExpertRiskKnowledgeClicked')
     getExpertRiskKnowledgeItems()
 }
 
 function riskExpertPurchasesClicked() {
-    console.log('riskExpertPurchasesClicked')
+    getExpertPurchases()
 }
 
 function riskExpertBidsClicked() {
-    console.log('riskExpertBidsClicked')
+    getExpertEnquiryBids()
 }
 
 function registerRiskExpert() {
@@ -168,11 +167,11 @@ function showExpertEnquiryBids(data) {
         items = items.concat('</tr>\n')
     });
     items.concat('</tbody></table>')
-    document.getElementById('expertBids').innerHTML=items
-    showBalance(expertAddress)
+    document.getElementById('expertEnquiryBids').innerHTML=items
+    //showBalance(expertAddress)
 }
 
-function showExpertPurchases(data) {
+function showExpertPurchases(data, elementId) {
     var items = '<table style="width:100%">' +
     '<thead><tr>' +
     '<th>Title</th><th>Key words</th><th>Price</th><th>Client</th><th>Date</th>\n' +
@@ -189,8 +188,8 @@ function showExpertPurchases(data) {
         items = items.concat('</tr>\n')
     });
     items.concat('</tbody></table>')
-    document.getElementById('expertPurchases').innerHTML=items
-    showBalance(expertAddress)
+    document.getElementById(elementId).innerHTML=items
+    //showBalance(expertAddress)
 }
 
 function showExpertRiskKnowledge(uuid) {
@@ -240,7 +239,7 @@ function showExpertEnquiries(data) {
         );
     });
     items.concat('</tbody></table>')
-    document.getElementById('riskKnowledgeEnquiries').innerHTML=items
+    document.getElementById('expertEnquiries').innerHTML=items
     showBalance(expertAddress)
 }
 
@@ -261,7 +260,7 @@ function placeBid(enquiryId) {
 }
 
 function getExpertRiskKnowledgeItems() {
-    var address = getAddress(defaultAddress)
+    address = getAddress(defaultAddress)
     $.get("/riskKnowledge/expert/" + address,
         function(data) {
             showExpertRiskKnowledgeItems(data)
@@ -270,8 +269,7 @@ function getExpertRiskKnowledgeItems() {
 }
 
 function getExpertEnquiryBids() {
-    address = getAddress(expertAddress);
-
+    address = getAddress(defaultAddress)
     $.get("/enquiry/bid/expert/" + address,
         function(data) {
             showExpertEnquiryBids(data)
@@ -280,33 +278,40 @@ function getExpertEnquiryBids() {
 }
 
 function getExpertPurchases() {
-    address = getAddress(expertAddress);
-
+    address = getAddress(defaultAddress)
     $.get("/purchase/expert/" + address,
         function(data) {
-            showExpertPurchases(data)
+            showExpertPurchases(data, "expertPurchases")
         }
     );
 }
 
 function getRiskKnowledgePurchases(uuid) {
-    address = getAddress(expertAddress);
-
+    address = getAddress(defaultAddress)
     $.get("/purchase/riskKnowledge/" + uuid,
         function(data) {
-            showExpertPurchases(data)
+            showExpertPurchases(data, "expertPurchases")
         }
     );
 }
 
-function searchEnquiries() {
-    address = getAddress(expertAddress);
+function getExpertEnquiries() {
+    address = getAddress(defaultAddress)
 
-    keywords = $("#enquiryKeywords").val();
+    $.get("/enquiry/expert/" + address + "/keywords",
+        function(data) {
+            showExpertEnquiries(data)
+        }
+    )
+}
+
+function searchEnquiries() {
+    address = getAddress(defaultAddress)
+    keywords = $("#enquiryKeywords").val()
 
     $.get("/enquiry/expert/" + address + "/keywords/" + keywords,
         function(data) {
             showExpertEnquiries(data)
         }
-    );
+    )
 }
