@@ -20,7 +20,9 @@ function registerClient() {
     $.post("/client",
            {
                'name': name,
-               'address': address
+               'address': address,
+               'emailAddress': '',
+               'comment': ''
            }
     )
 
@@ -56,17 +58,17 @@ function viewClientRiskKnowledge(uuid) {
 }
 
 function buyTokens() {
-    amount = $("#amount").val() * tokenPrice;
-    address = getAddress(clientAddress);
+    amount = $("#clientBuyTokensAmount").val() * tokenPrice;
+    address = getAddress(defaultAddress);
 
     contractInstance.buyTokens({from: address, value: amount},
             function(error, result) {
                 if(!error) {
-                    document.getElementById('result').innerHtml=result
-                    showBalance(clientAddress)
+                    //document.getElementById('result').innerHtml=result
+                    showUserBalance()
                 } else {
                     console.error(error);
-                    document.getElementById('result').innerHtml='Error. Have you got enough Ether?'
+                    //document.getElementById('result').innerHtml='Error. Have you got enough Ether?'
                 }
                 document.getElementById('amount').value='';
             }
@@ -74,7 +76,7 @@ function buyTokens() {
 }
 
 function payForRiskKnowledge(uuid) {
-    address = getAddress(clientAddress);
+    address = getAddress(defaultAddress);
 
     $.post("/purchase",
         {
@@ -85,7 +87,7 @@ function payForRiskKnowledge(uuid) {
             contractInstance.payForRiskKnowledge(uuid, {from: address},
                     function(error, result) {
                         if(!error) {
-                            showBalance(clientAddress)
+                            showUserBalance()
                         } else {
                             console.error(error);
                             document.getElementById('result').value='Error. Have you got enough tokens?'
@@ -109,26 +111,6 @@ function getRiskKnowledge(fileName) {
                 }
             }
     );
-}
-
-function placeEnquiry() {
-    var keywords = $("#enquiryKeywords").val();
-    var description = $("#enquiryDescription").val();
-
-    address = getAddress(clientAddress);
-
-    $.post("/enquiry",
-        {
-            'address': address,
-            'keywords': keywords,
-            'description': description
-        },
-        function(data) {
-            console.log(data.id)
-            document.getElementById('enquiryKeywords').value = ''
-            document.getElementById('enquiryDescription').value = ''
-        }
-    )
 }
 
 function showClientRiskKnowledgeItems(data) {
@@ -162,7 +144,7 @@ function showClientRiskKnowledgeItems(data) {
     })
     items.concat('</tbody></table>')
     document.getElementById('clientRiskKnowledgeItems').innerHTML=items
-    //showBalance(clientAddress)
+    showUserBalance()
 }
 
 function showClientEnquiries(data) {
@@ -186,7 +168,7 @@ function showClientEnquiries(data) {
     items = items.concat('</tbody></table>')
     items = items.concat('<p id="clientRiskKnowledgeEnquiryBids"/>')
     document.getElementById('clientRiskKnowledgeEnquiries').innerHTML=items
-    //showBalance(clientAddress)
+    showUserBalance()
 }
 
 function showClientPurchases(data) {
@@ -207,7 +189,7 @@ function showClientPurchases(data) {
     });
     items.concat('</tbody></table>')
     document.getElementById('clientPurchases').innerHTML=items
-    showBalance(expertAddress)
+    showUserBalance()
 }
 
 function showEnquiryBids(enquiryId, keywords, description, data) {
@@ -267,7 +249,7 @@ function showEnquiryBids(enquiryId, keywords, description, data) {
     document.getElementById('clientRiskKnowledgeEnquiryBids').innerHTML=items
     globalEnquiryId = enquiryId
     globalKeywords = keywords
-    //showBalance(clientAddress)
+    showUserBalance()
 }
 
 function postEnquiry() {
@@ -283,7 +265,9 @@ function postEnquiry() {
             'description': description
         },
         function(data) {
-
+            document.getElementById('enquiryKeywords').value = ''
+            document.getElementById('enquiryDescription').value = ''
+            getClientEnquiries()
         }
     )
 }

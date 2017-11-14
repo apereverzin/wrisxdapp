@@ -21,7 +21,9 @@ function registerRiskExpert() {
     $.post("/riskExpert",
            {
                'name': name,
-               'address': address
+               'address': address,
+               'emailAddress': '',
+               'comment': ''
            }
     )
 
@@ -139,7 +141,7 @@ function showExpertRiskKnowledgeItems(data) {
     });
     items.concat('</tbody></table>')
     document.getElementById('expertRiskKnowledgeItems').innerHTML=items
-    //showBalance(expertAddress)
+    showUserBalance()
 }
 
 function showExpertEnquiryBids(data) {
@@ -168,7 +170,7 @@ function showExpertEnquiryBids(data) {
     });
     items.concat('</tbody></table>')
     document.getElementById('expertEnquiryBids').innerHTML=items
-    //showBalance(expertAddress)
+    showUserBalance()
 }
 
 function showExpertPurchases(data, elementId) {
@@ -189,7 +191,7 @@ function showExpertPurchases(data, elementId) {
     });
     items.concat('</tbody></table>')
     document.getElementById(elementId).innerHTML=items
-    //showBalance(expertAddress)
+    showUserBalance()
 }
 
 function showExpertRiskKnowledge(uuid) {
@@ -240,7 +242,7 @@ function showExpertEnquiries(data) {
     });
     items.concat('</tbody></table>')
     document.getElementById('expertEnquiries').innerHTML=items
-    showBalance(expertAddress)
+    showUserBalance()
 }
 
 function placeBid(enquiryId) {

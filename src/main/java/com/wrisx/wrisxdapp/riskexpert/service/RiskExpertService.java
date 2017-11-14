@@ -1,6 +1,8 @@
 package com.wrisx.wrisxdapp.riskexpert.service;
 
 import com.wrisx.wrisxdapp.data.RiskExpertData;
+import com.wrisx.wrisxdapp.domain.Client;
+import com.wrisx.wrisxdapp.domain.ClientDao;
 import com.wrisx.wrisxdapp.domain.RiskExpert;
 import com.wrisx.wrisxdapp.domain.RiskExpertDao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,17 +16,35 @@ import static java.util.stream.Collectors.toList;
 @Service
 public class RiskExpertService {
     private final RiskExpertDao riskExpertDao;
+    private final ClientDao clientDao;
 
     @Autowired
-    public RiskExpertService(RiskExpertDao riskExpertDao) {
+    public RiskExpertService(RiskExpertDao riskExpertDao, ClientDao clientDao) {
         this.riskExpertDao = riskExpertDao;
+        this.clientDao = clientDao;
     }
 
-    public RiskExpertData saveRiskExpert(String address,
-                                         String name) {
-        RiskExpert riskExpert = riskExpertDao.findByAddress(address);
+    public RiskExpertData saveRiskExpert(String expertAddress, String name,
+                                         String emailAddress, String comment) {
+        RiskExpert riskExpert = riskExpertDao.findByAddress(expertAddress);
         if (riskExpert == null) {
-            riskExpert = new RiskExpert(address, name);
+            String riskExpertName;
+            String riskExpertEmailAddress;
+            String riskExpertComment;
+
+            Client client = clientDao.findByAddress(expertAddress);
+            if (client != null) {
+                riskExpertName = client.getName();
+                riskExpertEmailAddress = client.getEmailAddress();
+                riskExpertComment = client.getComment();
+            } else {
+                riskExpertName = name;
+                riskExpertEmailAddress = emailAddress;
+                riskExpertComment = comment;
+            }
+
+            riskExpert = new RiskExpert(expertAddress, riskExpertName,
+                    riskExpertEmailAddress, riskExpertComment);
             riskExpert = riskExpertDao.save(riskExpert);
         }
         return new RiskExpertData(riskExpert);

@@ -31,10 +31,12 @@ public class FacilitatorController {
     @RequestMapping(value = "/facilitator", method = POST)
     public ResponseEntity<?> createFacilitator(
             @RequestParam("address") String address,
-            @RequestParam("name") String name) {
+            @RequestParam("name") String name,
+            @RequestParam("emailAddress") String emailAddress,
+            @RequestParam("comment") String comment) {
         logger.debug(MessageFormat.format("Creating facilitator {0}", address));
 
-        facilitatorService.saveFacilitator(address, name);
+        facilitatorService.saveFacilitator(address, name, emailAddress, comment);
 
         return new ResponseEntity<>(OK);
     }

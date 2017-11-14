@@ -44,12 +44,12 @@ public class RiskKnowledgeEnquiryService {
         this.enquiryBidDao = enquiryBidDao;
     }
 
-    public RiskKnowledgeEnquiryData saveEnquiry(String address, String keywords,
+    public RiskKnowledgeEnquiryData saveEnquiry(String clientAddress, String keywords,
                                                 String description) {
-        Client client = clientDao.findByAddress(address);
+        Client client = clientDao.findByAddress(clientAddress);
         if (client == null) {
-            client = new Client(address, "");
-            client = clientDao.save(client);
+            throw new RuntimeException(
+                    MessageFormat.format("Client not found {0}", clientAddress));
         }
         RiskKnowledgeEnquiry riskKnowledgeEnquiry =
                 new RiskKnowledgeEnquiry(client, keywords, description);

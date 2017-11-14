@@ -33,10 +33,12 @@ public class ClientController {
     @RequestMapping(value = "/client", method = POST)
     public ResponseEntity<?> createClient(
             @RequestParam("address") String address,
-            @RequestParam("name") String name) {
+            @RequestParam("name") String name,
+            @RequestParam("emailAddress") String emailAddress,
+            @RequestParam("comment") String comment) {
         logger.debug(MessageFormat.format("Creating client {0}", address));
 
-        clientService.saveClient(address, name);
+        clientService.saveClient(address, name, emailAddress, comment);
 
         return new ResponseEntity<>(OK);
     }

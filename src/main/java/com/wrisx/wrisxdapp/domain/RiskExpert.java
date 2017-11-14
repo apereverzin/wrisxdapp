@@ -23,12 +23,20 @@ public class RiskExpert {
     @NotNull
     private String name;
 
+    @NotNull
+    private String emailAddress;
+
+    @NotNull
+    private String comment;
+
     public RiskExpert() {
         //
     }
 
-    public RiskExpert(String address, String name) {
+    public RiskExpert(String address, String name, String emailAddress, String comment) {
         this.address = address;
         this.name = name;
+        this.emailAddress = emailAddress;
+        this.comment = comment;
     }
 }

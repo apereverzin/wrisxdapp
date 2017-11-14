@@ -2,7 +2,7 @@ var expertAddress = '0xcb68535e193f6cfca90213c3a13bc2519cf27f90'
 var clientAddress = '0xc0a862fbbc7d9396df9a923513b084c33499feee'
 var facilitatorAddress = '0xf2c580b24d6e2179976990889ec445a960362fb7'
 
-var defaultAddress = expertAddress
+var defaultAddress = clientAddress
 
 var tokenPrice;
 var balance;
@@ -67,10 +67,34 @@ function showBalance(memberAddress) {
             function(error, result) {
                 if(!error) {
                     balance = result
-                    //document.getElementById('balance').innerHTML=balance
+                    document.getElementById('userBalance').innerHTML=balance
                 } else {
                     console.error(error);
                 }
             }
+    )
+}
+
+function showUserBalance() {
+    address = getAddress(defaultAddress)
+    contractInstance.getMemberBalance.call(address,
+            function(error, result) {
+                if(!error) {
+                    balance = result
+                    document.getElementById('userBalance').innerHTML=balance
+                } else {
+                    console.error(error);
+                }
+            }
+    )
+}
+
+function showUserData() {
+    address = getAddress(defaultAddress)
+    $.get("/user/" + address,
+        function(data) {
+            document.getElementById('userAddress').innerHTML=data.address
+            document.getElementById('userName').innerHTML=data.name
+        }
     )
 }

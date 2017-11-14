@@ -33,10 +33,12 @@ public class RiskExpertController {
     @RequestMapping(value = "/riskExpert", method = POST)
     public ResponseEntity<?> createRiskExpert(
             @RequestParam("address") String address,
-            @RequestParam("name") String name) {
+            @RequestParam("name") String name,
+            @RequestParam("emailAddress") String emailAddress,
+            @RequestParam("comment") String comment) {
         logger.debug(MessageFormat.format("Creating risk expert {0}", address));
 
-        riskExpertService.saveRiskExpert(address, name);
+        riskExpertService.saveRiskExpert(address, name, emailAddress, comment);
 
         return new ResponseEntity<>(OK);
     }

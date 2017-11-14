@@ -17,11 +17,11 @@ public class FacilitatorService {
         this.facilitatorDao = facilitatorDao;
     }
 
-    public Facilitator saveFacilitator(String address,
-                                      String name) {
+    public Facilitator saveFacilitator(String address, String name,
+                                       String emailAddress, String comment) {
         Facilitator facilitator = facilitatorDao.findByAddress(address);
         if (facilitator == null) {
-            facilitator = new Facilitator(address, name);
+            facilitator = new Facilitator(address, name, emailAddress, comment);
             facilitator = facilitatorDao.save(facilitator);
         }
         return facilitator;

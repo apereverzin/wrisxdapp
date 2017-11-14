@@ -23,12 +23,20 @@ public class Client {
     @NotNull
     private String name;
 
+    @NotNull
+    private String emailAddress;
+
+    @NotNull
+    private String comment;
+
     public Client() {
         //
     }
 
-    public Client(String address, String name) {
+    public Client(String address, String name, String emailAddress, String comment) {
         this.address = address;
         this.name = name;
+        this.emailAddress = emailAddress;
+        this.comment = comment;
     }
 }

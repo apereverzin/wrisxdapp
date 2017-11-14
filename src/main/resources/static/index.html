@@ -21,6 +21,8 @@
         $(document).ready(function() {
             clientRiskKnowledgeClicked()
             riskExpertEnquiriesClicked()
+            showUserData()
+            showUserBalance()
         })
     </script>
 </head>
@@ -31,20 +33,50 @@
         <li><a href="#roleClient">Client</a></li>
         <li><a href="#roleRiskExpert">Risk Expert</a></li>
     </ul>
+    <div>
+        <p>
+            <span>Address:</span>
+            <span id="userAddress"/>
+        </p>
+        <p>
+            <span>Name:</span>
+            <span id="userName"/>
+        </p>
+        <p>
+            <span>Balance:</span>
+            <span id="userBalance"/>
+        </p>
+    </div>
     <div id="roleClient">
         <ul>
             <li><a href="#clientRiskKnowledge" onclick="clientRiskKnowledgeClicked()">Risk Knowledge</a></li>
             <li><a href="#clientPurchases" onclick="clientPurchasesClicked()">Purchases</a></li>
             <li><a href="#clientEnquiries" onclick="clientEnquiriesClicked()">Enquiries</a></li>
+            <li><a href="#clientBuyTokens" onclick="clientEnquiriesClicked()">Buy Tokens</a></li>
         </ul>
         <div id="clientRiskKnowledge">
+            <p>
+                Key words: <input type="text" id="keywords"/>
+                <a href="#" onclick="searchRiskKnowledgeItems()" class="btn btn-primary">Search</a>
+            </p>
             <p id="clientRiskKnowledgeItems"/>
         </div>
         <div id="clientPurchases">
             <p id="clientRiskKnowledgePurchases"/>
         </div>
         <div id="clientEnquiries">
+            <p>
+                Key words: <input type="text" id="enquiryKeywords"/><br/>
+                Description: <input type="text" id="enquiryDescription"/><br/>
+                <a href="#" onclick="postEnquiry()" class="btn btn-primary">Place enquiry</a>
+            </p>
             <p id="clientRiskKnowledgeEnquiries"/>
+        </div>
+        <div id="clientBuyTokens">
+            <p>
+                Number of tokens: <input type="text" id="clientBuyTokensAmount"/>
+                <a href="#" onclick="buyTokens()" class="btn btn-primary">Buy</a>
+            </p>
         </div>
     </div>
     <div id="roleRiskExpert">
