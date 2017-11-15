@@ -352,7 +352,7 @@ function getEnquiryBids(enquiryId, keywords, description) {
 
 function searchRiskKnowledgeItems() {
     address = getAddress(defaultAddress)
-    keywords = $("#keywords").val()
+    keywords = $("#clientRiskKnowledgeKeywords").val()
 
     $.get("/riskKnowledge/client/" + address + "/keywords/" + keywords,
         function(data) {

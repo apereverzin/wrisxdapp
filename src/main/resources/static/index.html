@@ -60,7 +60,7 @@
             </ul>
             <div id="clientRiskKnowledge">
                 <p>
-                    Key words: <input type="text" id="keywords"/>
+                    Key words: <input type="text" id="clientRiskKnowledgeKeywords"/>
                     <a href="#" onclick="searchRiskKnowledgeItems()" class="btn btn-primary">Search</a>
                 </p>
                 <p id="clientRiskKnowledgeItems"/>
@@ -105,12 +105,33 @@
                 <p id="expertEnquiries"/>
             </div>
             <div id="riskExpertRiskKnowledge">
+                <form id="riskKnowledge-upload-file-form">
+                    Price: <input type="text" id="riskExpertRiskKnowledgePrice"/>&nbsp;&nbsp;
+                    Title: <input type="text" id="riskExpertRiskKnowledgeTitle"/><br>
+                    Description: <input type="text" id="riskExpertRiskKnowledgeDescription"/><br>
+                    Key words: <input type="text" id="riskExpertRiskKnowledgeKeywords"/><br>
+                    <label for="bid-upload-file-input">Upload your file:</label>
+                    <input id="riskKnowledge-upload-file-input" type="file" name="uploadfile" accept="*"/>
+                    <br/>
+                    <span id="riskKnowledge-upload-file-message"></span>
+                </form>
                 <p id="expertRiskKnowledgeItems"/>
             </div>
             <div id="riskExpertPurchases">
                 <p id="expertPurchases"/>
             </div>
             <div id="riskExpertBids">
+                <form id="bid-upload-file-form">
+                    Price: <input type="text" id="riskExpertBidPrice"/>&nbsp;&nbsp;
+                    Title: <input type="text" id="riskExpertBidTitle"/><br>
+                    Description: <input type="text" id="riskExpertBidDescription"/><br>
+                    Key words: <input type="text" id="riskExpertBidKeywords"/><br>
+                    <label for="bid-upload-file-input">Upload your file:</label>
+                    <input id="bid-upload-file-input" type="file" name="uploadfile" accept="*"/>
+                    <br/>
+                    <span id="bid-upload-file-message"></span>
+                </form>
+
                 <p id="expertEnquiryBids"/>
             </div>
         </div>

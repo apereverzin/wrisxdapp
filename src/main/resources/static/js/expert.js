@@ -41,20 +41,71 @@ function registerRiskExpert() {
 }
 
 function depositRiskKnowledge() {
-    depositEnquiryBidRiskKnowledge('', 0, 0)
+    address = getAddress(defaultAddress);
+
+    var price = $("#riskExpertRiskKnowledgePrice").val();
+    var title = $("#riskExpertRiskKnowledgeTitle").val();
+    var description = $("#riskExpertRiskKnowledgeDescription").val();
+    var keywords = $("#riskExpertRiskKnowledgeKeywords").val();
+
+    address = getAddress(defaultAddress);
+
+    var riskKnowledgeFile = uploadRiskKnowledgeFile();
+
+    $.post("/riskKnowledge",
+           {
+               'address': address,
+               'uuid': riskKnowledgeFile.uuid,
+               'price': price,
+               'title': title,
+               'description': description,
+               'keywords': keywords,
+               'checksum': riskKnowledgeFile.zipFileChecksumMD5,
+               'password': riskKnowledgeFile.password,
+
+               'clientAddress': clientAddress,
+               'enquiryId': 0,
+               'bidId': 0,
+           },
+           function(data) {
+               contractInstance.depositRiskKnowledge(price,
+                                                     riskKnowledgeFile.uuid,
+                                                     riskKnowledgeFile.password,
+                                                     riskKnowledgeFile.zipFileChecksumMD5,
+
+                                                     clientAddress,
+                                                     0,
+                                                     0,
+                                                     {from: address},
+                   function(error, result) {
+                       if(!error) {
+                           document.getElementById('result').value=result
+                       } else {
+                           console.error(error);
+                           document.getElementById('result').value='Error. Have you registered as an expert?'
+                       }
+                       document.getElementById('riskExpertRiskKnowledgePrice').value=''
+                       document.getElementById('riskExpertRiskKnowledgeTitle').value=''
+                       document.getElementById('riskExpertRiskKnowledgeDescription').value=''
+                       document.getElementById('riskExpertRiskKnowledgeKeywords').value=''
+                       document.getElementById('riskKnowledge-upload-file-input').value=''
+                   }
+               );
+           }
+    )
 }
 
 function depositEnquiryBidRiskKnowledge(clientAddress, enquiryId, bidId) {
     address = getAddress(defaultAddress);
 
-    var price = $("#price").val();
-    var title = $("#title").val();
-    var description = $("#description").val();
-    var keywords = $("#keywords").val();
+    var price = $("#riskExpertBidPrice").val();
+    var title = $("#riskExpertBidTitle").val();
+    var description = $("#riskExpertBidDescription").val();
+    var keywords = $("#riskExpertBidKeywords").val();
 
     address = getAddress(defaultAddress);
 
-    var riskKnowledgeFile = uploadFile();
+    var riskKnowledgeFile = uploadBidFile();
 
     $.post("/riskKnowledge",
            {
@@ -88,20 +139,20 @@ function depositEnquiryBidRiskKnowledge(clientAddress, enquiryId, bidId) {
                            console.error(error);
                            document.getElementById('result').value='Error. Have you registered as an expert?'
                        }
-                       document.getElementById('price').value=''
-                       document.getElementById('title').value=''
-                       document.getElementById('description').value=''
-                       document.getElementById('keywords').value=''
-                       document.getElementById('upload-file-input').value=''
+                       document.getElementById('riskExpertBidPrice').value=''
+                       document.getElementById('riskExpertBidTitle').value=''
+                       document.getElementById('riskExpertBidDescription').value=''
+                       document.getElementById('riskExpertBidKeywords').value=''
+                       document.getElementById('bid-upload-file-input').value=''
                    }
                );
            }
     )
 }
 
-function uploadFile() {
+function uploadBidFile() {
     var res;
-    var formData = new FormData($("#upload-file-form")[0]);
+    var formData = new FormData($("#bid-upload-file-form")[0]);
     $.ajax({
         url: "/uploadFile",
         type: "POST",
@@ -112,11 +163,34 @@ function uploadFile() {
         cache: false,
         async: false,
         success: function (data) {
-            $("#upload-file-message").text("File succesfully uploaded");
+            $("#bid-upload-file-message").text("File succesfully uploaded");
             res = data;
         },
         error: function () {
-            $("#upload-file-message").text("File not uploaded (perhaps it's too much big)");
+            $("#bid-upload-file-message").text("File not uploaded (perhaps it's too much big)");
+        }
+    });
+    return res;
+}
+
+function uploadRiskKnowledgeFile() {
+    var res;
+    var formData = new FormData($("#riskKnowledge-upload-file-form")[0]);
+    $.ajax({
+        url: "/uploadFile",
+        type: "POST",
+        data: formData,
+        enctype: 'multipart/form-data',
+        processData: false,
+        contentType: false,
+        cache: false,
+        async: false,
+        success: function (data) {
+            $("#riskKnowledge-upload-file-message").text("File succesfully uploaded");
+            res = data;
+        },
+        error: function () {
+            $("#riskKnowledge-upload-file-message").text("File not uploaded (perhaps it's too much big)");
         }
     });
     return res;
@@ -160,7 +234,7 @@ function showExpertEnquiryBids(data) {
         '<td>' + data[val].comment + '</td>' +
         '<td>' + data[val].selected + '</td>')
         if (data[val].selected && data[val].riskKnowledge == null) {
-            items = items.concat('<td>' + '<a href="#" onclick="depositEnquiryBidRiskKnowledge(&#39;' + data[val].riskKnowledgeEnquiry.client.address + '&#39;,&#39;' + data[val].riskKnowledgeEnquiry.id + '&#39;,&#39;' + data[val].id + '&#39;)" class="btn btn-primary">Deposit risk knowledge</a>' + '</td>')
+            items = items.concat('<td>' + '<a href="#" onclick="depositRiskKnowledge(&#39;' + data[val].riskKnowledgeEnquiry.client.address + '&#39;,&#39;' + data[val].riskKnowledgeEnquiry.id + '&#39;,&#39;' + data[val].id + '&#39;)" class="btn btn-primary">Deposit risk knowledge</a>' + '</td>')
         } else if (data[val].riskKnowledge != null) {
             items = items.concat('<td>Deposited</td>')
         } else {
