@@ -15,8 +15,8 @@ function riskExpertBidsClicked() {
 }
 
 function registerRiskExpert() {
-    address = getAddress(expertAddress);
-    name = $("#name").val();
+    address = getAddress(defaultAddress);
+    name = $("#riskExpertName").val();
 
     $.post("/riskExpert",
            {
@@ -30,10 +30,10 @@ function registerRiskExpert() {
     contractInstance.registerRiskExpert(name, {from: address},
             function(error, result) {
                 if(!error) {
-                    document.getElementById('result').value=result
+                    //document.getElementById('result').value=result
                 } else {
                     console.error(error);
-                    document.getElementById('result').value='Error'
+                    //document.getElementById('result').value='Error'
                 }
                 document.getElementById('name').value=''
             }
@@ -45,14 +45,14 @@ function depositRiskKnowledge() {
 }
 
 function depositEnquiryBidRiskKnowledge(clientAddress, enquiryId, bidId) {
-    address = getAddress(expertAddress);
+    address = getAddress(defaultAddress);
 
     var price = $("#price").val();
     var title = $("#title").val();
     var description = $("#description").val();
     var keywords = $("#keywords").val();
 
-    address = getAddress(expertAddress);
+    address = getAddress(defaultAddress);
 
     var riskKnowledgeFile = uploadFile();
 
@@ -246,7 +246,7 @@ function showExpertEnquiries(data) {
 }
 
 function placeBid(enquiryId) {
-    address = getAddress(expertAddress);
+    address = getAddress(defaultAddress);
 
     var enquiryBid = $("#enquiryBid").val();
     var comment = $("#enquiryBidComment").val();

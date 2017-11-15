@@ -83,7 +83,7 @@ function showUserBalance() {
                     balance = result
                     document.getElementById('userBalance').innerHTML=balance
                 } else {
-                    console.error(error);
+                    document.getElementById('userBalance').innerHTML=''
                 }
             }
     )
@@ -91,10 +91,72 @@ function showUserBalance() {
 
 function showUserData() {
     address = getAddress(defaultAddress)
-    $.get("/user/" + address,
-        function(data) {
+    $.get({
+        url: "/user/" + address,
+        success: function(data) {
             document.getElementById('userAddress').innerHTML=data.address
             document.getElementById('userName').innerHTML=data.name
+        },
+        error: function() {
+            document.getElementById('userAddress').innerHTML=''
+            document.getElementById('userName').innerHTML=''
         }
-    )
+    })
+}
+
+function showRolePanels() {
+    showClientRolePanels()
+    showRiskExpertRolePanels()
+}
+
+function showRiskExpertRolePanels() {
+    address = getAddress(defaultAddress)
+    $.get({
+        url: "/riskExpert/" + address,
+        success: function(data) {
+            $("#roleRiskExpertTabs").show()
+            $("#registerRiskExpert").hide()
+        },
+        error: function() {
+            $("#roleRiskExpertTabs").hide()
+            $("#registerRiskExpert").show()
+            $.get({
+                url: "/user/" + address,
+                success: function(data) {
+                    $("#riskExpertName").val(data.name)
+                    $("#riskExpertName").prop('disabled', true)
+                },
+                error: function() {
+                    $("#riskExpertName").val('')
+                    $("#riskExpertName").prop('disabled', false)
+                }
+            })
+        }
+    })
+}
+
+function showClientRolePanels() {
+    address = getAddress(defaultAddress)
+    $.get({
+        url: "/client/" + address,
+        success: function(data) {
+            $("#roleClientTabs").show()
+            $("#registerClient").hide()
+        },
+        error: function() {
+            $("#roleClientTabs").hide()
+            $("#registerClient").show()
+            $.get({
+                url: "/user/" + address,
+                success: function(data) {
+                    $("#clientName").val(data.name)
+                    $("#clientName").prop('disabled', true)
+                },
+                error: function() {
+                    $("#clientName").val('')
+                    $("#clientName").prop('disabled', false)
+                }
+            })
+        }
+    })
 }

@@ -14,8 +14,8 @@ function clientEnquiriesClicked() {
 }
 
 function registerClient() {
-    address = getAddress(clientAddress);
-    name = $("#name").val();
+    address = getAddress(defaultAddress);
+    name = $("#clientName").val();
 
     $.post("/client",
            {
@@ -99,7 +99,7 @@ function payForRiskKnowledge(uuid) {
 }
 
 function getRiskKnowledge(fileName) {
-    address = getAddress(clientAddress);
+    address = getAddress(defaultAddress);
 
     contractInstance.getRiskKnowledge.call(fileName, {from: address},
             function(error, result) {
@@ -256,7 +256,7 @@ function postEnquiry() {
     var keywords = $("#enquiryKeywords").val();
     var description = $("#enquiryDescription").val();
 
-    address = getAddress(clientAddress);
+    address = getAddress(defaultAddress);
 
     $.post("/enquiry",
         {
@@ -372,7 +372,7 @@ function getClientRiskKnowledgeItems() {
 }
 
 function getClientEnquiries() {
-    address = getAddress(clientAddress);
+    address = getAddress(defaultAddress);
 
     $.get("/enquiry/client/" + address,
         function(data) {
@@ -382,7 +382,7 @@ function getClientEnquiries() {
 }
 
 function getClientPurchases() {
-    address = getAddress(clientAddress);
+    address = getAddress(defaultAddress);
 
     $.get("/purchase/client/" + address,
         function(data) {

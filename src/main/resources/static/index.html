@@ -16,22 +16,24 @@
 
     <script>
         $( function() {
-            $( "#tabs, #roleClient, #roleRiskExpert" ).tabs();
+            $( "#roleTabs, #roleClientTabs, #roleRiskExpertTabs" ).tabs();
         } )
         $(document).ready(function() {
             clientRiskKnowledgeClicked()
             riskExpertEnquiriesClicked()
             showUserData()
             showUserBalance()
+            showRolePanels()
         })
+
     </script>
 </head>
 <body>
 
-<div id="tabs">
+<div id="roleTabs">
     <ul>
-        <li><a href="#roleClient">Client</a></li>
-        <li><a href="#roleRiskExpert">Risk Expert</a></li>
+        <li><a href="#roleClient" onClick="showClientRolePanels()">Client</a></li>
+        <li><a href="#roleRiskExpert" onClick="showRiskExpertRolePanels()">Risk Expert</a></li>
     </ul>
     <div>
         <p>
@@ -47,56 +49,77 @@
             <span id="userBalance"/>
         </p>
     </div>
+
     <div id="roleClient">
-        <ul>
-            <li><a href="#clientRiskKnowledge" onclick="clientRiskKnowledgeClicked()">Risk Knowledge</a></li>
-            <li><a href="#clientPurchases" onclick="clientPurchasesClicked()">Purchases</a></li>
-            <li><a href="#clientEnquiries" onclick="clientEnquiriesClicked()">Enquiries</a></li>
-            <li><a href="#clientBuyTokens" onclick="clientEnquiriesClicked()">Buy Tokens</a></li>
-        </ul>
-        <div id="clientRiskKnowledge">
-            <p>
-                Key words: <input type="text" id="keywords"/>
-                <a href="#" onclick="searchRiskKnowledgeItems()" class="btn btn-primary">Search</a>
-            </p>
-            <p id="clientRiskKnowledgeItems"/>
+        <div id="roleClientTabs">
+            <ul>
+                <li><a href="#clientRiskKnowledge" onclick="clientRiskKnowledgeClicked()">Risk Knowledge</a></li>
+                <li><a href="#clientPurchases" onclick="clientPurchasesClicked()">Purchases</a></li>
+                <li><a href="#clientEnquiries" onclick="clientEnquiriesClicked()">Enquiries</a></li>
+                <li><a href="#clientBuyTokens" onclick="clientEnquiriesClicked()">Buy Tokens</a></li>
+            </ul>
+            <div id="clientRiskKnowledge">
+                <p>
+                    Key words: <input type="text" id="keywords"/>
+                    <a href="#" onclick="searchRiskKnowledgeItems()" class="btn btn-primary">Search</a>
+                </p>
+                <p id="clientRiskKnowledgeItems"/>
+            </div>
+            <div id="clientPurchases">
+                <p id="clientRiskKnowledgePurchases"/>
+            </div>
+            <div id="clientEnquiries">
+                <p>
+                    Key words: <input type="text" id="enquiryKeywords"/><br/>
+                    Description: <input type="text" id="enquiryDescription"/><br/>
+                    <a href="#" onclick="postEnquiry()" class="btn btn-primary">Place enquiry</a>
+                </p>
+                <p id="clientRiskKnowledgeEnquiries"/>
+            </div>
+            <div id="clientBuyTokens">
+                <p>
+                    Number of tokens: <input type="text" id="clientBuyTokensAmount"/>
+                    <a href="#" onclick="buyTokens()" class="btn btn-primary">Buy</a>
+                </p>
+            </div>
         </div>
-        <div id="clientPurchases">
-            <p id="clientRiskKnowledgePurchases"/>
-        </div>
-        <div id="clientEnquiries">
+
+        <div id="registerClient">
             <p>
-                Key words: <input type="text" id="enquiryKeywords"/><br/>
-                Description: <input type="text" id="enquiryDescription"/><br/>
-                <a href="#" onclick="postEnquiry()" class="btn btn-primary">Place enquiry</a>
-            </p>
-            <p id="clientRiskKnowledgeEnquiries"/>
-        </div>
-        <div id="clientBuyTokens">
-            <p>
-                Number of tokens: <input type="text" id="clientBuyTokensAmount"/>
-                <a href="#" onclick="buyTokens()" class="btn btn-primary">Buy</a>
+                Name: <input type="text" id="clientName"/>
+                <a href="#" onclick="registerClient()" class="btn btn-primary">Register</a>
             </p>
         </div>
     </div>
+
     <div id="roleRiskExpert">
-        <ul>
-            <li><a href="#riskExpertEnquiries" onclick="riskExpertEnquiriesClicked()">Enquiries</a></li>
-            <li><a href="#riskExpertRiskKnowledge" onclick="riskExpertRiskKnowledgeClicked()">Risk Knowledge</a></li>
-            <li><a href="#riskExpertPurchases" onclick="riskExpertPurchasesClicked()">Purchases</a></li>
-            <li><a href="#riskExpertBids" onclick="riskExpertBidsClicked()">Bids</a></li>
-        </ul>
-        <div id="riskExpertEnquiries">
-            <p id="expertEnquiries"/>
+        <div id="roleRiskExpertTabs">
+            <ul>
+                <li><a href="#riskExpertEnquiries" onclick="riskExpertEnquiriesClicked()">Enquiries</a></li>
+                <li><a href="#riskExpertRiskKnowledge" onclick="riskExpertRiskKnowledgeClicked()">Risk Knowledge</a>
+                </li>
+                <li><a href="#riskExpertPurchases" onclick="riskExpertPurchasesClicked()">Purchases</a></li>
+                <li><a href="#riskExpertBids" onclick="riskExpertBidsClicked()">Bids</a></li>
+            </ul>
+            <div id="riskExpertEnquiries">
+                <p id="expertEnquiries"/>
+            </div>
+            <div id="riskExpertRiskKnowledge">
+                <p id="expertRiskKnowledgeItems"/>
+            </div>
+            <div id="riskExpertPurchases">
+                <p id="expertPurchases"/>
+            </div>
+            <div id="riskExpertBids">
+                <p id="expertEnquiryBids"/>
+            </div>
         </div>
-        <div id="riskExpertRiskKnowledge">
-            <p id="expertRiskKnowledgeItems"/>
-        </div>
-        <div id="riskExpertPurchases">
-            <p id="expertPurchases"/>
-        </div>
-        <div id="riskExpertBids">
-            <p id="expertEnquiryBids"/>
+
+        <div id="registerRiskExpert">
+            <p>
+                Name: <input type="text" id="riskExpertName"/>
+                <a href="#" onclick="registerRiskExpert()" class="btn btn-primary">Register</a>
+            </p>
         </div>
     </div>
 </div>
