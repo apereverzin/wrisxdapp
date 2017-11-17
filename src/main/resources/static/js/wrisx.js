@@ -47,7 +47,11 @@ async function waitForTxToBeMined (txHash) {
     console.log("Success")
 }
 
-window.addEventListener('load', function() {
+//window.addEventListener('load', function() {
+//    getWeb3(startApp);
+//});
+
+$(document).ready(function() {
     getWeb3(startApp);
 });
 
