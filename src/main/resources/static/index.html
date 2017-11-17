@@ -71,8 +71,8 @@
             </div>
             <div id="clientEnquiries">
                 <p>
-                    Key words: <input type="text" id="enquiryKeywords"/><br/>
-                    Description: <input type="text" id="enquiryDescription"/><br/>
+                    Key words: <input type="text" id="clientEnquiryKeywords"/><br/>
+                    Description: <input type="text" id="clientEnquiryDescription"/><br/>
                     <a href="#" onclick="postEnquiry()" class="btn btn-primary">Place enquiry</a>
                 </p>
                 <p id="clientRiskKnowledgeEnquiries"/>
@@ -103,6 +103,10 @@
                 <li><a href="#riskExpertBids" onclick="riskExpertBidsClicked()">Bids</a></li>
             </ul>
             <div id="riskExpertEnquiries">
+                <p>
+                    Key words: <input type="text" id="riskExpertEnquiryKeywords"/>
+                    <a href="#" onclick="searchEnquiries()" class="btn btn-primary">Search</a>
+                </p>
                 <p id="expertEnquiries"/>
             </div>
             <div id="riskExpertRiskKnowledge">

@@ -253,8 +253,8 @@ function showEnquiryBids(enquiryId, keywords, description, data) {
 }
 
 function postEnquiry() {
-    var keywords = $("#enquiryKeywords").val();
-    var description = $("#enquiryDescription").val();
+    var keywords = $("#clientEnquiryKeywords").val();
+    var description = $("#clientEnquiryDescription").val();
 
     address = getAddress(defaultAddress);
 
@@ -265,8 +265,8 @@ function postEnquiry() {
             'description': description
         },
         function(data) {
-            document.getElementById('enquiryKeywords').value = ''
-            document.getElementById('enquiryDescription').value = ''
+            $("#clientEnquiryKeywords").val('')
+            $("#clientEnquiryDescription").val('')
             getClientEnquiries()
         }
     )

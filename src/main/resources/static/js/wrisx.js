@@ -47,10 +47,6 @@ async function waitForTxToBeMined (txHash) {
     console.log("Success")
 }
 
-//window.addEventListener('load', function() {
-//    getWeb3(startApp);
-//});
-
 $(document).ready(function() {
     getWeb3(startApp);
 });
@@ -85,8 +81,10 @@ function showUserBalance() {
             function(error, result) {
                 if(!error) {
                     balance = result
+                    //$("#userBalance").val(balance)
                     document.getElementById('userBalance').innerHTML=balance
                 } else {
+                    //$("#userBalance").val('')
                     document.getElementById('userBalance').innerHTML=''
                 }
             }
@@ -95,15 +93,14 @@ function showUserBalance() {
 
 function showUserData() {
     address = getAddress(defaultAddress)
+    $("#userAddress").text(address)
     $.get({
         url: "/user/" + address,
         success: function(data) {
-            document.getElementById('userAddress').innerHTML=data.address
-            document.getElementById('userName').innerHTML=data.name
+            $("#userName").text(data.name)
         },
         error: function() {
-            document.getElementById('userAddress').innerHTML=''
-            document.getElementById('userName').innerHTML=''
+            $("#userName").text('')
         }
     })
 }

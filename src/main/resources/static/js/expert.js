@@ -242,8 +242,8 @@ function showExpertEnquiryBids(data) {
         }
         items = items.concat('</tr>\n')
     });
-    items.concat('</tbody></table>')
-    document.getElementById('expertEnquiryBids').innerHTML=items
+    items = items.concat('</tbody></table>')
+    $("#expertEnquiryBids").html(items)
     showUserBalance()
 }
 
@@ -263,7 +263,7 @@ function showExpertPurchases(data, elementId) {
         '<td>' + data[val].timestamp + '</td>')
         items = items.concat('</tr>\n')
     });
-    items.concat('</tbody></table>')
+    items = items.concat('</tbody></table>')
     document.getElementById(elementId).innerHTML=items
     showUserBalance()
 }
@@ -283,20 +283,22 @@ function showExpertRiskKnowledge(uuid) {
             text = text.concat('<td>' + data.checksum + '</td>')
             text = text.concat('</tr>')
             text = text.concat('</tbody></table>')
-            document.getElementById('result').innerHTML = text
         }
     );
 }
 
 function showExpertEnquiries(data) {
-    var items = 'Bid: <input type="text" id="enquiryBid"/>&nbsp;' +
-    'Comment:<input type="text" id="enquiryBidComment"/>' +
+    var enquiriesExist = false
+
+    var items =
     '<table style="width:100%">' +
     '<thead><tr>' +
     '<th>Key words</th><th>Description</th><th>Bid</th>\n' +
     '</tr></thead>' +
     '<tbody>'
+
     $.each(data, function(val) {
+        enquiriesExist = true
         items = items.concat(
         '<tr>' +
         '<td>' + data[val].keywords + '</td>' +
@@ -313,9 +315,18 @@ function showExpertEnquiries(data) {
         items = items.concat(
         '</tr>\n'
         );
-    });
-    items.concat('</tbody></table>')
-    document.getElementById('expertEnquiries').innerHTML=items
+    })
+
+    items = items.concat('</tbody></table>')
+
+    if (enquiriesExist == true) {
+        items = items.concat(
+            'Bid: <input type="text" id="enquiryBid"/>&nbsp;' +
+            'Comment:<input type="text" id="enquiryBidComment"/>'
+        )
+    }
+
+    $("#expertEnquiries").html(items)
     showUserBalance()
 }
 
@@ -331,8 +342,8 @@ function placeBid(enquiryId) {
                 'comment': comment
             }
     );
-    document.getElementById('enquiryBid').value=''
-    document.getElementById('enquiryBidComment').value=''
+    $("#enquiryBid").val('')
+    $("#enquiryBidComment").val('')
 }
 
 function getExpertRiskKnowledgeItems() {
@@ -383,7 +394,7 @@ function getExpertEnquiries() {
 
 function searchEnquiries() {
     address = getAddress(defaultAddress)
-    keywords = $("#enquiryKeywords").val()
+    keywords = $("#riskExpertEnquiryKeywords").val()
 
     $.get("/enquiry/expert/" + address + "/keywords/" + keywords,
         function(data) {
