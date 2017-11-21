@@ -145,13 +145,14 @@ public class ResearchService {
         return new ResearchData(researchDao.findByUuid(uuid));
     }
 
-    public List<ResearchData> findResearch(String clientAddress, String keywords) {
-        List<String> keywordList = getKeywordList(keywords);
+    public List<ResearchData> findResearchItems(String clientAddress, String keywords) {
         Client client = clientDao.findByAddress(clientAddress);
         if (client == null) {
             throw new RuntimeException(MessageFormat.format(
                     "Client not found {0}", clientAddress));
         }
+
+        List<String> keywordList = getKeywordList(keywords);
 
         List<Research> researchItems =
                 getListFromIterable(researchDao.findAll());

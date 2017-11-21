@@ -68,7 +68,7 @@ function viewAnonymousExpert(id) {
     )
 }
 
-function showAnonymousRistExperts(data) {
+function showAnonymousExperts(data) {
     var items = '<table style="width:100%">' +
     '<thead><tr>' +
     '<th>Name</th><th>Email</th><th>Description</th>' +
@@ -78,14 +78,14 @@ function showAnonymousRistExperts(data) {
     $.each(data, function(val) {
         items = items.concat(
         '<tr>' +
-        '<td>' + data[val].title + '</td>' +
-        '<td>' + data[val].riskExpert.name + '</td>' +
-        '<td>' + data[val].price + '</td>' +
+        '<td>' + data[val].name + '</td>' +
+        '<td>' + data[val].emailAddress + '</td>' +
+        '<td>' + data[val].description + '</td>' +
         '<td>' + '<a href="#" onclick="viewAnonymousExpert(&#39;' + data[val].id + '&#39;)" class="btn btn-primary">View</a>' + '</td>'
         )
     })
     items.concat('</tbody></table>')
-    $("#anonymousRiskExperts").html(items)
+    $("#anonymousExperts").html(items)
     showUserBalance()
 }
 
@@ -101,14 +101,14 @@ function anonymousSearchResearchItems() {
     )
 }
 
-function anonymousSearchRiskExperts() {
+function anonymousSearchExperts() {
     address = getAddress(defaultAddress)
-    keywords = $("#anonymousRiskExpertKeywords").val()
+    keywords = $("#anonymousExpertKeywords").val()
 
     $.get("/expert/keywords/" + keywords,
         function(data) {
-            showAnonymousRiskExperts(data)
-            $("#anonymousRiskExpertKeywords").val('')
+            showAnonymousExperts(data)
+            $("#anonymousExpertKeywords").val('')
         }
     )
 }

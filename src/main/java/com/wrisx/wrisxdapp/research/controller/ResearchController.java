@@ -109,7 +109,7 @@ public class ResearchController {
                 clientAddress, keywords));
 
         List<ResearchData> researchItems =
-                researchService.findResearch(clientAddress, keywords);
+                researchService.findResearchItems(clientAddress, keywords);
 
         return new ResponseEntity<>(researchItems, OK);
     }
@@ -122,7 +122,7 @@ public class ResearchController {
                 clientAddress));
 
         List<ResearchData> researchItems =
-                researchService.findResearch(clientAddress,"");
+                researchService.findResearchItems(clientAddress,"");
 
         return new ResponseEntity<>(researchItems, OK);
     }

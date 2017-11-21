@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.wrisx.wrisxdapp.util.WrisxUtil.getKeywordList;
+import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.toList;
 
 @Service
@@ -58,9 +60,20 @@ public class ExpertService {
         return new ExpertData(expert);
     }
 
-    public List<ExpertData> getExperts() {
+    public List<ExpertData> findExperts(String keywords) {
+        List<String> keywordList = getKeywordList(keywords);
+
         List<Expert> experts = new ArrayList<>();
         expertDao.findAll().forEach(experts::add);
-        return experts.stream().map(expert -> new ExpertData(expert)).collect(toList());
+
+        return (keywordList.isEmpty() ? experts.stream() :
+                experts.stream().
+                        filter(item -> {
+                            List<String> itemKeywordList = getKeywordList(item.getKeywords());
+                            return itemKeywordList.containsAll(keywordList);
+                        })).
+                sorted(comparing(Expert::getName)).
+                map(item -> new ExpertData(item)).
+                collect(toList());
     }
 }
