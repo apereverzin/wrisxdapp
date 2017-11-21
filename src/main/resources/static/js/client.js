@@ -1,28 +1,50 @@
 var enquiryBids
 var globalEnquiryId
 
-function clientRiskKnowledgeClicked() {
-    getClientRiskKnowledgeItems()
+function clientResearchClicked() {
+    address = getAddress(defaultAddress)
+
+    $.get("/research/client/" + address + "/keywords",
+        function(data) {
+            showClientResearchItems(data)
+        }
+    )
+
+    showUserData()
+    showUserBalance()
 }
 
 function clientPurchasesClicked() {
-    getClientPurchases()
+    address = getAddress(defaultAddress);
+
+    $.get("/purchase/client/" + address,
+        function(data) {
+            showClientPurchases(data)
+        }
+    );
+
+    showUserData()
+    showUserBalance()
 }
 
 function clientEnquiriesClicked() {
     getClientEnquiries()
+    showUserData()
+    showUserBalance()
 }
 
 function registerClient() {
     address = getAddress(defaultAddress);
-    name = $("#clientName").val();
+    var name = $("#clientName").val();
+    var emailAddress = $("#clientEmailAddress").val();
+    var description = $("#clientDescription").val();
 
     $.post("/client",
            {
                'name': name,
                'address': address,
-               'emailAddress': '',
-               'comment': ''
+               'emailAddress': emailAddress,
+               'description': description
            }
     )
 
@@ -32,13 +54,16 @@ function registerClient() {
                 } else {
                     console.error(error);
                 }
-                document.getElementById('name').value=''
+                $("#clientName").val('')
+                $("#clientEmailAddress").val('')
+                $("#clientDescription").val('')
+                showClientRolePanels()
             }
     )
 }
 
-function viewClientRiskKnowledge(uuid) {
-    $.get("/riskKnowledge/" + uuid,
+function viewClientResearch(uuid) {
+    $.get("/research/" + uuid,
         function(data) {
             var text = '<table style="width:100%">' +
             '<thead><tr>' +
@@ -52,7 +77,6 @@ function viewClientRiskKnowledge(uuid) {
             text = text.concat('<td>' + data.checksum + '</td>')
             text = text.concat('</tr>')
             text = text.concat('</tbody></table>')
-            document.getElementById('result').innerHTML = text
         }
     )
 }
@@ -64,18 +88,16 @@ function buyTokens() {
     contractInstance.buyTokens({from: address, value: amount},
             function(error, result) {
                 if(!error) {
-                    //document.getElementById('result').innerHtml=result
                     showUserBalance()
                 } else {
                     console.error(error);
-                    //document.getElementById('result').innerHtml='Error. Have you got enough Ether?'
                 }
-                document.getElementById('amount').value='';
+                $("#clientBuyTokensAmount").val('');
             }
     );
 }
 
-function payForRiskKnowledge(uuid) {
+function payForResearch(uuid) {
     address = getAddress(defaultAddress);
 
     $.post("/purchase",
@@ -84,13 +106,13 @@ function payForRiskKnowledge(uuid) {
             "uuid": uuid
         },
         function(data) {
-            contractInstance.payForRiskKnowledge(uuid, {from: address},
+            contractInstance.payForResearch(uuid, {from: address},
                     function(error, result) {
                         if(!error) {
                             showUserBalance()
                         } else {
                             console.error(error);
-                            document.getElementById('result').value='Error. Have you got enough tokens?'
+                            //document.getElementById('result').value='Error. Have you got enough tokens?'
                         }
                     }
             );
@@ -98,22 +120,22 @@ function payForRiskKnowledge(uuid) {
     )
 }
 
-function getRiskKnowledge(fileName) {
+function getResearch(fileName) {
     address = getAddress(defaultAddress);
 
-    contractInstance.getRiskKnowledge.call(fileName, {from: address},
+    contractInstance.getResearch.call(fileName, {from: address},
             function(error, result) {
                 if(!error) {
-                    document.getElementById('result').value=result
+                    //document.getElementById('result').value=result
                 } else {
                     console.error(error);
-                    document.getElementById('result').value='Error. Have you paid?'
+                    //document.getElementById('result').value='Error. Have you paid?'
                 }
             }
     );
 }
 
-function showClientRiskKnowledgeItems(data) {
+function showClientResearchItems(data) {
     var items = '<table style="width:100%">' +
     '<thead><tr>' +
     '<th>Title</th><th>Expert</th><th>Price</th>' +
@@ -126,15 +148,15 @@ function showClientRiskKnowledgeItems(data) {
         '<td>' + data[val].title + '</td>' +
         '<td>' + data[val].riskExpert.name + '</td>' +
         '<td>' + data[val].price + '</td>' +
-        '<td>' + '<a href="#" onclick="viewClientRiskKnowledge(&#39;' + data[val].uuid + '&#39;)" class="btn btn-primary">View</a>' + '</td>'
+        '<td>' + '<a href="#" onclick="viewClientResearch(&#39;' + data[val].uuid + '&#39;)" class="btn btn-primary">View</a>' + '</td>'
         )
         if (data[val].purchase == null) {
             items = items.concat(
-            '<td>' + '<a href="#" onclick="payForRiskKnowledge(&#39;' + data[val].uuid + '&#39;)" class="btn btn-primary">Pay</a>' + '</td>'
+            '<td>' + '<a href="#" onclick="payForResearch(&#39;' + data[val].uuid + '&#39;)" class="btn btn-primary">Pay</a>' + '</td>'
             )
         } else {
             items = items.concat(
-            '<td>' + '<a href="#" onclick="getRiskKnowledge(&#39;' + data[val].uuid + '&#39;)" class="btn btn-primary">Password</a>' + '</td>'
+            '<td>' + '<a href="#" onclick="getResearch(&#39;' + data[val].uuid + '&#39;)" class="btn btn-primary">Password</a>' + '</td>'
             )
         }
         items = items.concat(
@@ -143,7 +165,7 @@ function showClientRiskKnowledgeItems(data) {
         )
     })
     items.concat('</tbody></table>')
-    document.getElementById('clientRiskKnowledgeItems').innerHTML=items
+    $("#clientResearchItems").html(items)
     showUserBalance()
 }
 
@@ -166,8 +188,10 @@ function showClientEnquiries(data) {
         );
     });
     items = items.concat('</tbody></table>')
-    items = items.concat('<p id="clientRiskKnowledgeEnquiryBids"/>')
-    document.getElementById('clientRiskKnowledgeEnquiries').innerHTML=items
+    items = items.concat('<p id="clientResearchEnquiryBids"/>')
+
+    $("#clientResearchEnquiries").html(items)
+
     showUserBalance()
 }
 
@@ -180,15 +204,17 @@ function showClientPurchases(data) {
     $.each(data, function(val) {
         items = items.concat(
         '<tr>' +
-        '<td>' + data[val].riskKnowledge.title + '</td>' +
-        '<td>' + data[val].riskKnowledge.keywords + '</td>' +
+        '<td>' + data[val].research.title + '</td>' +
+        '<td>' + data[val].research.keywords + '</td>' +
         '<td>' + data[val].price + '</td>' +
         '<td>' + data[val].riskExpert.name + '</td>' +
         '<td>' + data[val].timestamp + '</td>')
         items = items.concat('</tr>\n')
     });
     items.concat('</tbody></table>')
-    document.getElementById('clientPurchases').innerHTML=items
+
+    $("#clientPurchases").html(items)
+
     showUserBalance()
 }
 
@@ -228,11 +254,11 @@ function showEnquiryBids(enquiryId, keywords, description, data) {
         '<td>' + data[val].riskExpert.name + '</td>')
         if (!submitted) {
             items = items.concat('<td><input type="checkbox" id="' + enquiryBidCheckboxId + '"/></td>')
-        } else if (data[val].riskKnowledge != null) {
+        } else if (data[val].research != null) {
             items = items.concat('<td>' +
-            '<a href="#" onclick="getRiskKnowledge(&#39;' + data[val].riskKnowledge.uuid + '&#39;)" class="btn btn-primary">Password</a>' +
+            '<a href="#" onclick="getResearch(&#39;' + data[val].research.uuid + '&#39;)" class="btn btn-primary">Password</a>' +
             '&nbsp;' +
-            '<a href="/downloadFile/' + data[val].riskKnowledge.uuid + '" class="btn btn-primary">Download</a>' +
+            '<a href="/downloadFile/' + data[val].research.uuid + '" class="btn btn-primary">Download</a>' +
             '</td>')
         } else {
             items = items.concat('<td></td>')
@@ -246,9 +272,12 @@ function showEnquiryBids(enquiryId, keywords, description, data) {
     if (!submitted) {
         items = items.concat('<a href="#" onclick="placeEnquiry()" class="btn btn-primary">Submit</a>')
     }
-    document.getElementById('clientRiskKnowledgeEnquiryBids').innerHTML=items
+
+    $("#clientResearchEnquiryBids").html(items)
+
     globalEnquiryId = enquiryId
     globalKeywords = keywords
+
     showUserBalance()
 }
 
@@ -334,7 +363,6 @@ function placeEnquiry() {
                         } else {
                             console.error(error);
                         }
-                        document.getElementById('enquiryDescription').value=''
                     }
                 )
             }
@@ -350,23 +378,13 @@ function getEnquiryBids(enquiryId, keywords, description) {
     );
 }
 
-function searchRiskKnowledgeItems() {
+function searchResearchItems() {
     address = getAddress(defaultAddress)
-    keywords = $("#clientRiskKnowledgeKeywords").val()
+    keywords = $("#clientResearchKeywords").val()
 
-    $.get("/riskKnowledge/client/" + address + "/keywords/" + keywords,
+    $.get("/research/client/" + address + "/keywords/" + keywords,
         function(data) {
-            showClientRiskKnowledgeItems(data)
-        }
-    )
-}
-
-function getClientRiskKnowledgeItems() {
-    address = getAddress(defaultAddress)
-
-    $.get("/riskKnowledge/client/" + address + "/keywords",
-        function(data) {
-            showClientRiskKnowledgeItems(data)
+            showClientResearchItems(data)
         }
     )
 }
@@ -377,16 +395,6 @@ function getClientEnquiries() {
     $.get("/enquiry/client/" + address,
         function(data) {
             showClientEnquiries(data)
-        }
-    );
-}
-
-function getClientPurchases() {
-    address = getAddress(defaultAddress);
-
-    $.get("/purchase/client/" + address,
-        function(data) {
-            showClientPurchases(data)
         }
     );
 }

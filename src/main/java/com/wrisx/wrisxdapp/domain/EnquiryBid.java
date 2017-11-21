@@ -37,26 +37,26 @@ public class EnquiryBid {
     @NotNull
     @ManyToOne
     @JoinColumn(name = "enquiry_id")
-    private RiskKnowledgeEnquiry riskKnowledgeEnquiry;
+    private ResearchEnquiry researchEnquiry;
 
     @NotNull
     @ManyToOne
-    @JoinColumn(name = "risk_expert_id")
-    private RiskExpert riskExpert;
+    @JoinColumn(name = "expert_id")
+    private Expert expert;
 
     @Setter
     @ManyToOne
-    @JoinColumn(name = "risk_knowledge_id")
-    private RiskKnowledge riskKnowledge;
+    @JoinColumn(name = "research_id")
+    private Research research;
 
     public EnquiryBid() {
         //
     }
 
-    public EnquiryBid(RiskKnowledgeEnquiry riskKnowledgeEnquiry, RiskExpert riskExpert,
+    public EnquiryBid(ResearchEnquiry researchEnquiry, Expert expert,
                       int price, String comment) {
-        this.riskKnowledgeEnquiry = riskKnowledgeEnquiry;
-        this.riskExpert = riskExpert;
+        this.researchEnquiry = researchEnquiry;
+        this.expert = expert;
         this.price = price;
         this.comment = comment;
         this.selected = false;

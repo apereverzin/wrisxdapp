@@ -1,0 +1,69 @@
+package com.wrisx.wrisxdapp.expert.controller;
+
+import com.wrisx.wrisxdapp.data.ExpertData;
+import com.wrisx.wrisxdapp.expert.service.ExpertService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.text.MessageFormat;
+import java.util.List;
+
+import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
+
+@Controller
+public class ExpertController {
+    private final Logger logger = LoggerFactory.getLogger(ExpertController.class);
+
+    private final ExpertService expertService;
+
+    @Autowired
+    public ExpertController(ExpertService expertService) {
+        this.expertService = expertService;
+    }
+
+    @RequestMapping(value = "/expert", method = POST)
+    public ResponseEntity<?> createExpert(
+            @RequestParam("address") String address,
+            @RequestParam("name") String name,
+            @RequestParam("emailAddress") String emailAddress,
+            @RequestParam("keyWords") String keyWords,
+            @RequestParam("description") String description) {
+        logger.debug(MessageFormat.format("Creating expert {0}", address));
+
+        expertService.saveExpert(address, name, emailAddress, keyWords, description);
+
+        return new ResponseEntity<>(OK);
+    }
+
+    @RequestMapping(value = "/expert/{address}", method = GET)
+    public ResponseEntity<ExpertData> getExpert(
+            @PathVariable("address") String expertAddress) {
+        logger.debug(MessageFormat.format("Getting expert {0}", expertAddress));
+
+        ExpertData expert = expertService.getExpert(expertAddress);
+
+        if (expert == null) {
+            return new ResponseEntity<>(NOT_FOUND);
+        }
+
+        return new ResponseEntity<>(expert, OK);
+    }
+
+    @RequestMapping(value = "/expert", method = GET)
+    public ResponseEntity<List<ExpertData>> getExperts() {
+        logger.debug("Getting experts");
+
+        List<ExpertData> experts = expertService.getExperts();
+
+        return new ResponseEntity<>(experts, OK);
+    }
+}

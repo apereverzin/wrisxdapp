@@ -33,10 +33,10 @@ public class FacilitatorController {
             @RequestParam("address") String address,
             @RequestParam("name") String name,
             @RequestParam("emailAddress") String emailAddress,
-            @RequestParam("comment") String comment) {
+            @RequestParam("description") String description) {
         logger.debug(MessageFormat.format("Creating facilitator {0}", address));
 
-        facilitatorService.saveFacilitator(address, name, emailAddress, comment);
+        facilitatorService.saveFacilitator(address, name, emailAddress, description);
 
         return new ResponseEntity<>(OK);
     }

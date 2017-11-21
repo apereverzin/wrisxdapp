@@ -1,4 +1,4 @@
-package com.wrisx.wrisxdapp.riskknowledge.service;
+package com.wrisx.wrisxdapp.research.service;
 
 import net.lingala.zip4j.core.ZipFile;
 import net.lingala.zip4j.model.ZipParameters;
@@ -9,7 +9,7 @@ import java.io.File;
 import java.nio.file.Paths;
 import java.util.UUID;
 
-import static com.wrisx.wrisxdapp.riskknowledge.service.RiskKnowledgeService.ZIP_EXTENSION;
+import static com.wrisx.wrisxdapp.research.service.ResearchService.ZIP_EXTENSION;
 
 @Component
 public class ZipFileProvider {

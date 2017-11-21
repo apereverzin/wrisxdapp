@@ -18,10 +18,10 @@ public class FacilitatorService {
     }
 
     public Facilitator saveFacilitator(String address, String name,
-                                       String emailAddress, String comment) {
+                                       String emailAddress, String description) {
         Facilitator facilitator = facilitatorDao.findByAddress(address);
         if (facilitator == null) {
-            facilitator = new Facilitator(address, name, emailAddress, comment);
+            facilitator = new Facilitator(address, name, emailAddress, description);
             facilitator = facilitatorDao.save(facilitator);
         }
         return facilitator;

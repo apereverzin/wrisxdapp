@@ -30,7 +30,7 @@ public class PurchaseController {
     }
 
     @RequestMapping(value = "/purchase", method = POST)
-    public ResponseEntity<PurchaseData> payForRiskKnowledge(
+    public ResponseEntity<PurchaseData> payForResearch(
             @RequestParam("address")String clientAddress,
             @RequestParam("uuid")String uuid) {
         logger.debug(MessageFormat.format(
@@ -56,19 +56,19 @@ public class PurchaseController {
     public ResponseEntity<List<PurchaseData>> getRiskExpertPurchases(
             @PathVariable("address")String expertAddress) {
         logger.debug(MessageFormat.format(
-                "Getting risk expert purchases {0}", expertAddress));
+                "Getting expert purchases {0}", expertAddress));
 
-        List<PurchaseData> purchases = purchaseService.getRiskExpertPurchases(expertAddress);
+        List<PurchaseData> purchases = purchaseService.getExpertPurchases(expertAddress);
 
         return new ResponseEntity<>(purchases, OK);
     }
 
-    @RequestMapping(value = "/purchase/riskKnowledge/{uuid}", method = GET)
-    public ResponseEntity<List<PurchaseData>> getRiskKnowledgePurchases(
+    @RequestMapping(value = "/purchase/research/{uuid}", method = GET)
+    public ResponseEntity<List<PurchaseData>> getResearchPurchases(
             @PathVariable("uuid")String uuid) {
-        logger.debug(MessageFormat.format("Client risk knowledge purchases {0}", uuid));
+        logger.debug(MessageFormat.format("Client research purchases {0}", uuid));
 
-        List<PurchaseData> purchases = purchaseService.getRiskKnowledgePurchases(uuid);
+        List<PurchaseData> purchases = purchaseService.getResearchPurchases(uuid);
 
         return new ResponseEntity<>(purchases, OK);
     }

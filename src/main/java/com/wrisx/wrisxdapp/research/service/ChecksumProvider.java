@@ -1,4 +1,4 @@
-package com.wrisx.wrisxdapp.riskknowledge.service;
+package com.wrisx.wrisxdapp.research.service;
 
 import org.springframework.stereotype.Component;
 

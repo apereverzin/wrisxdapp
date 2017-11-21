@@ -19,10 +19,10 @@ public class PurchaseData {
     private ClientData client;
 
     @JsonProperty
-    private RiskExpertData riskExpert;
+    private ExpertData expert;
 
     @JsonProperty
-    private RiskKnowledgeData riskKnowledge;
+    private ResearchData research;
 
     public PurchaseData(Purchase purchase) {
         this.id = purchase.getId();
@@ -31,11 +31,11 @@ public class PurchaseData {
         if (purchase.getClient() != null) {
             this.client = new ClientData(purchase.getClient());
         }
-        if (purchase.getRiskExpert() != null) {
-            this.riskExpert = new RiskExpertData(purchase.getRiskExpert());
+        if (purchase.getExpert() != null) {
+            this.expert = new ExpertData(purchase.getExpert());
         }
-        if (purchase.getRiskKnowledge() != null) {
-            this.riskKnowledge = new RiskKnowledgeData(purchase.getRiskKnowledge());
+        if (purchase.getResearch() != null) {
+            this.research = new ResearchData(purchase.getResearch());
         }
     }
 }

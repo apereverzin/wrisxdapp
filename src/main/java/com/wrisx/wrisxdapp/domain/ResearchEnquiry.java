@@ -14,8 +14,8 @@ import java.util.Date;
 
 @Getter
 @Entity
-@Table(name = "risk_knowledge_enquiry")
-public class RiskKnowledgeEnquiry {
+@Table(name = "research_enquiry")
+public class ResearchEnquiry {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
@@ -34,11 +34,11 @@ public class RiskKnowledgeEnquiry {
     @NotNull
     private Date timestamp;
 
-    public RiskKnowledgeEnquiry() {
+    public ResearchEnquiry() {
         //
     }
 
-    public RiskKnowledgeEnquiry(Client client, String keywords, String description) {
+    public ResearchEnquiry(Client client, String keywords, String description) {
         this.client = client;
         this.keywords = keywords;
         this.description = description;

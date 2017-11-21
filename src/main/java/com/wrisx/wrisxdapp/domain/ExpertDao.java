@@ -5,6 +5,6 @@ import org.springframework.data.repository.CrudRepository;
 import javax.transaction.Transactional;
 
 @Transactional
-public interface RiskExpertDao extends CrudRepository<RiskExpert, Long> {
-  public RiskExpert findByAddress(String address);
+public interface ExpertDao extends CrudRepository<Expert, Long> {
+  public Expert findByAddress(String address);
 }

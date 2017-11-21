@@ -15,9 +15,17 @@ public class ClientData implements Serializable {
     @JsonProperty
     private String name;
 
+    @JsonProperty
+    private String emailAddress;
+
+    @JsonProperty
+    private String description;
+
     public ClientData(Client client) {
         this.id = client.getId();
         this.address = client.getAddress();
         this.name = client.getName();
+        this.emailAddress = client.getEmailAddress();
+        this.description = client.getDescription();
     }
 }

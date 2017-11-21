@@ -1,9 +1,9 @@
-package com.wrisx.wrisxdapp.riskknowledge.controller;
+package com.wrisx.wrisxdapp.research.controller;
 
-import com.wrisx.wrisxdapp.data.RiskKnowledgeData;
+import com.wrisx.wrisxdapp.data.ResearchData;
 import com.wrisx.wrisxdapp.errorhandling.ErrorData;
-import com.wrisx.wrisxdapp.riskknowledge.data.RiskKnowledgeFile;
-import com.wrisx.wrisxdapp.riskknowledge.service.RiskKnowledgeService;
+import com.wrisx.wrisxdapp.research.data.ResearchFile;
+import com.wrisx.wrisxdapp.research.service.ResearchService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,14 +31,14 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 @Controller
-public class RiskKnowledgeController {
-    private final Logger logger = LoggerFactory.getLogger(RiskKnowledgeController.class);
+public class ResearchController {
+    private final Logger logger = LoggerFactory.getLogger(ResearchController.class);
 
-    private final RiskKnowledgeService riskKnowledgeService;
+    private final ResearchService researchService;
 
     @Autowired
-    public RiskKnowledgeController(RiskKnowledgeService riskKnowledgeService) {
-        this.riskKnowledgeService = riskKnowledgeService;
+    public ResearchController(ResearchService researchService) {
+        this.researchService = researchService;
     }
 
     @RequestMapping("/a")
@@ -47,17 +47,17 @@ public class RiskKnowledgeController {
     }
 
     @RequestMapping(value = "/uploadFile", method = POST)
-    public ResponseEntity<RiskKnowledgeFile> uploadFile(
+    public ResponseEntity<ResearchFile> uploadFile(
             @RequestParam("uploadfile") MultipartFile uploadfile) {
         logger.debug(MessageFormat.format("Uploading file {0}", uploadfile.getName()));
 
-        RiskKnowledgeFile riskKnowledgeFile =
-                riskKnowledgeService.saveUploadedFile(uploadfile);
+        ResearchFile researchFile =
+                researchService.saveUploadedFile(uploadfile);
 
-        return new ResponseEntity<>(riskKnowledgeFile, OK);
+        return new ResponseEntity<>(researchFile, OK);
     }
 
-    @RequestMapping(value = "/riskKnowledge", method = POST)
+    @RequestMapping(value = "/research", method = POST)
     public ResponseEntity<?> setFileAttributes(
             @RequestParam("address") String riskExpertAddress,
             @RequestParam("uuid") String uuid,
@@ -72,65 +72,65 @@ public class RiskKnowledgeController {
             @RequestParam("bidId") long bidId) {
         logger.debug(MessageFormat.format("Setting file attributes {0}", title));
 
-        RiskKnowledgeData riskKnowledge =
-                riskKnowledgeService.saveRiskKnowledge(riskExpertAddress, uuid, price, title,
+        ResearchData research =
+                researchService.saveResearch(riskExpertAddress, uuid, price, title,
                         description, keywords, checksum, password,
                         clientAddress, enquiryId, bidId);
 
-        return new ResponseEntity<>(riskKnowledge, OK);
+        return new ResponseEntity<>(research, OK);
     }
 
-    @RequestMapping(value = "/riskKnowledge/expert/{address}", method = GET)
-    public ResponseEntity<List<RiskKnowledgeData>> getExpertRiskKnowledgeItems(
+    @RequestMapping(value = "/research/expert/{address}", method = GET)
+    public ResponseEntity<List<ResearchData>> getExpertResearchItems(
             @PathVariable String address) {
-        logger.debug(MessageFormat.format("Getting expert risk knowledge items {0}", address));
+        logger.debug(MessageFormat.format("Getting expert research items {0}", address));
 
-        List<RiskKnowledgeData> riskKnowledgeItems =
-                riskKnowledgeService.getExpertRiskKnowledgeItems(address);
+        List<ResearchData> researchItems =
+                researchService.getExpertResearchItems(address);
 
-        return new ResponseEntity<>(riskKnowledgeItems, OK);
+        return new ResponseEntity<>(researchItems, OK);
     }
 
-    @RequestMapping(value = "/riskKnowledge/{uuid}", method = GET)
-    public ResponseEntity<RiskKnowledgeData> getRiskKnowledge(@PathVariable String uuid) {
-        logger.debug(MessageFormat.format("Getting risk knowledge {0}", uuid));
+    @RequestMapping(value = "/research/{uuid}", method = GET)
+    public ResponseEntity<ResearchData> getResearch(@PathVariable String uuid) {
+        logger.debug(MessageFormat.format("Getting research {0}", uuid));
 
-        RiskKnowledgeData riskKnowledge = riskKnowledgeService.getRiskKnowledge(uuid);
+        ResearchData research = researchService.getResearch(uuid);
 
-        return new ResponseEntity<>(riskKnowledge, OK);
+        return new ResponseEntity<>(research, OK);
     }
 
-    @RequestMapping(value = "/riskKnowledge/client/{address}/keywords/{keywords}", method = GET)
-    public ResponseEntity<List<RiskKnowledgeData>> findClientRiskKnowledgeItems(
+    @RequestMapping(value = "/research/client/{address}/keywords/{keywords}", method = GET)
+    public ResponseEntity<List<ResearchData>> findClientResearchItems(
             @PathVariable String keywords,
             @PathVariable("address") String clientAddress) {
         logger.debug(MessageFormat.format(
-                "Searching risk knowledge items for client {0} {1}",
+                "Searching research items for client {0} {1}",
                 clientAddress, keywords));
 
-        List<RiskKnowledgeData> riskKnowledgeItems =
-                riskKnowledgeService.findRiskKnowledge(clientAddress, keywords);
+        List<ResearchData> researchItems =
+                researchService.findResearch(clientAddress, keywords);
 
-        return new ResponseEntity<>(riskKnowledgeItems, OK);
+        return new ResponseEntity<>(researchItems, OK);
     }
 
-    @RequestMapping(value = "/riskKnowledge/client/{address}/keywords", method = GET)
-    public ResponseEntity<List<RiskKnowledgeData>> findAllClientRiskKnowledgeItems(
+    @RequestMapping(value = "/research/client/{address}/keywords", method = GET)
+    public ResponseEntity<List<ResearchData>> findAllClientResearchItems(
             @PathVariable("address") String clientAddress) {
         logger.debug(MessageFormat.format(
-                "Searching risk knowledge items for client {0}",
+                "Searching research items for client {0}",
                 clientAddress));
 
-        List<RiskKnowledgeData> riskKnowledgeItems =
-                riskKnowledgeService.findRiskKnowledge(clientAddress,"");
+        List<ResearchData> researchItems =
+                researchService.findResearch(clientAddress,"");
 
-        return new ResponseEntity<>(riskKnowledgeItems, OK);
+        return new ResponseEntity<>(researchItems, OK);
     }
 
     @RequestMapping(value = "/downloadFile/{uuid}", produces = "application/zip", method = GET)
-    public ResponseEntity<Resource> downloadRiskKnowledge(
+    public ResponseEntity<Resource> downloadResearch(
             @PathVariable("uuid") String uuid) throws FileNotFoundException {
-        File file = riskKnowledgeService.getRiskKnowledgeFile(uuid);
+        File file = researchService.getResearchFile(uuid);
         InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
 
         return ResponseEntity.ok()

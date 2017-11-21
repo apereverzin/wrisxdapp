@@ -3,8 +3,8 @@ package com.wrisx.wrisxdapp.client.service;
 import com.wrisx.wrisxdapp.data.ClientData;
 import com.wrisx.wrisxdapp.domain.Client;
 import com.wrisx.wrisxdapp.domain.ClientDao;
-import com.wrisx.wrisxdapp.domain.RiskExpert;
-import com.wrisx.wrisxdapp.domain.RiskExpertDao;
+import com.wrisx.wrisxdapp.domain.Expert;
+import com.wrisx.wrisxdapp.domain.ExpertDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,35 +16,34 @@ import static java.util.stream.Collectors.toList;
 @Service
 public class ClientService {
     private final ClientDao clientDao;
-    private final RiskExpertDao riskExpertDao;
+    private final ExpertDao expertDao;
 
     @Autowired
-    public ClientService(ClientDao clientDao, RiskExpertDao riskExpertDao) {
+    public ClientService(ClientDao clientDao, ExpertDao expertDao) {
         this.clientDao = clientDao;
-        this.riskExpertDao = riskExpertDao;
+        this.expertDao = expertDao;
     }
 
     public ClientData saveClient(String clientAddress, String name,
-                                 String emailAddress, String comment) {
+                                 String emailAddress, String description) {
         Client client = clientDao.findByAddress(clientAddress);
         if (client == null) {
             String clientName;
             String clientEmailAddress;
-            String clientComment;
+            String clientDescription;
 
-            RiskExpert riskExpert = riskExpertDao.findByAddress(clientAddress);
-            if (riskExpert != null) {
-                clientName = riskExpert.getName();
-                clientEmailAddress = riskExpert.getEmailAddress();
-                clientComment = riskExpert.getComment();
+            Expert expert = expertDao.findByAddress(clientAddress);
+            if (expert != null) {
+                clientName = expert.getName();
+                clientEmailAddress = expert.getEmailAddress();
             } else {
                 clientName = name;
                 clientEmailAddress = emailAddress;
-                clientComment = comment;
             }
+            clientDescription = description;
 
             client = new Client(clientAddress, clientName,
-                    clientEmailAddress, clientComment);
+                    clientEmailAddress, clientDescription);
             client = clientDao.save(client);
         }
         return new ClientData(client);

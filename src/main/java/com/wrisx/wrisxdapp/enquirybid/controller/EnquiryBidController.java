@@ -35,9 +35,11 @@ public class EnquiryBidController {
             @RequestParam("address") String expertAddress,
             @RequestParam("bid") int bid,
             @RequestParam("comment") String comment) {
-        logger.debug(MessageFormat.format("Placing bid {0} for risk knowledge enquiry {1}", bid, enquiryId));
+        logger.debug(MessageFormat.format(
+                "Placing bid {0} for research enquiry {1}", bid, enquiryId));
 
-        EnquiryBidData enquiryBid = enquiryBidService.placeEnquiryBid(enquiryId, expertAddress, bid, comment);
+        EnquiryBidData enquiryBid =
+                enquiryBidService.placeEnquiryBid(enquiryId, expertAddress, bid, comment);
 
         return new ResponseEntity<>(enquiryBid, OK);
     }
@@ -45,7 +47,8 @@ public class EnquiryBidController {
     @RequestMapping(value = "/enquiry/bid/{enquiryBidId}", method = POST)
     public ResponseEntity<EnquiryBidData> selectEnquiryBid(
             @PathVariable long enquiryBidId) {
-        logger.debug(MessageFormat.format("Selecting bid {0} for risk knowledge enquiry", enquiryBidId));
+        logger.debug(MessageFormat.format(
+                "Selecting bid {0} for research enquiry", enquiryBidId));
 
         EnquiryBidData enquiryBid = enquiryBidService.selectEnquiryBid(enquiryBidId);
 
@@ -53,26 +56,32 @@ public class EnquiryBidController {
     }
 
     @RequestMapping(value = "/enquiry/bid/expert/{expertAddress}", method = GET)
-    public ResponseEntity<List<EnquiryBidData>> getExpertEnquiryBids(@PathVariable String expertAddress) {
-        logger.debug(MessageFormat.format("Getting expert enquiry bids {0}", expertAddress));
+    public ResponseEntity<List<EnquiryBidData>> getExpertEnquiryBids(
+            @PathVariable String expertAddress) {
+        logger.debug(MessageFormat.format(
+                "Getting expert enquiry bids {0}", expertAddress));
 
-        List<EnquiryBidData> riskKnowledgeItems = enquiryBidService.getEnquiryBidsByExpert(expertAddress);
+        List<EnquiryBidData> researchItems =
+                enquiryBidService.getEnquiryBidsByExpert(expertAddress);
 
-        return new ResponseEntity<>(riskKnowledgeItems, OK);
+        return new ResponseEntity<>(researchItems, OK);
     }
 
     @RequestMapping(value = "/enquiry/{enquiryId}/bid", method = GET)
     public ResponseEntity<List<EnquiryBidData>> getEnquiryBids(@PathVariable long enquiryId) {
-        logger.debug(MessageFormat.format("Getting bids for risk knowledge enquiry {0}", enquiryId));
+        logger.debug(MessageFormat.format(
+                "Getting bids for research enquiry {0}", enquiryId));
 
-        List<EnquiryBidData> enquiryBids = enquiryBidService.getEnquiryBidsByEnquiry(enquiryId);
+        List<EnquiryBidData> enquiryBids =
+                enquiryBidService.getEnquiryBidsByEnquiry(enquiryId);
 
         return new ResponseEntity<>(enquiryBids, OK);
     }
 
     @RequestMapping(value = "/enquiry/bid/{enquiryBidId}", method = GET)
     public ResponseEntity<EnquiryBidData> selectEnquiryBids(@PathVariable long enquiryBidId) {
-        logger.debug(MessageFormat.format("Selecting bid {0} for risk knowledge enquiry", enquiryBidId));
+        logger.debug(MessageFormat.format(
+                "Selecting bid {0} for research enquiry", enquiryBidId));
 
         EnquiryBidData enquiryBid = enquiryBidService.selectEnquiryBid(enquiryBidId);
 

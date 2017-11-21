@@ -1,4 +1,4 @@
-package com.wrisx.wrisxdapp.riskknowledge.service;
+package com.wrisx.wrisxdapp.research.service;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Component;

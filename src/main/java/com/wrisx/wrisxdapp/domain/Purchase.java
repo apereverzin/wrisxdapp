@@ -33,24 +33,24 @@ public class Purchase {
 
     @NotNull
     @ManyToOne
-    @JoinColumn(name = "risk_expert_id")
-    private RiskExpert riskExpert;
+    @JoinColumn(name = "expert_id")
+    private Expert expert;
 
     @NotNull
     @ManyToOne
-    @JoinColumn(name = "risk_knowledge_id")
-    private RiskKnowledge riskKnowledge;
+    @JoinColumn(name = "research_id")
+    private Research research;
 
     public Purchase() {
         //
     }
 
-    public Purchase(int price, Client client, RiskExpert riskExpert,
-                    RiskKnowledge riskKnowledge) {
+    public Purchase(int price, Client client, Expert expert,
+                    Research research) {
         this.price = price;
         this.timestamp = new Date(System.currentTimeMillis());
         this.client = client;
-        this.riskExpert = riskExpert;
-        this.riskKnowledge = riskKnowledge;
+        this.expert = expert;
+        this.research = research;
     }
 }

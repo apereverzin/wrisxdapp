@@ -11,8 +11,8 @@ import javax.validation.constraints.NotNull;
 
 @Getter
 @Entity
-@Table(name = "risk_expert")
-public class RiskExpert {
+@Table(name = "expert")
+public class Expert {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
@@ -27,16 +27,21 @@ public class RiskExpert {
     private String emailAddress;
 
     @NotNull
-    private String comment;
+    private String keywords;
 
-    public RiskExpert() {
+    @NotNull
+    private String description;
+
+    public Expert() {
         //
     }
 
-    public RiskExpert(String address, String name, String emailAddress, String comment) {
+    public Expert(String address, String name, String emailAddress,
+                  String keywords, String description) {
         this.address = address;
         this.name = name;
         this.emailAddress = emailAddress;
-        this.comment = comment;
+        this.keywords = keywords;
+        this.description = description;
     }
 }

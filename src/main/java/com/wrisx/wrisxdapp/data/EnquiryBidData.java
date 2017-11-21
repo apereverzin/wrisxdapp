@@ -23,13 +23,13 @@ public class EnquiryBidData implements Serializable {
     private Date timestamp;
 
     @JsonProperty
-    private RiskKnowledgeEnquiryData riskKnowledgeEnquiry;
+    private ResearchEnquiryData researchEnquiry;
 
     @JsonProperty
-    private RiskExpertData riskExpert;
+    private ExpertData expert;
 
     @JsonProperty
-    private RiskKnowledgeData riskKnowledge;
+    private ResearchData research;
 
     public EnquiryBidData(EnquiryBid enquiryBid) {
         this.id = enquiryBid.getId();
@@ -37,15 +37,15 @@ public class EnquiryBidData implements Serializable {
         this.comment = enquiryBid.getComment();
         this.selected = enquiryBid.isSelected();
         this.timestamp = enquiryBid.getTimestamp();
-        if (enquiryBid.getRiskKnowledgeEnquiry() != null) {
-            this.riskKnowledgeEnquiry =
-                    new RiskKnowledgeEnquiryData(enquiryBid.getRiskKnowledgeEnquiry());
+        if (enquiryBid.getResearchEnquiry() != null) {
+            this.researchEnquiry =
+                    new ResearchEnquiryData(enquiryBid.getResearchEnquiry());
         }
-        if (enquiryBid.getRiskExpert() != null) {
-            this.riskExpert = new RiskExpertData(enquiryBid.getRiskExpert());
+        if (enquiryBid.getExpert() != null) {
+            this.expert = new ExpertData(enquiryBid.getExpert());
         }
-        if (enquiryBid.getRiskKnowledge() != null) {
-            this.riskKnowledge = new RiskKnowledgeData(enquiryBid.getRiskKnowledge());
+        if (enquiryBid.getResearch() != null) {
+            this.research = new ResearchData(enquiryBid.getResearch());
         }
     }
 }

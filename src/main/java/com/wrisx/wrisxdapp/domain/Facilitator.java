@@ -27,16 +27,16 @@ public class Facilitator {
     private String emailAddress;
 
     @NotNull
-    private String comment;
+    private String description;
 
     public Facilitator() {
         //
     }
 
-    public Facilitator(String address, String name, String emailAddress, String comment) {
+    public Facilitator(String address, String name, String emailAddress, String description) {
         this.address = address;
         this.name = name;
         this.emailAddress = emailAddress;
-        this.comment = comment;
+        this.description = description;
     }
 }

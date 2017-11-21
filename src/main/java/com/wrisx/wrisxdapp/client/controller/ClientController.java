@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.text.MessageFormat;
 import java.util.List;
 
+import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
@@ -35,12 +36,12 @@ public class ClientController {
             @RequestParam("address") String address,
             @RequestParam("name") String name,
             @RequestParam("emailAddress") String emailAddress,
-            @RequestParam("comment") String comment) {
+            @RequestParam("description") String description) {
         logger.debug(MessageFormat.format("Creating client {0}", address));
 
-        clientService.saveClient(address, name, emailAddress, comment);
+        clientService.saveClient(address, name, emailAddress, description);
 
-        return new ResponseEntity<>(OK);
+        return new ResponseEntity<>(CREATED);
     }
 
     @RequestMapping(value = "/client/{address}", method = GET)

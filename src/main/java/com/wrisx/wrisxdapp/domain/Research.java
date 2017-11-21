@@ -14,8 +14,8 @@ import java.util.Date;
 
 @Getter
 @Entity
-@Table(name = "risk_knowledge")
-public class RiskKnowledge {
+@Table(name = "research")
+public class Research {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
@@ -46,16 +46,16 @@ public class RiskKnowledge {
 
     @NotNull
     @ManyToOne
-    @JoinColumn(name = "risk_expert_id")
-    private RiskExpert riskExpert;
+    @JoinColumn(name = "expert_id")
+    private Expert expert;
 
-    public RiskKnowledge() {
+    public Research() {
         //
     }
 
-    public RiskKnowledge(String uuid, int price, String title, String description,
-                         String keywords, String checksum, String password,
-                         RiskExpert riskExpert) {
+    public Research(String uuid, int price, String title, String description,
+                    String keywords, String checksum, String password,
+                    Expert expert) {
         this.uuid = uuid;
         this.price = price;
         this.title = title;
@@ -63,7 +63,7 @@ public class RiskKnowledge {
         this.keywords = keywords;
         this.checksum = checksum;
         this.password = password;
-        this.riskExpert = riskExpert;
+        this.expert = expert;
         this.timestamp = new Date(System.currentTimeMillis());
     }
 }
