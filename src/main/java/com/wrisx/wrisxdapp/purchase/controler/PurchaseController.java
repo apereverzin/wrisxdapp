@@ -53,7 +53,7 @@ public class PurchaseController {
     }
 
     @RequestMapping(value = "/purchase/expert/{address}", method = GET)
-    public ResponseEntity<List<PurchaseData>> getRiskExpertPurchases(
+    public ResponseEntity<List<PurchaseData>> getExpertPurchases(
             @PathVariable("address")String expertAddress) {
         logger.debug(MessageFormat.format(
                 "Getting expert purchases {0}", expertAddress));

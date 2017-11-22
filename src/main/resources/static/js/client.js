@@ -1,7 +1,7 @@
 var enquiryBids
 var globalEnquiryId
 
-function clientResearchClicked() {
+function clientResearchTabClicked() {
     address = getAddress(defaultAddress)
 
     $.get("/research/client/" + address + "/keywords",
@@ -14,7 +14,7 @@ function clientResearchClicked() {
     showUserBalance()
 }
 
-function clientPurchasesClicked() {
+function clientPurchasesTabClicked() {
     address = getAddress(defaultAddress);
 
     $.get("/purchase/client/" + address,
@@ -27,7 +27,7 @@ function clientPurchasesClicked() {
     showUserBalance()
 }
 
-function clientEnquiriesClicked() {
+function clientEnquiriesTabClicked() {
     getClientEnquiries()
     showUserData()
     showUserBalance()
@@ -57,7 +57,7 @@ function registerClient() {
                 $("#clientName").val('')
                 $("#clientEmailAddress").val('')
                 $("#clientDescription").val('')
-                showClientRolePanels()
+                showClientRoleTab()
             }
     )
 }
@@ -146,7 +146,7 @@ function showClientResearchItems(data) {
         items = items.concat(
         '<tr>' +
         '<td>' + data[val].title + '</td>' +
-        '<td>' + data[val].riskExpert.name + '</td>' +
+        '<td>' + data[val].expert.name + '</td>' +
         '<td>' + data[val].price + '</td>' +
         '<td>' + '<a href="#" onclick="viewClientResearch(&#39;' + data[val].uuid + '&#39;)" class="btn btn-primary">View</a>' + '</td>'
         )
@@ -207,7 +207,7 @@ function showClientPurchases(data) {
         '<td>' + data[val].research.title + '</td>' +
         '<td>' + data[val].research.keywords + '</td>' +
         '<td>' + data[val].price + '</td>' +
-        '<td>' + data[val].riskExpert.name + '</td>' +
+        '<td>' + data[val].expert.name + '</td>' +
         '<td>' + data[val].timestamp + '</td>')
         items = items.concat('</tr>\n')
     });
@@ -243,7 +243,7 @@ function showEnquiryBids(enquiryId, keywords, description, data) {
         var enquiryBid = {
             enquiryBidCheckboxId: enquiryBidCheckboxId,
             bidId: data[val].id,
-            expert: data[val].riskExpert.address,
+            expert: data[val].expert.address,
             price: data[val].price
         };
         enquiryBids.push(enquiryBid)
@@ -251,7 +251,7 @@ function showEnquiryBids(enquiryId, keywords, description, data) {
         '<tr>' +
         '<td>' + data[val].price + '</td>' +
         '<td>' + data[val].comment + '</td>' +
-        '<td>' + data[val].riskExpert.name + '</td>')
+        '<td>' + data[val].expert.name + '</td>')
         if (!submitted) {
             items = items.concat('<td><input type="checkbox" id="' + enquiryBidCheckboxId + '"/></td>')
         } else if (data[val].research != null) {

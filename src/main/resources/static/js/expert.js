@@ -1,16 +1,16 @@
-function expertEnquiriesClicked() {
+function expertEnquiriesTabClicked() {
     searchEnquiries()
 }
 
-function riskExpertResearchClicked() {
+function expertResearchTabClicked() {
     getExpertResearchItems()
 }
 
-function riskExpertPurchasesClicked() {
+function expertPurchasesTabClicked() {
     getExpertPurchases()
 }
 
-function riskExpertBidsClicked() {
+function expertBidsTabClicked() {
     getExpertEnquiryBids()
 }
 
@@ -43,7 +43,7 @@ function registerExpert() {
                 $("#expertEmailAddress").val('')
                 $("#expertKeywords").val('')
                 $("#expertDescription").val('')
-                showRiskExpertRolePanels()
+                showExpertRoleTab()
             }
     )
 }
@@ -107,10 +107,10 @@ function depositResearch() {
 function depositEnquiryBidResearch(clientAddress, enquiryId, bidId) {
     address = getAddress(defaultAddress);
 
-    var price = $("#riskExpertBidPrice").val();
-    var title = $("#riskExpertBidTitle").val();
-    var description = $("#riskExpertBidDescription").val();
-    var keywords = $("#riskExpertBidKeywords").val();
+    var price = $("#expertBidPrice").val();
+    var title = $("#expertBidTitle").val();
+    var description = $("#expertBidDescription").val();
+    var keywords = $("#expertBidKeywords").val();
 
     address = getAddress(defaultAddress);
 
@@ -148,10 +148,10 @@ function depositEnquiryBidResearch(clientAddress, enquiryId, bidId) {
                            console.error(error);
                            //document.getElementById('result').value='Error. Have you registered as an expert?'
                        }
-                       $("#riskExpertBidPrice").val('')
-                       $("#riskExpertBidTitle").val('')
-                       $("#riskExpertBidDescription").val('')
-                       $("#riskExpertBidKeywords").val('')
+                       $("#expertBidPrice").val('')
+                       $("#expertBidTitle").val('')
+                       $("#expertBidDescription").val('')
+                       $("#expertBidKeywords").val('')
                        $("#bid-upload-file-input").val('')
                    }
                );
@@ -245,7 +245,7 @@ function showExpertEnquiryBids(data) {
         '<td>' + data[val].comment + '</td>' +
         '<td>' + data[val].selected + '</td>')
         if (data[val].selected && data[val].research == null) {
-            items = items.concat('<td>' + '<a href="#" onclick="depositResearch(&#39;' + data[val].researchEnquiry.client.address + '&#39;,&#39;' + data[val].researchEnquiry.id + '&#39;,&#39;' + data[val].id + '&#39;)" class="btn btn-primary">Deposit risk knowledge</a>' + '</td>')
+            items = items.concat('<td>' + '<a href="#" onclick="depositResearch(&#39;' + data[val].researchEnquiry.client.address + '&#39;,&#39;' + data[val].researchEnquiry.id + '&#39;,&#39;' + data[val].id + '&#39;)" class="btn btn-primary">Deposit research</a>' + '</td>')
         } else if (data[val].research != null) {
             items = items.concat('<td>Deposited</td>')
         } else {
@@ -400,7 +400,7 @@ function getResearchPurchases(uuid) {
 
 function searchEnquiries() {
     address = getAddress(defaultAddress)
-    keywords = $("#riskExpertEnquiryKeywords").val()
+    keywords = $("#expertEnquiryKeywords").val()
 
     $.get("/enquiry/expert/" + address + "/keywords/" + keywords,
         function(data) {

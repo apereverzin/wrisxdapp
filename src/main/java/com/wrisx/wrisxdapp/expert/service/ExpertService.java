@@ -27,33 +27,33 @@ public class ExpertService {
     }
 
     public ExpertData saveExpert(String expertAddress, String name,
-                                 String emailAddress, String riskExpertKeywords,
+                                 String emailAddress, String expertKeywords,
                                  String description) {
         Expert expert = expertDao.findByAddress(expertAddress);
         if (expert == null) {
-            String riskExpertName;
-            String riskExpertEmailAddress;
-            String riskExpertDescription;
+            String expertName;
+            String expertEmailAddress;
+            String expertDescription;
 
             Client client = clientDao.findByAddress(expertAddress);
             if (client != null) {
-                riskExpertName = client.getName();
-                riskExpertEmailAddress = client.getEmailAddress();
+                expertName = client.getName();
+                expertEmailAddress = client.getEmailAddress();
             } else {
-                riskExpertName = name;
-                riskExpertEmailAddress = emailAddress;
+                expertName = name;
+                expertEmailAddress = emailAddress;
             }
-            riskExpertDescription = description;
+            expertDescription = description;
 
-            expert = new Expert(expertAddress, riskExpertName,
-                    riskExpertEmailAddress, riskExpertKeywords, riskExpertDescription);
+            expert = new Expert(expertAddress, expertName,
+                    expertEmailAddress, expertKeywords, expertDescription);
             expert = expertDao.save(expert);
         }
         return new ExpertData(expert);
     }
 
-    public ExpertData getExpert(String riskExpertAddress) {
-        Expert expert = expertDao.findByAddress(riskExpertAddress);
+    public ExpertData getExpert(String expertAddress) {
+        Expert expert = expertDao.findByAddress(expertAddress);
         if (expert == null) {
             return null;
         }

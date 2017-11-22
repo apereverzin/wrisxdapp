@@ -1,8 +1,8 @@
-function showAnonymousSearchResearches() {
+function showAnonymousSearchResearchTab() {
 
 }
 
-function showAnonymousSearchExperts() {
+function showAnonymousSearchExpertTab() {
 
 }
 
@@ -38,7 +38,7 @@ function showAnonymousResearchItems(data) {
         items = items.concat(
         '<tr>' +
         '<td>' + data[val].title + '</td>' +
-        '<td>' + data[val].riskExpert.name + '</td>' +
+        '<td>' + data[val].expert.name + '</td>' +
         '<td>' + data[val].price + '</td>' +
         '<td>' + '<a href="#" onclick="viewAnonymousResearch(&#39;' + data[val].uuid + '&#39;)" class="btn btn-primary">View</a>' + '</td>'
         )

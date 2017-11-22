@@ -96,7 +96,7 @@ public class ResearchService {
     }
 
     @Transactional
-    public ResearchData saveResearch(String riskExpertAddress,
+    public ResearchData saveResearch(String expertAddress,
                                      String uuid,
                                      int price,
                                      String title,
@@ -108,7 +108,7 @@ public class ResearchService {
                                      long enquiryId,
                                      long bidId) {
         Research research =
-                saveResearch(riskExpertAddress, uuid, price, title,
+                saveResearch(expertAddress, uuid, price, title,
                         description, keywords, checksum, password);
 
         if (bidId > 0) {
@@ -129,11 +129,11 @@ public class ResearchService {
         return new ResearchData(research);
     }
 
-    public List<ResearchData> getExpertResearchItems(String riskExpertAddress) {
-        Expert expert = expertDao.findByAddress(riskExpertAddress);
+    public List<ResearchData> getExpertResearchItems(String expertAddress) {
+        Expert expert = expertDao.findByAddress(expertAddress);
         if (expert == null) {
             throw new RuntimeException(MessageFormat.format(
-                    "Expert not found {0}", riskExpertAddress));
+                    "Expert not found {0}", expertAddress));
         }
         return getListFromIterable(researchDao.findByExpert(expert)).stream().
                 sorted(comparing(Research::getTimestamp).reversed()).
@@ -171,6 +171,22 @@ public class ResearchService {
                     }
                     return new ResearchData(item, purchases.get(0));
                 }).
+                collect(toList());
+    }
+
+    public List<ResearchData> findResearchItemsByKeywords(String keywords) {
+        List<String> keywordList = getKeywordList(keywords);
+
+        List<Research> researchItems =
+                getListFromIterable(researchDao.findAll());
+        return (keywordList.isEmpty() ? researchItems.stream() :
+                researchItems.stream().
+                        filter(item -> {
+                            List<String> itemKeywordList = getKeywordList(item.getKeywords());
+                            return itemKeywordList.containsAll(keywordList);
+                        })).
+                sorted(comparing(Research::getTimestamp)).
+                map(item -> new ResearchData(item)).
                 collect(toList());
     }
 

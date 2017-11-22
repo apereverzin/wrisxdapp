@@ -21,8 +21,8 @@
         } )
         $(document).ready(function() {
             showRolePanels()
-            clientResearchClicked()
-            expertEnquiriesClicked()
+            clientResearchTabClicked()
+            expertEnquiriesTabClicked()
             showUserData()
             showUserBalance()
         })
@@ -35,10 +35,10 @@
 
 <div id="roleTabs">
     <ul>
-        <li><a href="#roleClient" onClick="showClientRolePanels()">Client</a></li>
-        <li><a href="#roleRiskExpert" onClick="showRiskExpertRolePanels()">Expert</a></li>
-        <li><a href="#anonymousSearchResearches" onClick="showAnonymousSearchResearches()">Find Researches</a></li>
-        <li><a href="#anonymousSearchExperts" onClick="showAnonymousSearchExperts()">Find Experts</a></li>
+        <li><a href="#roleClientTab" onClick="showClientRoleTab()">Client</a></li>
+        <li><a href="#roleExpertTab" onClick="showExpertRoleTab()">Expert</a></li>
+        <li><a href="#anonymousSearchResearchesTab" onClick="showAnonymousSearchResearchTab()">Find Researches</a></li>
+        <li><a href="#anonymousSearchExpertsTab" onClick="showAnonymousSearchExpertTab()">Find Experts</a></li>
     </ul>
     <div>
         <p>
@@ -55,25 +55,25 @@
         </p>
     </div>
 
-    <div id="roleClient">
+    <div id="roleClientTab">
         <div id="roleClientTabs">
             <ul>
-                <li><a href="#clientResearch" onclick="clientResearchClicked()">Research</a></li>
-                <li><a href="#clientPurchases" onclick="clientPurchasesClicked()">Purchases</a></li>
-                <li><a href="#clientEnquiries" onclick="clientEnquiriesClicked()">Enquiries</a></li>
-                <li><a href="#clientBuyTokens" onclick="clientEnquiriesClicked()">Buy Tokens</a></li>
+                <li><a href="#clientResearchTab" onclick="clientResearchTabClicked()">Research</a></li>
+                <li><a href="#clientPurchasesTab" onclick="clientPurchasesTabClicked()">Purchases</a></li>
+                <li><a href="#clientEnquiriesTab" onclick="clientEnquiriesTabClicked()">Enquiries</a></li>
+                <li><a href="#clientBuyTokensTab">Buy Tokens</a></li>
             </ul>
-            <div id="clientResearch">
+            <div id="clientResearchTab">
                 <p>
                     Key words: <input type="text" id="clientResearchKeywords"/>
                     <a href="#" onclick="searchResearchItems()" class="btn btn-primary">Search</a>
                 </p>
                 <p id="clientResearchItems"/>
             </div>
-            <div id="clientPurchases">
+            <div id="clientPurchasesTab">
                 <p id="clientResearchPurchases"/>
             </div>
-            <div id="clientEnquiries">
+            <div id="clientEnquiriesTab">
                 <p>
                     Key words: <input type="text" id="clientEnquiryKeywords"/><br/>
                     Description: <input type="text" id="clientEnquiryDescription"/><br/>
@@ -81,7 +81,7 @@
                 </p>
                 <p id="clientResearchEnquiries"/>
             </div>
-            <div id="clientBuyTokens">
+            <div id="clientBuyTokensTab">
                 <p>
                     Number of tokens: <input type="text" id="clientBuyTokensAmount"/>
                     <a href="#" onclick="buyTokens()" class="btn btn-primary">Buy</a>
@@ -99,22 +99,22 @@
         </div>
     </div>
 
-    <div id="roleRiskExpert">
+    <div id="roleExpertTab">
         <div id="roleExpertTabs">
             <ul>
-                <li><a href="#expertEnquiriesTab" onclick="expertEnquiriesClicked()">Enquiries</a></li>
-                <li><a href="#riskExpertResearch" onclick="riskExpertResearchClicked()">Research</a></li>
-                <li><a href="#riskExpertPurchases" onclick="riskExpertPurchasesClicked()">Purchases</a></li>
-                <li><a href="#riskExpertBids" onclick="riskExpertBidsClicked()">Bids</a></li>
+                <li><a href="#expertEnquiriesTab" onclick="expertEnquiriesTabClicked()">Enquiries</a></li>
+                <li><a href="#expertResearchTab" onclick="expertResearchTabClicked()">Research</a></li>
+                <li><a href="#expertPurchasesTab" onclick="expertPurchasesTabClicked()">Purchases</a></li>
+                <li><a href="#expertBidsTab" onclick="expertBidsTabClicked()">Bids</a></li>
             </ul>
             <div id="expertEnquiriesTab">
                 <p>
-                    Key words: <input type="text" id="riskExpertEnquiryKeywords"/>
+                    Key words: <input type="text" id="expertEnquiryKeywords"/>
                     <a href="#" onclick="searchEnquiries()" class="btn btn-primary">Search</a>
                 </p>
                 <p id="expertEnquiries"/>
             </div>
-            <div id="riskExpertResearch">
+            <div id="expertResearchTab">
                 <form id="research-upload-file-form">
                     Price: <input type="text" id="expertResearchPrice"/>&nbsp;&nbsp;
                     Title: <input type="text" id="expertResearchTitle"/><br>
@@ -128,15 +128,15 @@
                 <a href="#" onclick="depositResearch()" class="btn btn-primary">Deposit</a>
                 <p id="expertResearchItems"/>
             </div>
-            <div id="riskExpertPurchases">
+            <div id="expertPurchasesTab">
                 <p id="expertPurchases"/>
             </div>
-            <div id="riskExpertBids">
+            <div id="expertBidsTab">
                 <!--<form id="bid-upload-file-form">-->
-                <!--Price: <input type="text" id="riskExpertBidPrice"/>&nbsp;&nbsp;-->
-                <!--Title: <input type="text" id="riskExpertBidTitle"/><br>-->
-                <!--Description: <input type="text" id="riskExpertBidDescription"/><br>-->
-                <!--Key words: <input type="text" id="riskExpertBidKeywords"/><br>-->
+                <!--Price: <input type="text" id="expertBidPrice"/>&nbsp;&nbsp;-->
+                <!--Title: <input type="text" id="expertBidTitle"/><br>-->
+                <!--Description: <input type="text" id="expertBidDescription"/><br>-->
+                <!--Key words: <input type="text" id="expertBidKeywords"/><br>-->
                 <!--<label for="bid-upload-file-input">Upload your file:</label>-->
                 <!--<input id="bid-upload-file-input" type="file" name="uploadfile" accept="*"/>-->
                 <!--<br/>-->
@@ -158,7 +158,7 @@
         </div>
     </div>
 
-    <div id="anonymousSearchResearches">
+    <div id="anonymousSearchResearchesTab">
         <p>
             Key words: <input type="text" id="anonymousResearchKeywords"/>
             <a href="#" onclick="anonymousSearchResearchItems()" class="btn btn-primary">Search</a>
@@ -166,7 +166,7 @@
         <p id="anonymousResearchItems"/>
     </div>
 
-    <div id="anonymousSearchExperts">
+    <div id="anonymousSearchExpertsTab">
         <p>
             Key words: <input type="text" id="anonymousExpertKeywords"/>
             <a href="#" onclick="anonymousSearchExperts()" class="btn btn-primary">Search</a>

@@ -22,12 +22,12 @@ public class UserService {
     public UserData getUser(String userAddress) {
         Client client = clientDao.findByAddress(userAddress);
         if (client == null) {
-            return getRiskExpert(userAddress);
+            return getExpert(userAddress);
         }
         return new UserData(client);
     }
 
-    private UserData getRiskExpert(String userAddress) {
+    private UserData getExpert(String userAddress) {
         Expert expert = expertDao.findByAddress(userAddress);
         if (expert == null) {
             return null;

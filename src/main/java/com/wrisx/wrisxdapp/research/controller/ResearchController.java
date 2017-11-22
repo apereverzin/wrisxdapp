@@ -59,7 +59,7 @@ public class ResearchController {
 
     @RequestMapping(value = "/research", method = POST)
     public ResponseEntity<?> setFileAttributes(
-            @RequestParam("address") String riskExpertAddress,
+            @RequestParam("address") String expertAddress,
             @RequestParam("uuid") String uuid,
             @RequestParam("price") int price,
             @RequestParam("title") String title,
@@ -73,7 +73,7 @@ public class ResearchController {
         logger.debug(MessageFormat.format("Setting file attributes {0}", title));
 
         ResearchData research =
-                researchService.saveResearch(riskExpertAddress, uuid, price, title,
+                researchService.saveResearch(expertAddress, uuid, price, title,
                         description, keywords, checksum, password,
                         clientAddress, enquiryId, bidId);
 
@@ -138,6 +138,25 @@ public class ResearchController {
                 .contentType(MediaType.parseMediaType("application/octet-stream"))
                 .header("Content-Disposition", "attachment; filename=\"" + uuid + ".zip\"")
                 .body(resource);
+    }
+
+    @RequestMapping(value = "/research/keywords/{keywords}", method = GET)
+    public ResponseEntity<List<ResearchData>> findResearchItems(
+            @PathVariable String keywords) {
+        logger.debug(MessageFormat.format("Searching research {0}", keywords));
+
+        List<ResearchData> researchItems = researchService.findResearchItemsByKeywords(keywords);
+
+        return new ResponseEntity<>(researchItems, OK);
+    }
+
+    @RequestMapping(value = "/research/keywords", method = GET)
+    public ResponseEntity<List<ResearchData>> findAllResearchItems() {
+        logger.debug("Searching research");
+
+        List<ResearchData> researchItems = researchService.findResearchItemsByKeywords("");
+
+        return new ResponseEntity<>(researchItems, OK);
     }
 
     @ExceptionHandler(Exception.class)
