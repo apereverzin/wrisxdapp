@@ -27,16 +27,14 @@
             showUserBalance()
         })
 
-
-
     </script>
 </head>
 <body>
 
 <div id="roleTabs">
     <ul>
-        <li><a href="#roleClientTab" onClick="showClientRoleTab()">Client</a></li>
-        <li><a href="#roleExpertTab" onClick="showExpertRoleTab()">Expert</a></li>
+        <li><a href="#roleClientTab" onClick="showClientRoleTab()" id="roleClientTabTitle"></a></li>
+        <li><a href="#roleExpertTab" onClick="showExpertRoleTab()" id="roleExpertTabTitle"></a></li>
         <li><a href="#anonymousSearchResearchesTab" onClick="showAnonymousSearchResearchTab()">Find Researches</a></li>
         <li><a href="#anonymousSearchExpertsTab" onClick="showAnonymousSearchExpertTab()">Find Experts</a></li>
     </ul>
@@ -132,16 +130,16 @@
                 <p id="expertPurchases"/>
             </div>
             <div id="expertBidsTab">
-                <!--<form id="bid-upload-file-form">-->
-                <!--Price: <input type="text" id="expertBidPrice"/>&nbsp;&nbsp;-->
-                <!--Title: <input type="text" id="expertBidTitle"/><br>-->
-                <!--Description: <input type="text" id="expertBidDescription"/><br>-->
-                <!--Key words: <input type="text" id="expertBidKeywords"/><br>-->
-                <!--<label for="bid-upload-file-input">Upload your file:</label>-->
-                <!--<input id="bid-upload-file-input" type="file" name="uploadfile" accept="*"/>-->
-                <!--<br/>-->
-                <!--<span id="bid-upload-file-message"></span>-->
-                <!--</form>-->
+                <form id="bid-upload-file-form">
+                    Price: <input type="text" id="expertBidPrice"/>&nbsp;&nbsp;
+                    Title: <input type="text" id="expertBidTitle"/><br>
+                    Description: <input type="text" id="expertBidDescription"/><br>
+                    Key words: <input type="text" id="expertBidKeywords"/><br>
+                    <label for="bid-upload-file-input">Upload your file:</label>
+                    <input id="bid-upload-file-input" type="file" name="uploadfile" accept="*"/>
+                    <br/>
+                    <span id="bid-upload-file-message"></span>
+                </form>
 
                 <p id="expertEnquiryBids"/>
             </div>

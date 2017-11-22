@@ -99,10 +99,12 @@ function showExpertRoleTab() {
     $.get({
         url: "/expert/" + address,
         success: function(data) {
+            $("#roleExpertTabTitle").text('Expert')
             $("#roleExpertTabs").show()
             $("#registerExpertPanel").hide()
         },
         error: function() {
+            $("#roleExpertTabTitle").text('Become Expert')
             $("#roleExpertTabs").hide()
             $("#registerExpertPanel").show()
             $.get({
@@ -130,10 +132,12 @@ function showClientRoleTab() {
     $.get({
         url: "/client/" + address,
         success: function(data) {
+            $("#roleClientTabTitle").text('Client')
             $("#roleClientTabs").show()
             $("#registerClient").hide()
         },
         error: function() {
+            $("#roleClientTabTitle").text('Become Client')
             $("#roleClientTabs").hide()
             $("#registerClient").show()
             $.get({

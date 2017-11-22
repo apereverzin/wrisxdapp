@@ -245,7 +245,7 @@ function showExpertEnquiryBids(data) {
         '<td>' + data[val].comment + '</td>' +
         '<td>' + data[val].selected + '</td>')
         if (data[val].selected && data[val].research == null) {
-            items = items.concat('<td>' + '<a href="#" onclick="depositResearch(&#39;' + data[val].researchEnquiry.client.address + '&#39;,&#39;' + data[val].researchEnquiry.id + '&#39;,&#39;' + data[val].id + '&#39;)" class="btn btn-primary">Deposit research</a>' + '</td>')
+            items = items.concat('<td>' + '<a href="#" onclick="depositEnquiryBidResearch(&#39;' + data[val].researchEnquiry.client.address + '&#39;,&#39;' + data[val].researchEnquiry.id + '&#39;,&#39;' + data[val].id + '&#39;)" class="btn btn-primary">Deposit research</a>' + '</td>')
         } else if (data[val].research != null) {
             items = items.concat('<td>Deposited</td>')
         } else {

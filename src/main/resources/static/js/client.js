@@ -211,9 +211,9 @@ function showClientPurchases(data) {
         '<td>' + data[val].timestamp + '</td>')
         items = items.concat('</tr>\n')
     });
-    items.concat('</tbody></table>')
+    items = items.concat('</tbody></table>')
 
-    $("#clientPurchases").html(items)
+    $("#clientResearchPurchases").html(items)
 
     showUserBalance()
 }
