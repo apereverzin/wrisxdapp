@@ -122,6 +122,7 @@ function showExpertRoleTab() {
             })
         }
     })
+    showUserData()
 }
 
 function showClientRoleTab() {
@@ -152,4 +153,5 @@ function showClientRoleTab() {
             })
         }
     })
+    showUserData()
 }
