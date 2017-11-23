@@ -1,7 +1,7 @@
 var enquiryBids
 var globalEnquiryId
 
-function clientResearchTabClicked() {
+function clientResearchItemsTabClicked() {
     address = getAddress()
 
     $.get("/research/client/" + address + "/keywords",
@@ -187,7 +187,7 @@ function showClientEnquiries(data) {
         );
     });
     items = items.concat('</tbody></table>')
-    items = items.concat('<p id="clientResearchEnquiryBids"/>')
+    items = items.concat('<p id="clientEnquiryBidsPanel"/>')
 
     $("#clientEnquiriesPanel").html(items)
 
@@ -207,7 +207,7 @@ function showClientPurchases(data) {
         '<td>' + data[val].research.keywords + '</td>' +
         '<td>' + data[val].price + '</td>' +
         '<td>' + data[val].expert.name + '</td>' +
-        '<td>' + data[val].timestamp + '</td>')
+        '<td>' + showDateTime(data[val].timestamp) + '</td>')
         items = items.concat('</tr>\n')
     });
     items = items.concat('</tbody></table>')
@@ -272,7 +272,7 @@ function showEnquiryBids(enquiryId, keywords, description, data) {
         items = items.concat('<a href="#" onclick="placeEnquiry()" class="btn btn-primary">Submit</a>')
     }
 
-    $("#clientResearchEnquiryBids").html(items)
+    $("#clientEnquiryBidsPanel").html(items)
 
     globalEnquiryId = enquiryId
     globalKeywords = keywords

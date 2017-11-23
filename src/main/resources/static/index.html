@@ -22,7 +22,7 @@
         $(document).ready(function() {
             var newDate = new Date()
             showRolePanels()
-            clientResearchTabClicked()
+            clientResearchItemsTabClicked()
             expertEnquiriesTabClicked()
             showUserData()
             showUserBalance()
@@ -57,7 +57,7 @@
     <div id="roleClientTab">
         <div id="roleClientTabs">
             <ul>
-                <li><a href="#clientResearchTab" onclick="clientResearchTabClicked()">Research</a></li>
+                <li><a href="#clientResearchItemsTab" onclick="clientResearchItemsTabClicked()">Researches</a></li>
                 <li><a href="#clientPurchasesTab" onclick="clientPurchasesTabClicked()">Purchases</a></li>
                 <li><a href="#clientEnquiriesTab" onclick="clientEnquiriesTabClicked()">Enquiries</a></li>
                 <li><a href="#clientBuyTokensTab">Buy Tokens</a></li>
@@ -103,7 +103,7 @@
         <div id="roleExpertTabs">
             <ul>
                 <li><a href="#expertEnquiriesTab" onclick="expertEnquiriesTabClicked()">Enquiries</a></li>
-                <li><a href="#expertResearchTab" onclick="expertResearchTabClicked()">Research</a></li>
+                <li><a href="#expertResearchItemsTab" onclick="expertResearchItemsTabClicked()">Researches</a></li>
                 <li><a href="#expertPurchasesTab" onclick="expertPurchasesTabClicked()">Purchases</a></li>
                 <li><a href="#expertBidsTab" onclick="expertBidsTabClicked()">Bids</a></li>
             </ul>
@@ -112,9 +112,9 @@
                     Key words: <input type="text" id="expertEnquiryKeywords"/>
                     <a href="#" onclick="searchEnquiries()" class="btn btn-primary">Search</a>
                 </p>
-                <p id="expertEnquiries"/>
+                <p id="expertEnquiriesPanel"/>
             </div>
-            <div id="expertResearchTab">
+            <div id="expertResearchItemsTab">
                 <form id="research-upload-file-form">
                     Price: <input type="text" id="expertResearchPrice"/>&nbsp;&nbsp;
                     Title: <input type="text" id="expertResearchTitle"/><br>
@@ -130,7 +130,7 @@
                 <p id="expertResearchItemPanel"/>
             </div>
             <div id="expertPurchasesTab">
-                <p id="expertPurchases"/>
+                <p id="expertPurchasesPanel"/>
             </div>
             <div id="expertBidsTab">
                 <form id="bid-upload-file-form">
@@ -144,7 +144,7 @@
                     <span id="bid-upload-file-message"></span>
                 </form>
 
-                <p id="expertEnquiryBids"/>
+                <p id="expertEnquiryBidsPanel"/>
             </div>
         </div>
 

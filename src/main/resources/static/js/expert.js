@@ -4,7 +4,7 @@ function expertEnquiriesTabClicked() {
     showUserBalance()
 }
 
-function expertResearchTabClicked() {
+function expertResearchItemsTabClicked() {
     getExpertResearchItems()
     showUserData()
     showUserBalance()
@@ -264,11 +264,11 @@ function showExpertEnquiryBids(data) {
         items = items.concat('</tr>\n')
     });
     items = items.concat('</tbody></table>')
-    $("#expertEnquiryBids").html(items)
+    $("#expertEnquiryBidsPanel").html(items)
     showUserBalance()
 }
 
-function showExpertPurchases(data, elementId) {
+function showExpertPurchases(data) {
     var items = '<table style="width:100%">' +
     '<thead><tr>' +
     '<th>Title</th><th>Key words</th><th>Price</th><th>Client</th><th>Date</th>\n' +
@@ -281,12 +281,12 @@ function showExpertPurchases(data, elementId) {
         '<td>' + data[val].research.keywords + '</td>' +
         '<td>' + data[val].price + '</td>' +
         '<td>' + data[val].client.name + '</td>' +
-        '<td>' + data[val].timestamp + '</td>')
+        '<td>' + showDateTime(data[val].timestamp) + '</td>')
         items = items.concat('</tr>\n')
     });
     items = items.concat('</tbody></table>')
 
-    document.getElementById(elementId).innerHTML=items
+    $("#expertPurchasesPanel").html(items)
 
     showUserBalance()
 }
@@ -346,7 +346,7 @@ function showExpertEnquiries(data) {
         )
     }
 
-    $("#expertEnquiries").html(items)
+    $("#expertEnquiriesPanel").html(items)
     showUserBalance()
 }
 
@@ -391,7 +391,7 @@ function getExpertPurchases() {
     address = getAddress()
     $.get("/purchase/expert/" + address,
         function(data) {
-            showExpertPurchases(data, "expertPurchases")
+            showExpertPurchases(data)
         }
     );
 }
@@ -400,7 +400,7 @@ function getResearchPurchases(uuid) {
     address = getAddress()
     $.get("/purchase/research/" + uuid,
         function(data) {
-            showExpertPurchases(data, "expertPurchases")
+            showExpertPurchases(data)
         }
     );
 }

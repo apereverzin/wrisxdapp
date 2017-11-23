@@ -160,3 +160,9 @@ function showClientRoleTab() {
     })
     showUserData()
 }
+
+function showDateTime(timestamp) {
+    date = new Date(timestamp * 1000)
+    return date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds() + " " +
+        date.getDate() + "/" + (date.getMonth()+1) + "/" + date.getFullYear()
+}
