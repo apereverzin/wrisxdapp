@@ -1,21 +1,30 @@
 function expertEnquiriesTabClicked() {
     searchEnquiries()
+    showUserData()
+    showUserBalance()
 }
 
 function expertResearchTabClicked() {
     getExpertResearchItems()
+    showUserData()
+    showUserBalance()
+    $("#expertResearchItemPanel").html('')
 }
 
 function expertPurchasesTabClicked() {
     getExpertPurchases()
+    showUserData()
+    showUserBalance()
 }
 
 function expertBidsTabClicked() {
     getExpertEnquiryBids()
+    showUserData()
+    showUserBalance()
 }
 
 function registerExpert() {
-    address = getAddress(defaultAddress);
+    address = getAddress();
     var name = $("#expertName").val();
     var emailAddress = $("#expertEmailAddress").val();
     var keywords = $("#expertKeywords").val();
@@ -49,14 +58,14 @@ function registerExpert() {
 }
 
 function depositResearch() {
-    address = getAddress(defaultAddress);
+    address = getAddress();
 
     var price = $("#expertResearchPrice").val();
     var title = $("#expertResearchTitle").val();
     var description = $("#expertResearchDescription").val();
     var keywords = $("#expertResearchKeywords").val();
 
-    address = getAddress(defaultAddress);
+    address = getAddress();
 
     var researchFile = uploadResearchFile();
 
@@ -105,14 +114,14 @@ function depositResearch() {
 }
 
 function depositEnquiryBidResearch(clientAddress, enquiryId, bidId) {
-    address = getAddress(defaultAddress);
+    address = getAddress();
 
     var price = $("#expertBidPrice").val();
     var title = $("#expertBidTitle").val();
     var description = $("#expertBidDescription").val();
     var keywords = $("#expertBidKeywords").val();
 
-    address = getAddress(defaultAddress);
+    address = getAddress();
 
     var researchFile = uploadBidFile();
 
@@ -153,6 +162,7 @@ function depositEnquiryBidResearch(clientAddress, enquiryId, bidId) {
                        $("#expertBidDescription").val('')
                        $("#expertBidKeywords").val('')
                        $("#bid-upload-file-input").val('')
+                       getExpertEnquiryBids()
                    }
                );
            }
@@ -217,14 +227,14 @@ function showExpertResearchItems(data) {
         '<tr>' +
         '<td>' + data[val].title + '</td>' +
         '<td>' + data[val].price + '</td>' +
-        '<td>' + '<a href="#" onclick="showExpertResearch(&#39;' + data[val].uuid + '&#39;)" class="btn btn-primary">View</a>' + '</td>' +
+        '<td>' + '<a href="#" onclick="viewExpertResearchItem(&#39;' + data[val].uuid + '&#39;)" class="btn btn-primary">View</a>' + '</td>' +
         '<td>' + '<a href="#" onclick="getResearchPurchases(&#39;' + data[val].uuid + '&#39;)" class="btn btn-primary">Purchases</a>' + '</td>' +
         '</tr>\n'
         );
     });
     items.concat('</tbody></table>')
 
-    $("#expertResearchItems").html(items)
+    $("#expertResearchItemsPanel").html(items)
 
     showUserBalance()
 }
@@ -281,21 +291,18 @@ function showExpertPurchases(data, elementId) {
     showUserBalance()
 }
 
-function showExpertResearch(uuid) {
+function viewExpertResearchItem(uuid) {
     $.get("/research/" + uuid,
         function(data) {
-            var text = '<table style="width:100%">' +
-            '<thead><tr>' +
-            '<th>Title</th><th>Description</th><th>Key words</th><th>Price</th><th>Check sum</th>' +
-            '</tr></thead><tbody>'
-            text = text.concat('<tr>')
-            text = text.concat('<td>' + data.title + '</td>')
-            text = text.concat('<td>' + data.description + '</td>')
-            text = text.concat('<td>' + data.keywords + '</td>')
-            text = text.concat('<td>' + data.price + '</td>')
-            text = text.concat('<td>' + data.checksum + '</td>')
-            text = text.concat('</tr>')
-            text = text.concat('</tbody></table>')
+            var text = '<table style="width:100%">'
+            text = text.concat('<tr><td>Title</td><td>' + data.title + '</td></tr>')
+            text = text.concat('<tr><td>Description</td><td>' + data.description + '</td></tr>')
+            text = text.concat('<tr><td>Key words</td><td>' + data.keywords + '</td></tr>')
+            text = text.concat('<tr><td>Price</th><td>' + data.price + '</td></tr>')
+            text = text.concat('<tr><td>MD5</td><td>' + data.checksum + '</td></tr>')
+            text = text.concat('<tr><td>Expert</td><td>' + data.expert.name + '</td></tr>')
+            text = text.concat('</table>')
+            $("#expertResearchItemPanel").html(text)
         }
     );
 }
@@ -344,7 +351,7 @@ function showExpertEnquiries(data) {
 }
 
 function placeBid(enquiryId) {
-    address = getAddress(defaultAddress);
+    address = getAddress();
 
     var enquiryBid = $("#enquiryBid").val();
     var comment = $("#enquiryBidComment").val();
@@ -355,7 +362,7 @@ function placeBid(enquiryId) {
                 'comment': comment
             },
             function() {
-                    searchEnquiries()
+                searchEnquiries()
             }
     )
     $("#enquiryBid").val('')
@@ -363,16 +370,16 @@ function placeBid(enquiryId) {
 }
 
 function getExpertResearchItems() {
-    address = getAddress(defaultAddress)
+    address = getAddress()
     $.get("/research/expert/" + address,
         function(data) {
             showExpertResearchItems(data)
         }
-    );
+    )
 }
 
 function getExpertEnquiryBids() {
-    address = getAddress(defaultAddress)
+    address = getAddress()
     $.get("/enquiry/bid/expert/" + address,
         function(data) {
             showExpertEnquiryBids(data)
@@ -381,7 +388,7 @@ function getExpertEnquiryBids() {
 }
 
 function getExpertPurchases() {
-    address = getAddress(defaultAddress)
+    address = getAddress()
     $.get("/purchase/expert/" + address,
         function(data) {
             showExpertPurchases(data, "expertPurchases")
@@ -390,7 +397,7 @@ function getExpertPurchases() {
 }
 
 function getResearchPurchases(uuid) {
-    address = getAddress(defaultAddress)
+    address = getAddress()
     $.get("/purchase/research/" + uuid,
         function(data) {
             showExpertPurchases(data, "expertPurchases")
@@ -399,7 +406,7 @@ function getResearchPurchases(uuid) {
 }
 
 function searchEnquiries() {
-    address = getAddress(defaultAddress)
+    address = getAddress()
     keywords = $("#expertEnquiryKeywords").val()
 
     $.get("/enquiry/expert/" + address + "/keywords/" + keywords,

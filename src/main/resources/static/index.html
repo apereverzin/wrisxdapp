@@ -20,6 +20,7 @@
             $( "#roleTabs, #roleClientTabs, #roleExpertTabs" ).tabs();
         } )
         $(document).ready(function() {
+            var newDate = new Date()
             showRolePanels()
             clientResearchTabClicked()
             expertEnquiriesTabClicked()
@@ -66,10 +67,11 @@
                     Key words: <input type="text" id="clientResearchKeywords"/>
                     <a href="#" onclick="searchResearchItems()" class="btn btn-primary">Search</a>
                 </p>
-                <p id="clientResearchItems"/>
+                <p id="clientResearchItemsPanel"/>
+                <p id="clientResearchItemPanel"/>
             </div>
             <div id="clientPurchasesTab">
-                <p id="clientResearchPurchases"/>
+                <p id="clientPurchasesPanel"/>
             </div>
             <div id="clientEnquiriesTab">
                 <p>
@@ -77,7 +79,7 @@
                     Description: <input type="text" id="clientEnquiryDescription"/><br/>
                     <a href="#" onclick="postEnquiry()" class="btn btn-primary">Place enquiry</a>
                 </p>
-                <p id="clientResearchEnquiries"/>
+                <p id="clientEnquiriesPanel"/>
             </div>
             <div id="clientBuyTokensTab">
                 <p>
@@ -124,7 +126,8 @@
                     <span id="expertResearch-upload-file-message"></span>
                 </form>
                 <a href="#" onclick="depositResearch()" class="btn btn-primary">Deposit</a>
-                <p id="expertResearchItems"/>
+                <p id="expertResearchItemsPanel"/>
+                <p id="expertResearchItemPanel"/>
             </div>
             <div id="expertPurchasesTab">
                 <p id="expertPurchases"/>
@@ -161,7 +164,8 @@
             Key words: <input type="text" id="anonymousResearchKeywords"/>
             <a href="#" onclick="anonymousSearchResearchItems()" class="btn btn-primary">Search</a>
         </p>
-        <p id="anonymousResearchItems"/>
+        <p id="anonymousResearchItemsPanel"/>
+        <p id="anonymousResearchItemPanel"/>
     </div>
 
     <div id="anonymousSearchExpertsTab">
@@ -169,7 +173,8 @@
             Key words: <input type="text" id="anonymousExpertKeywords"/>
             <a href="#" onclick="anonymousSearchExperts()" class="btn btn-primary">Search</a>
         </p>
-        <p id="anonymousExperts"/>
+        <p id="anonymousExpertsPanel"/>
+        <p id="anonymousExpertPanel"/>
     </div>
 
 </body>

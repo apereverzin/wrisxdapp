@@ -1,8 +1,8 @@
 //var expertAddress = '0xcb68535e193f6cfca90213c3a13bc2519cf27f90'
-var clientAddress = '0xc0a862fbbc7d9396df9a923513b084c33499feee'
+//var clientAddress = '0xc0a862fbbc7d9396df9a923513b084c33499feee'
 //var facilitatorAddress = '0xf2c580b24d6e2179976990889ec445a960362fb7'
 
-var defaultAddress = clientAddress
+//var defaultAddress = clientAddress
 
 var tokenPrice;
 var balance;
@@ -51,18 +51,19 @@ $(document).ready(function() {
     getWeb3(startApp);
 });
 
-function getAddress(defaultAddress) {
-    getWeb3(startApp);
-    var address = web3.eth.accounts[0];
+function getAddress() {
+    getWeb3(startApp)
+    var address = web3.eth.accounts[0]
     if (address === undefined) {
         console.log('address undefined')
-        address = defaultAddress;
+        //address = defaultAddress
+        return ''
     }
-    return address;
+    return address
 }
 
 function showUserBalance() {
-    address = getAddress(defaultAddress)
+    address = getAddress()
     contractInstance.getMemberBalance.call(address,
             function(error, result) {
                 if(!error) {
@@ -76,7 +77,7 @@ function showUserBalance() {
 }
 
 function showUserData() {
-    address = getAddress(defaultAddress)
+    address = getAddress()
     $("#userAddress").text(address)
     $.get({
         url: "/user/" + address,
@@ -95,7 +96,7 @@ function showRolePanels() {
 }
 
 function showExpertRoleTab() {
-    address = getAddress(defaultAddress)
+    address = getAddress()
     $.get({
         url: "/expert/" + address,
         success: function(data) {
@@ -104,7 +105,7 @@ function showExpertRoleTab() {
             $("#registerExpertPanel").hide()
         },
         error: function() {
-            $("#roleExpertTabTitle").text('Become Expert')
+            $("#roleExpertTabTitle").text('Become an Expert')
             $("#roleExpertTabs").hide()
             $("#registerExpertPanel").show()
             $.get({
@@ -128,7 +129,7 @@ function showExpertRoleTab() {
 }
 
 function showClientRoleTab() {
-    address = getAddress(defaultAddress)
+    address = getAddress()
     $.get({
         url: "/client/" + address,
         success: function(data) {
@@ -137,7 +138,7 @@ function showClientRoleTab() {
             $("#registerClient").hide()
         },
         error: function() {
-            $("#roleClientTabTitle").text('Become Client')
+            $("#roleClientTabTitle").text('Become a Client')
             $("#roleClientTabs").hide()
             $("#registerClient").show()
             $.get({

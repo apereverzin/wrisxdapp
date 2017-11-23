@@ -2,7 +2,7 @@ var enquiryBids
 var globalEnquiryId
 
 function clientResearchTabClicked() {
-    address = getAddress(defaultAddress)
+    address = getAddress()
 
     $.get("/research/client/" + address + "/keywords",
         function(data) {
@@ -12,10 +12,11 @@ function clientResearchTabClicked() {
 
     showUserData()
     showUserBalance()
+    $("#clientResearchItemPanel").html('')
 }
 
 function clientPurchasesTabClicked() {
-    address = getAddress(defaultAddress);
+    address = getAddress();
 
     $.get("/purchase/client/" + address,
         function(data) {
@@ -34,7 +35,7 @@ function clientEnquiriesTabClicked() {
 }
 
 function registerClient() {
-    address = getAddress(defaultAddress);
+    address = getAddress();
     var name = $("#clientName").val();
     var emailAddress = $("#clientEmailAddress").val();
     var description = $("#clientDescription").val();
@@ -62,28 +63,25 @@ function registerClient() {
     )
 }
 
-function viewClientResearch(uuid) {
+function viewClientResearchItem(uuid) {
     $.get("/research/" + uuid,
         function(data) {
-            var text = '<table style="width:100%">' +
-            '<thead><tr>' +
-            '<th>Title</th><th>Description</th><th>Key words</th><th>Price</th><th>Check sum</th>' +
-            '</tr></thead><tbody>'
-            text = text.concat('<tr>')
-            text = text.concat('<td>' + data.title + '</td>')
-            text = text.concat('<td>' + data.description + '</td>')
-            text = text.concat('<td>' + data.keywords + '</td>')
-            text = text.concat('<td>' + data.price + '</td>')
-            text = text.concat('<td>' + data.checksum + '</td>')
-            text = text.concat('</tr>')
-            text = text.concat('</tbody></table>')
+            var text = '<table style="width:100%">'
+            text = text.concat('<tr><td>Title</td><td>' + data.title + '</td></tr>')
+            text = text.concat('<tr><td>Description</td><td>' + data.description + '</td></tr>')
+            text = text.concat('<tr><td>Key words</td><td>' + data.keywords + '</td></tr>')
+            text = text.concat('<tr><td>Price</th><td>' + data.price + '</td></tr>')
+            text = text.concat('<tr><td>MD5</td><td>' + data.checksum + '</td></tr>')
+            text = text.concat('<tr><td>Expert</td><td>' + data.expert.name + '</td></tr>')
+            text = text.concat('</table>')
+            $("#clientResearchItemPanel").html(text)
         }
     )
 }
 
 function buyTokens() {
     amount = $("#clientBuyTokensAmount").val() * tokenPrice;
-    address = getAddress(defaultAddress);
+    address = getAddress();
 
     contractInstance.buyTokens({from: address, value: amount},
             function(error, result) {
@@ -92,13 +90,14 @@ function buyTokens() {
                 } else {
                     console.error(error);
                 }
-                $("#clientBuyTokensAmount").val('');
+                $("#clientBuyTokensAmount").val('')
+                showUserBalance()
             }
     );
 }
 
 function payForResearch(uuid) {
-    address = getAddress(defaultAddress);
+    address = getAddress();
 
     $.post("/purchase",
         {
@@ -121,7 +120,7 @@ function payForResearch(uuid) {
 }
 
 function getResearch(fileName) {
-    address = getAddress(defaultAddress);
+    address = getAddress();
 
     contractInstance.getResearch.call(fileName, {from: address},
             function(error, result) {
@@ -148,7 +147,7 @@ function showClientResearchItems(data) {
         '<td>' + data[val].title + '</td>' +
         '<td>' + data[val].expert.name + '</td>' +
         '<td>' + data[val].price + '</td>' +
-        '<td>' + '<a href="#" onclick="viewClientResearch(&#39;' + data[val].uuid + '&#39;)" class="btn btn-primary">View</a>' + '</td>'
+        '<td>' + '<a href="#" onclick="viewClientResearchItem(&#39;' + data[val].uuid + '&#39;)" class="btn btn-primary">View</a>' + '</td>'
         )
         if (data[val].purchase == null) {
             items = items.concat(
@@ -165,7 +164,7 @@ function showClientResearchItems(data) {
         )
     })
     items.concat('</tbody></table>')
-    $("#clientResearchItems").html(items)
+    $("#clientResearchItemsPanel").html(items)
     showUserBalance()
 }
 
@@ -190,7 +189,7 @@ function showClientEnquiries(data) {
     items = items.concat('</tbody></table>')
     items = items.concat('<p id="clientResearchEnquiryBids"/>')
 
-    $("#clientResearchEnquiries").html(items)
+    $("#clientEnquiriesPanel").html(items)
 
     showUserBalance()
 }
@@ -213,7 +212,7 @@ function showClientPurchases(data) {
     });
     items = items.concat('</tbody></table>')
 
-    $("#clientResearchPurchases").html(items)
+    $("#clientPurchasesPanel").html(items)
 
     showUserBalance()
 }
@@ -285,7 +284,7 @@ function postEnquiry() {
     var keywords = $("#clientEnquiryKeywords").val();
     var description = $("#clientEnquiryDescription").val();
 
-    address = getAddress(defaultAddress);
+    address = getAddress();
 
     $.post("/enquiry",
         {
@@ -379,7 +378,7 @@ function getEnquiryBids(enquiryId, keywords, description) {
 }
 
 function searchResearchItems() {
-    address = getAddress(defaultAddress)
+    address = getAddress()
     keywords = $("#clientResearchKeywords").val()
 
     $.get("/research/client/" + address + "/keywords/" + keywords,
@@ -390,7 +389,7 @@ function searchResearchItems() {
 }
 
 function getClientEnquiries() {
-    address = getAddress(defaultAddress);
+    address = getAddress();
 
     $.get("/enquiry/client/" + address,
         function(data) {
