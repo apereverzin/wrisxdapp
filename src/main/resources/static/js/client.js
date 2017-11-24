@@ -51,19 +51,14 @@ function registerClient() {
             contractInstance.registerClient(name, {from: address},
                     function(error, result) {
                         if(error) {
-                            $.delete({
-                                url: "/client/" + address,
-                                success: function(data) {
-                                    showUserData()
-                                    showUserBalance()
-                                },
-                                error: function(data) {
+                            console.log(error)
+                            $.delete("/client/" + address,
+                                function(data) {
                                     showUserData()
                                     showUserBalance()
                                 }
-                            })
+                            )
                         } else {
-                            console.error(error);
                             $("#clientName").val('')
                             $("#clientEmailAddress").val('')
                             $("#clientDescription").val('')

@@ -1,6 +1,8 @@
 package com.wrisx.wrisxdapp.expert.controller;
 
+import com.wrisx.wrisxdapp.data.ClientData;
 import com.wrisx.wrisxdapp.data.ExpertData;
+import com.wrisx.wrisxdapp.exception.NotFoundException;
 import com.wrisx.wrisxdapp.expert.service.ExpertService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +18,7 @@ import java.util.List;
 
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
@@ -49,13 +52,27 @@ public class ExpertController {
             @PathVariable("address") String expertAddress) {
         logger.debug(MessageFormat.format("Getting expert {0}", expertAddress));
 
-        ExpertData expert = expertService.getExpert(expertAddress);
-
-        if (expert == null) {
+        try {
+            ExpertData expert = expertService.getExpert(expertAddress);
+            return new ResponseEntity<>(expert, OK);
+        } catch (NotFoundException ex) {
+            logger.error(ex.getMessage(), ex);
             return new ResponseEntity<>(NOT_FOUND);
         }
+    }
 
-        return new ResponseEntity<>(expert, OK);
+    @RequestMapping(value = "/expert/{address}", method = DELETE)
+    public ResponseEntity<?> deleteExpert(
+            @PathVariable("address") String expertAddress) {
+        logger.debug(MessageFormat.format("Getting expert {0}", expertAddress));
+
+        try {
+            expertService.deleteExpert(expertAddress);
+            return new ResponseEntity<>(OK);
+        } catch (NotFoundException ex) {
+            logger.error(ex.getMessage(), ex);
+            return new ResponseEntity<>(NOT_FOUND);
+        }
     }
 
     @RequestMapping(value = "/expert/keywords/{keywords}", method = GET)

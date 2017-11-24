@@ -5,9 +5,11 @@ import com.wrisx.wrisxdapp.domain.Client;
 import com.wrisx.wrisxdapp.domain.ClientDao;
 import com.wrisx.wrisxdapp.domain.Expert;
 import com.wrisx.wrisxdapp.domain.ExpertDao;
+import com.wrisx.wrisxdapp.exception.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,12 +54,26 @@ public class ExpertService {
         return new ExpertData(expert);
     }
 
-    public ExpertData getExpert(String expertAddress) {
+    public ExpertData getExpert(String expertAddress) throws NotFoundException {
         Expert expert = expertDao.findByAddress(expertAddress);
+
         if (expert == null) {
-            return null;
+            throw new NotFoundException(
+                    MessageFormat.format("Expert not found {0}", expertAddress));
         }
+
         return new ExpertData(expert);
+    }
+
+    public void deleteExpert(String expertAddress) throws NotFoundException {
+        Expert expert = expertDao.findByAddress(expertAddress);
+
+        if (expert == null) {
+            throw new NotFoundException(
+                    MessageFormat.format("Expert not found {0}", expertAddress));
+        }
+
+        expertDao.delete(expert);
     }
 
     public List<ExpertData> findExperts(String keywords) {

@@ -53,17 +53,23 @@ public class ClientService {
 
     public ClientData getClient(String clientAddress) throws NotFoundException {
         Client client = clientDao.findByAddress(clientAddress);
+
         if (client == null) {
-            throw new NotFoundException(MessageFormat.format("Client not found {0}", clientAddress));
+            throw new NotFoundException(
+                    MessageFormat.format("Client not found {0}", clientAddress));
         }
+
         return new ClientData(client);
     }
 
     public void deleteClient(String clientAddress) throws NotFoundException {
         Client client = clientDao.findByAddress(clientAddress);
+
         if (client == null) {
-            throw new NotFoundException(MessageFormat.format("Client not found {0}", clientAddress));
+            throw new NotFoundException(
+                    MessageFormat.format("Client not found {0}", clientAddress));
         }
+
         clientDao.delete(client);
     }
 

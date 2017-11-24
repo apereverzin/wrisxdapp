@@ -30,28 +30,36 @@ function registerExpert() {
     var keywords = $("#expertKeywords").val();
     var description = $("#expertDescription").val();
 
-    contractInstance.registerExpert(name, {from: address},
-            function(error, result) {
-                if(!error) {
-                    $.post("/expert",
-                       {
-                           'name': name,
-                           'address': address,
-                           'emailAddress': emailAddress,
-                           'keyWords': keywords,
-                           'description': description
+    $.post("/expert",
+            {
+                'name': name,
+                'address': address,
+                'emailAddress': emailAddress,
+                'keyWords': keywords,
+                'description': description
+            },
+            function(data) {
+                contractInstance.registerExpert(name, {from: address},
+                    function(error, result) {
+                        if(error) {
+                            console.log(error)
+                            $.delete("/expert/" + address,
+                                function(data) {
+                                    showUserData()
+                                    showUserBalance()
+                                }
+                            )
+                        } else {
+                            $("#expertName").val('')
+                            $("#expertEmailAddress").val('')
+                            $("#expertKeywords").val('')
+                            $("#expertDescription").val('')
+                            showUserData()
+                            showUserBalance()
+                            showExpertRoleTab()
                         }
-                    )
-                } else {
-                    console.error(error);
-                }
-                $("#expertName").val('')
-                $("#expertEmailAddress").val('')
-                $("#expertKeywords").val('')
-                $("#expertDescription").val('')
-                showUserData()
-                showUserBalance()
-                showExpertRoleTab()
+                    }
+                )
             }
     )
 }

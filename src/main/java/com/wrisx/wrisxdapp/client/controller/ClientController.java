@@ -47,30 +47,29 @@ public class ClientController {
     }
 
     @RequestMapping(value = "/client/{address}", method = GET)
-    public ResponseEntity<?> getClient(
-            @PathVariable("address") String clientAddress) {
-        logger.debug(MessageFormat.format("Getting client {0}", clientAddress));
-
-        try {
-            clientService.deleteClient(clientAddress);
-        } catch (NotFoundException ex) {
-            return new ResponseEntity<>(NOT_FOUND);
-        }
-
-        return new ResponseEntity<>(OK);
-    }
-
-    @RequestMapping(value = "/client/{address}", method = DELETE)
-    public ResponseEntity<ClientData> deleteClient(
+    public ResponseEntity<ClientData> getClient(
             @PathVariable("address") String clientAddress) {
         logger.debug(MessageFormat.format("Getting client {0}", clientAddress));
 
         try {
             ClientData client = clientService.getClient(clientAddress);
-            System.out.println("------------" + client.toString());
             return new ResponseEntity<>(client, OK);
         } catch (NotFoundException ex) {
-            System.out.println("------------===");
+            logger.error(ex.getMessage(), ex);
+            return new ResponseEntity<>(NOT_FOUND);
+        }
+    }
+
+    @RequestMapping(value = "/client/{address}", method = DELETE)
+    public ResponseEntity<?> deleteClient(
+            @PathVariable("address") String clientAddress) {
+        logger.debug(MessageFormat.format("Getting client {0}", clientAddress));
+
+        try {
+            clientService.deleteClient(clientAddress);
+            return new ResponseEntity<>(OK);
+        } catch (NotFoundException ex) {
+            logger.error(ex.getMessage(), ex);
             return new ResponseEntity<>(NOT_FOUND);
         }
     }
