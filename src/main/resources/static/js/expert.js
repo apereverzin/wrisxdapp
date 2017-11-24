@@ -30,28 +30,27 @@ function registerExpert() {
     var keywords = $("#expertKeywords").val();
     var description = $("#expertDescription").val();
 
-    $.post("/expert",
-           {
-               'name': name,
-               'address': address,
-               'emailAddress': emailAddress,
-               'keyWords': keywords,
-               'description': description
-           }
-    )
-
     contractInstance.registerExpert(name, {from: address},
             function(error, result) {
                 if(!error) {
-                    //document.getElementById('result').value=result
+                    $.post("/expert",
+                       {
+                           'name': name,
+                           'address': address,
+                           'emailAddress': emailAddress,
+                           'keyWords': keywords,
+                           'description': description
+                        }
+                    )
                 } else {
                     console.error(error);
-                    //document.getElementById('result').value='Error'
                 }
                 $("#expertName").val('')
                 $("#expertEmailAddress").val('')
                 $("#expertKeywords").val('')
                 $("#expertDescription").val('')
+                showUserData()
+                showUserBalance()
                 showExpertRoleTab()
             }
     )

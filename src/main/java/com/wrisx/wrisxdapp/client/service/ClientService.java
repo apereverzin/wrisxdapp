@@ -5,9 +5,11 @@ import com.wrisx.wrisxdapp.domain.Client;
 import com.wrisx.wrisxdapp.domain.ClientDao;
 import com.wrisx.wrisxdapp.domain.Expert;
 import com.wrisx.wrisxdapp.domain.ExpertDao;
+import com.wrisx.wrisxdapp.exception.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,12 +51,20 @@ public class ClientService {
         return new ClientData(client);
     }
 
-    public ClientData getClient(String clientAddress) {
+    public ClientData getClient(String clientAddress) throws NotFoundException {
         Client client = clientDao.findByAddress(clientAddress);
         if (client == null) {
-            return null;
+            throw new NotFoundException(MessageFormat.format("Client not found {0}", clientAddress));
         }
         return new ClientData(client);
+    }
+
+    public void deleteClient(String clientAddress) throws NotFoundException {
+        Client client = clientDao.findByAddress(clientAddress);
+        if (client == null) {
+            throw new NotFoundException(MessageFormat.format("Client not found {0}", clientAddress));
+        }
+        clientDao.delete(client);
     }
 
     public List<ClientData> getClients() {

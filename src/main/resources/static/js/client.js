@@ -41,25 +41,39 @@ function registerClient() {
     var description = $("#clientDescription").val();
 
     $.post("/client",
-           {
-               'name': name,
-               'address': address,
-               'emailAddress': emailAddress,
-               'description': description
-           }
-    )
-
-    contractInstance.registerClient(name, {from: address},
-            function(error, result) {
-                if(!error) {
-                } else {
-                    console.error(error);
-                }
-                $("#clientName").val('')
-                $("#clientEmailAddress").val('')
-                $("#clientDescription").val('')
-                showClientRoleTab()
-            }
+        {
+            'name': name,
+            'address': address,
+            'emailAddress': emailAddress,
+            'description': description
+        },
+        function(data) {
+            contractInstance.registerClient(name, {from: address},
+                    function(error, result) {
+                        if(error) {
+                            $.delete({
+                                url: "/client/" + address,
+                                success: function(data) {
+                                    showUserData()
+                                    showUserBalance()
+                                },
+                                error: function(data) {
+                                    showUserData()
+                                    showUserBalance()
+                                }
+                            })
+                        } else {
+                            console.error(error);
+                            $("#clientName").val('')
+                            $("#clientEmailAddress").val('')
+                            $("#clientDescription").val('')
+                            showUserData()
+                            showUserBalance()
+                            showClientRoleTab()
+                        }
+                    }
+            )
+        }
     )
 }
 

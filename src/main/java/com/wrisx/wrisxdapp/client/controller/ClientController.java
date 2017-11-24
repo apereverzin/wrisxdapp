@@ -2,6 +2,7 @@ package com.wrisx.wrisxdapp.client.controller;
 
 import com.wrisx.wrisxdapp.client.service.ClientService;
 import com.wrisx.wrisxdapp.data.ClientData;
+import com.wrisx.wrisxdapp.exception.NotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import java.util.List;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
@@ -45,17 +47,32 @@ public class ClientController {
     }
 
     @RequestMapping(value = "/client/{address}", method = GET)
-    public ResponseEntity<ClientData> getClient(
+    public ResponseEntity<?> getClient(
             @PathVariable("address") String clientAddress) {
         logger.debug(MessageFormat.format("Getting client {0}", clientAddress));
 
-        ClientData client = clientService.getClient(clientAddress);
-
-        if (client == null) {
+        try {
+            clientService.deleteClient(clientAddress);
+        } catch (NotFoundException ex) {
             return new ResponseEntity<>(NOT_FOUND);
         }
 
-        return new ResponseEntity<>(client, OK);
+        return new ResponseEntity<>(OK);
+    }
+
+    @RequestMapping(value = "/client/{address}", method = DELETE)
+    public ResponseEntity<ClientData> deleteClient(
+            @PathVariable("address") String clientAddress) {
+        logger.debug(MessageFormat.format("Getting client {0}", clientAddress));
+
+        try {
+            ClientData client = clientService.getClient(clientAddress);
+            System.out.println("------------" + client.toString());
+            return new ResponseEntity<>(client, OK);
+        } catch (NotFoundException ex) {
+            System.out.println("------------===");
+            return new ResponseEntity<>(NOT_FOUND);
+        }
     }
 
     @RequestMapping(value = "/client", method = GET)
