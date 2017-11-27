@@ -32,6 +32,7 @@ public class ExpertService {
                                  String emailAddress, String expertKeywords,
                                  String description) {
         Expert expert = expertDao.findByAddress(expertAddress);
+
         if (expert == null) {
             String expertName;
             String expertEmailAddress;
@@ -51,6 +52,7 @@ public class ExpertService {
                     expertEmailAddress, expertKeywords, expertDescription);
             expert = expertDao.save(expert);
         }
+
         return new ExpertData(expert);
     }
 

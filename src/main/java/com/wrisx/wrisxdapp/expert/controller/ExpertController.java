@@ -1,6 +1,5 @@
 package com.wrisx.wrisxdapp.expert.controller;
 
-import com.wrisx.wrisxdapp.data.ClientData;
 import com.wrisx.wrisxdapp.data.ExpertData;
 import com.wrisx.wrisxdapp.exception.NotFoundException;
 import com.wrisx.wrisxdapp.expert.service.ExpertService;
@@ -64,7 +63,7 @@ public class ExpertController {
     @RequestMapping(value = "/expert/{address}", method = DELETE)
     public ResponseEntity<?> deleteExpert(
             @PathVariable("address") String expertAddress) {
-        logger.debug(MessageFormat.format("Getting expert {0}", expertAddress));
+        logger.debug(MessageFormat.format("Deleting expert {0}", expertAddress));
 
         try {
             expertService.deleteExpert(expertAddress);

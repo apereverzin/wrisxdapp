@@ -87,7 +87,7 @@ function depositResearch() {
                'checksum': researchFile.zipFileChecksumMD5,
                'password': researchFile.password,
 
-               'clientAddress': clientAddress,
+               'clientAddress': 0,
                'enquiryId': 0,
                'bidId': 0,
            },
@@ -97,23 +97,28 @@ function depositResearch() {
                                                 researchFile.password,
                                                 researchFile.zipFileChecksumMD5,
 
-                                                clientAddress,
+                                                0,
                                                 0,
                                                 0,
                                                 {from: address},
                    function(error, result) {
-                       if(!error) {
-                           //document.getElementById('result').value=result
+                       if(error) {
+                           console.log(error);
+                           $.delete("/research/" + researchFile.uuid,
+                               function(data) {
+                                   getExpertResearchItems()
+                                   showUserData()
+                                   showUserBalance()
+                               }
+                           )
                        } else {
-                           console.error(error);
-                           //document.getElementById('result').value='Error. Have you registered as an expert?'
+                           $("#expertResearchPrice").val('')
+                           $("#expertResearchTitle").val('')
+                           $("#expertResearchDescription").val('')
+                           $("#expertResearchKeywords").val('')
+                           $("#expertResearch-upload-file-input").val('')
+                           getExpertResearchItems()
                        }
-                       $("#expertResearchPrice").val('')
-                       $("#expertResearchTitle").val('')
-                       $("#expertResearchDescription").val('')
-                       $("#expertResearchKeywords").val('')
-                       $("#expertResearch-upload-file-input").val('')
-                       getExpertResearchItems()
                    }
                );
            }
@@ -158,18 +163,23 @@ function depositEnquiryBidResearch(clientAddress, enquiryId, bidId) {
                                                 bidId,
                                                 {from: address},
                    function(error, result) {
-                       if(!error) {
-                           //document.getElementById('result').value=result
+                       if(error) {
+                           console.log(error);
+                           $.delete("/research/" + researchFile.uuid,
+                               function(data) {
+                                   getExpertEnquiryBids()
+                                   showUserData()
+                                   showUserBalance()
+                               }
+                           )
                        } else {
-                           console.error(error);
-                           //document.getElementById('result').value='Error. Have you registered as an expert?'
+                           $("#expertBidPrice").val('')
+                           $("#expertBidTitle").val('')
+                           $("#expertBidDescription").val('')
+                           $("#expertBidKeywords").val('')
+                           $("#bid-upload-file-input").val('')
+                           getExpertEnquiryBids()
                        }
-                       $("#expertBidPrice").val('')
-                       $("#expertBidTitle").val('')
-                       $("#expertBidDescription").val('')
-                       $("#expertBidKeywords").val('')
-                       $("#bid-upload-file-input").val('')
-                       getExpertEnquiryBids()
                    }
                );
            }

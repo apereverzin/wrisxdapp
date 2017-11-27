@@ -63,7 +63,7 @@ public class ClientController {
     @RequestMapping(value = "/client/{address}", method = DELETE)
     public ResponseEntity<?> deleteClient(
             @PathVariable("address") String clientAddress) {
-        logger.debug(MessageFormat.format("Getting client {0}", clientAddress));
+        logger.debug(MessageFormat.format("Deleting client {0}", clientAddress));
 
         try {
             clientService.deleteClient(clientAddress);

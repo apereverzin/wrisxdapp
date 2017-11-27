@@ -2,6 +2,7 @@ package com.wrisx.wrisxdapp.research.controller;
 
 import com.wrisx.wrisxdapp.data.ResearchData;
 import com.wrisx.wrisxdapp.errorhandling.ErrorData;
+import com.wrisx.wrisxdapp.exception.NotFoundException;
 import com.wrisx.wrisxdapp.research.data.ResearchFile;
 import com.wrisx.wrisxdapp.research.service.ResearchService;
 import org.slf4j.Logger;
@@ -26,7 +27,9 @@ import java.io.FileNotFoundException;
 import java.text.MessageFormat;
 import java.util.List;
 
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
@@ -72,32 +75,59 @@ public class ResearchController {
             @RequestParam("bidId") long bidId) {
         logger.debug(MessageFormat.format("Setting file attributes {0}", title));
 
-        ResearchData research =
-                researchService.saveResearch(expertAddress, uuid, price, title,
-                        description, keywords, checksum, password,
-                        clientAddress, enquiryId, bidId);
+        try {
+            ResearchData research =
+                    researchService.saveResearch(expertAddress, uuid, price, title,
+                            description, keywords, checksum, password,
+                            clientAddress, enquiryId, bidId);
+            return new ResponseEntity<>(research, OK);
+        } catch (NotFoundException ex) {
+            logger.error(ex.getMessage(), ex);
+            return new ResponseEntity<>(NOT_FOUND);
+        }
+    }
 
-        return new ResponseEntity<>(research, OK);
+    @RequestMapping(value = "/research/{uuid}", method = DELETE)
+    public ResponseEntity<?> deleteResearch(
+            @PathVariable("uuid") String uuid) {
+        logger.debug(MessageFormat.format("Deleting research {0}", uuid));
+
+        try {
+            researchService.deleteResearch(uuid);
+            return new ResponseEntity<>(OK);
+        } catch (NotFoundException ex) {
+            logger.error(ex.getMessage(), ex);
+            return new ResponseEntity<>(NOT_FOUND);
+        }
     }
 
     @RequestMapping(value = "/research/expert/{address}", method = GET)
     public ResponseEntity<List<ResearchData>> getExpertResearchItems(
             @PathVariable String address) {
-        logger.debug(MessageFormat.format("Getting expert research items {0}", address));
+        logger.debug(MessageFormat.format(
+                "Getting expert research items {0}", address));
 
-        List<ResearchData> researchItems =
-                researchService.getExpertResearchItems(address);
-
-        return new ResponseEntity<>(researchItems, OK);
+        try {
+            List<ResearchData> researchItems =
+                    researchService.getExpertResearchItems(address);
+            return new ResponseEntity<>(researchItems, OK);
+        } catch (NotFoundException ex) {
+            logger.error(ex.getMessage(), ex);
+            return new ResponseEntity<>(NOT_FOUND);
+        }
     }
 
     @RequestMapping(value = "/research/{uuid}", method = GET)
     public ResponseEntity<ResearchData> getResearch(@PathVariable String uuid) {
         logger.debug(MessageFormat.format("Getting research {0}", uuid));
 
-        ResearchData research = researchService.getResearch(uuid);
-
-        return new ResponseEntity<>(research, OK);
+        try {
+            ResearchData research = researchService.getResearch(uuid);
+            return new ResponseEntity<>(research, OK);
+        } catch (NotFoundException ex) {
+            logger.error(ex.getMessage(), ex);
+            return new ResponseEntity<>(NOT_FOUND);
+        }
     }
 
     @RequestMapping(value = "/research/client/{address}/keywords/{keywords}", method = GET)
@@ -108,10 +138,14 @@ public class ResearchController {
                 "Searching research items for client {0} {1}",
                 clientAddress, keywords));
 
-        List<ResearchData> researchItems =
-                researchService.findResearchItems(clientAddress, keywords);
-
-        return new ResponseEntity<>(researchItems, OK);
+        try {
+            List<ResearchData> researchItems =
+                    researchService.findResearchItems(clientAddress, keywords);
+            return new ResponseEntity<>(researchItems, OK);
+        } catch (NotFoundException ex) {
+            logger.error(ex.getMessage(), ex);
+            return new ResponseEntity<>(NOT_FOUND);
+        }
     }
 
     @RequestMapping(value = "/research/client/{address}/keywords", method = GET)
@@ -121,10 +155,14 @@ public class ResearchController {
                 "Searching research items for client {0}",
                 clientAddress));
 
-        List<ResearchData> researchItems =
-                researchService.findResearchItems(clientAddress,"");
-
-        return new ResponseEntity<>(researchItems, OK);
+        try {
+            List<ResearchData> researchItems =
+                    researchService.findResearchItems(clientAddress, "");
+            return new ResponseEntity<>(researchItems, OK);
+        } catch (NotFoundException ex) {
+            logger.error(ex.getMessage(), ex);
+            return new ResponseEntity<>(NOT_FOUND);
+        }
     }
 
     @RequestMapping(value = "/downloadFile/{uuid}", produces = "application/zip", method = GET)
@@ -145,7 +183,8 @@ public class ResearchController {
             @PathVariable String keywords) {
         logger.debug(MessageFormat.format("Searching research {0}", keywords));
 
-        List<ResearchData> researchItems = researchService.findResearchItemsByKeywords(keywords);
+        List<ResearchData> researchItems =
+                researchService.findResearchItemsByKeywords(keywords);
 
         return new ResponseEntity<>(researchItems, OK);
     }

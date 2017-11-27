@@ -2,6 +2,7 @@ package com.wrisx.wrisxdapp.research.service;
 
 import com.wrisx.wrisxdapp.data.ResearchData;
 import com.wrisx.wrisxdapp.domain.*;
+import com.wrisx.wrisxdapp.exception.NotFoundException;
 import com.wrisx.wrisxdapp.purchase.service.PurchaseService;
 import com.wrisx.wrisxdapp.research.data.ResearchFile;
 import net.lingala.zip4j.core.ZipFile;
@@ -106,49 +107,77 @@ public class ResearchService {
                                      String password,
                                      String clientAddress,
                                      long enquiryId,
-                                     long bidId) {
+                                     long bidId) throws NotFoundException {
         Research research =
                 saveResearch(expertAddress, uuid, price, title,
                         description, keywords, checksum, password);
 
         if (bidId > 0) {
             EnquiryBid enquiryBid = enquiryBidDao.findOne(bidId);
+
             if (enquiryBid == null) {
-                throw new RuntimeException(MessageFormat.format(
+                throw new NotFoundException(MessageFormat.format(
                         "Bid not found {0}", bidId));
             }
+
             updateEnquiryBid(enquiryId, enquiryBid, research);
+
             Client client = clientDao.findByAddress(clientAddress);
+
             if (client == null) {
-                throw new RuntimeException(MessageFormat.format(
+                throw new NotFoundException(MessageFormat.format(
                         "Client not found {0}", clientAddress));
             }
+
             purchaseService.createPurchase(client, research, enquiryBid.getPrice());
         }
 
         return new ResearchData(research);
     }
 
-    public List<ResearchData> getExpertResearchItems(String expertAddress) {
+    public void deleteResearch(String uuid) throws NotFoundException {
+        Research research = researchDao.findByUuid(uuid);
+
+        if (research == null) {
+            throw new NotFoundException(
+                    MessageFormat.format("Research not found {0}", uuid));
+        }
+
+        researchDao.delete(research);
+    }
+
+    public List<ResearchData> getExpertResearchItems(String expertAddress)
+            throws NotFoundException {
         Expert expert = expertDao.findByAddress(expertAddress);
+
         if (expert == null) {
-            throw new RuntimeException(MessageFormat.format(
+            throw new NotFoundException(MessageFormat.format(
                     "Expert not found {0}", expertAddress));
         }
+
         return getListFromIterable(researchDao.findByExpert(expert)).stream().
                 sorted(comparing(Research::getTimestamp).reversed()).
                 map(research -> new ResearchData(research)).
                 collect(toList());
     }
 
-    public ResearchData getResearch(String uuid) {
-        return new ResearchData(researchDao.findByUuid(uuid));
+    public ResearchData getResearch(String uuid) throws NotFoundException {
+        Research research = researchDao.findByUuid(uuid);
+
+        if (research == null) {
+            throw new NotFoundException(MessageFormat.format(
+                    "Research not found {0}", uuid));
+        }
+
+        return new ResearchData(research);
     }
 
-    public List<ResearchData> findResearchItems(String clientAddress, String keywords) {
+    public List<ResearchData> findResearchItems(String clientAddress, String keywords)
+            throws NotFoundException {
         Client client = clientDao.findByAddress(clientAddress);
+
         if (client == null) {
-            throw new RuntimeException(MessageFormat.format(
+            throw new NotFoundException(MessageFormat.format(
                     "Client not found {0}", clientAddress));
         }
 
@@ -203,25 +232,31 @@ public class ResearchService {
 
     private Research saveResearch(String expertAddress, String uuid, int price,
                                   String title, String description, String keywords,
-                                  String checksum, String password) {
+                                  String checksum, String password)
+            throws NotFoundException {
         Expert expert = expertDao.findByAddress(expertAddress);
+
         if (expert == null) {
-            throw new RuntimeException(MessageFormat.format(
+            throw new NotFoundException(MessageFormat.format(
                     "Expert not found {0}", expertAddress));
         }
+
         Research research = new Research(uuid, price, title, description,
                 keywords, checksum, password, expert);
         research = researchDao.save(research);
+
         return research;
     }
 
     private void updateEnquiryBid(long enquiryId, EnquiryBid enquiryBid,
-                                  Research research) {
+                                  Research research) throws NotFoundException {
         ResearchEnquiry researchEnquiry = researchEnquiryDao.findOne(enquiryId);
+
         if (researchEnquiry == null) {
-            throw new RuntimeException(MessageFormat.format(
+            throw new NotFoundException(MessageFormat.format(
                     "Research enquiry not found {0}", enquiryId));
         }
+
         enquiryBid.setResearch(research);
         enquiryBidDao.save(enquiryBid);
     }
