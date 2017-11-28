@@ -20,6 +20,7 @@ import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
+import static org.springframework.web.bind.annotation.RequestMethod.PUT;
 
 @Controller
 public class ExpertController {
@@ -71,6 +72,21 @@ public class ExpertController {
         } catch (NotFoundException ex) {
             logger.error(ex.getMessage(), ex);
             return new ResponseEntity<>(NOT_FOUND);
+        }
+    }
+
+    @RequestMapping(value = "/expert/{address}/confirm", method = PUT)
+    public ResponseEntity<Void> confirmExpertCreation(
+            @PathVariable("address") String expertAddress) {
+        logger.debug(MessageFormat.format(
+                "Confirming expert creation {0}", expertAddress));
+
+        try {
+            expertService.confirmExpertCreation(expertAddress);
+            return ResponseEntity.noContent().build();
+        } catch (NotFoundException ex) {
+            logger.error(ex.getMessage(), ex);
+            return ResponseEntity.notFound().build();
         }
     }
 

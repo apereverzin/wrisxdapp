@@ -50,6 +50,7 @@ function registerExpert() {
                                 }
                             )
                         } else {
+                            $.put("/expert/" + address + "/confirm")
                             $("#expertName").val('')
                             $("#expertEmailAddress").val('')
                             $("#expertKeywords").val('')
@@ -112,6 +113,7 @@ function depositResearch() {
                                }
                            )
                        } else {
+                           $.put("/research/" + researchFile.uuid + "/confirm")
                            $("#expertResearchPrice").val('')
                            $("#expertResearchTitle").val('')
                            $("#expertResearchDescription").val('')
@@ -173,6 +175,7 @@ function depositEnquiryBidResearch(clientAddress, enquiryId, bidId) {
                                }
                            )
                        } else {
+                           $.put("/research/" + researchFile.uuid + "/confirm")
                            $("#expertBidPrice").val('')
                            $("#expertBidTitle").val('')
                            $("#expertBidDescription").val('')

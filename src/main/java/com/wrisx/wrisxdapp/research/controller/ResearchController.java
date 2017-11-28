@@ -32,6 +32,7 @@ import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
+import static org.springframework.web.bind.annotation.RequestMethod.PUT;
 
 @Controller
 public class ResearchController {
@@ -88,16 +89,30 @@ public class ResearchController {
     }
 
     @RequestMapping(value = "/research/{uuid}", method = DELETE)
-    public ResponseEntity<?> deleteResearch(
+    public ResponseEntity<Void> deleteResearch(
             @PathVariable("uuid") String uuid) {
         logger.debug(MessageFormat.format("Deleting research {0}", uuid));
 
         try {
             researchService.deleteResearch(uuid);
-            return new ResponseEntity<>(OK);
+            return ResponseEntity.noContent().build();
         } catch (NotFoundException ex) {
             logger.error(ex.getMessage(), ex);
-            return new ResponseEntity<>(NOT_FOUND);
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @RequestMapping(value = "/research/{uuid}/confirm", method = PUT)
+    public ResponseEntity<Void> confirmResearchCreation(
+            @PathVariable("uuid") String uuid) {
+        logger.debug(MessageFormat.format("Confirming research creation {0}", uuid));
+
+        try {
+            researchService.confirmResearchCreation(uuid);
+            return ResponseEntity.noContent().build();
+        } catch (NotFoundException ex) {
+            logger.error(ex.getMessage(), ex);
+            return ResponseEntity.notFound().build();
         }
     }
 

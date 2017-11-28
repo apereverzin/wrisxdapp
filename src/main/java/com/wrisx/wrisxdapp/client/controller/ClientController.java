@@ -21,6 +21,7 @@ import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
+import static org.springframework.web.bind.annotation.RequestMethod.PUT;
 
 @Controller
 public class ClientController {
@@ -61,16 +62,31 @@ public class ClientController {
     }
 
     @RequestMapping(value = "/client/{address}", method = DELETE)
-    public ResponseEntity<?> deleteClient(
+    public ResponseEntity<Void> deleteClient(
             @PathVariable("address") String clientAddress) {
         logger.debug(MessageFormat.format("Deleting client {0}", clientAddress));
 
         try {
             clientService.deleteClient(clientAddress);
-            return new ResponseEntity<>(OK);
+            return ResponseEntity.noContent().build();
         } catch (NotFoundException ex) {
             logger.error(ex.getMessage(), ex);
-            return new ResponseEntity<>(NOT_FOUND);
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @RequestMapping(value = "/client/{address}/confirm", method = PUT)
+    public ResponseEntity<Void> confirmClientCreation(
+            @PathVariable("address") String clientAddress) {
+        logger.debug(MessageFormat.format(
+                "Confirming client creation {0}", clientAddress));
+
+        try {
+            clientService.confirmClientCreation(clientAddress);
+            return ResponseEntity.noContent().build();
+        } catch (NotFoundException ex) {
+            logger.error(ex.getMessage(), ex);
+            return ResponseEntity.notFound().build();
         }
     }
 

@@ -35,6 +35,10 @@ public class EnquiryBid {
     private Date timestamp;
 
     @NotNull
+    @Setter
+    private boolean confirmed;
+
+    @NotNull
     @ManyToOne
     @JoinColumn(name = "enquiry_id")
     private ResearchEnquiry researchEnquiry;
@@ -61,5 +65,6 @@ public class EnquiryBid {
         this.comment = comment;
         this.selected = false;
         this.timestamp = new Date(System.currentTimeMillis());
+        this.confirmed = false;
     }
 }

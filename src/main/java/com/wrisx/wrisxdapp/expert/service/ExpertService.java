@@ -1,5 +1,6 @@
 package com.wrisx.wrisxdapp.expert.service;
 
+import com.wrisx.wrisxdapp.common.EntityProvider;
 import com.wrisx.wrisxdapp.data.ExpertData;
 import com.wrisx.wrisxdapp.domain.Client;
 import com.wrisx.wrisxdapp.domain.ClientDao;
@@ -9,7 +10,6 @@ import com.wrisx.wrisxdapp.exception.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,11 +21,14 @@ import static java.util.stream.Collectors.toList;
 public class ExpertService {
     private final ExpertDao expertDao;
     private final ClientDao clientDao;
+    private final EntityProvider entityProvider;
 
     @Autowired
-    public ExpertService(ExpertDao expertDao, ClientDao clientDao) {
+    public ExpertService(ExpertDao expertDao, ClientDao clientDao,
+                         EntityProvider entityProvider) {
         this.expertDao = expertDao;
         this.clientDao = clientDao;
+        this.entityProvider = entityProvider;
     }
 
     public ExpertData saveExpert(String expertAddress, String name,
@@ -57,25 +60,23 @@ public class ExpertService {
     }
 
     public ExpertData getExpert(String expertAddress) throws NotFoundException {
-        Expert expert = expertDao.findByAddress(expertAddress);
-
-        if (expert == null) {
-            throw new NotFoundException(
-                    MessageFormat.format("Expert not found {0}", expertAddress));
-        }
+        Expert expert = entityProvider.getExpertByAddress(expertAddress);
 
         return new ExpertData(expert);
     }
 
     public void deleteExpert(String expertAddress) throws NotFoundException {
-        Expert expert = expertDao.findByAddress(expertAddress);
-
-        if (expert == null) {
-            throw new NotFoundException(
-                    MessageFormat.format("Expert not found {0}", expertAddress));
-        }
+        Expert expert = entityProvider.getExpertByAddress(expertAddress);
 
         expertDao.delete(expert);
+    }
+
+    public void confirmExpertCreation(String clientAddress) throws NotFoundException {
+        Expert expert = entityProvider.getExpertByAddress(clientAddress);
+
+        expert.setConfirmed(true);
+
+        expertDao.save(expert);
     }
 
     public List<ExpertData> findExperts(String keywords) {

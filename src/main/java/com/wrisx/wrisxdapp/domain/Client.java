@@ -1,6 +1,7 @@
 package com.wrisx.wrisxdapp.domain;
 
 import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -29,6 +30,10 @@ public class Client {
     @NotNull
     private String description;
 
+    @NotNull
+    @Setter
+    private boolean confirmed;
+
     public Client() {
         //
     }
@@ -38,5 +43,6 @@ public class Client {
         this.name = name;
         this.emailAddress = emailAddress;
         this.description = description;
+        this.confirmed = false;
     }
 }

@@ -85,10 +85,12 @@ public class PurchaseService {
 
     public List<PurchaseData> getResearchPurchases(String uuid) {
         Research research = researchDao.findByUuid(uuid);
+
         if (research == null) {
             throw new RuntimeException(
                     MessageFormat.format("Research not found {0}", uuid));
         }
+
         return purchaseDao.findByResearch(research).stream().
                 sorted(comparing(Purchase::getTimestamp).reversed()).
                 map(purchase -> new PurchaseData(purchase)).

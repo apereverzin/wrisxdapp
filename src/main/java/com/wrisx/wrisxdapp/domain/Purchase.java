@@ -1,6 +1,7 @@
 package com.wrisx.wrisxdapp.domain;
 
 import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -25,6 +26,10 @@ public class Purchase {
 
     @NotNull
     private Date timestamp;
+
+    @NotNull
+    @Setter
+    private boolean confirmed;
 
     @NotNull
     @ManyToOne
@@ -52,5 +57,6 @@ public class Purchase {
         this.client = client;
         this.expert = expert;
         this.research = research;
+        this.confirmed = false;
     }
 }

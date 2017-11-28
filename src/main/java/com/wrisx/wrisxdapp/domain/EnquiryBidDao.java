@@ -7,6 +7,7 @@ import java.util.List;
 
 @Transactional
 public interface EnquiryBidDao extends CrudRepository<EnquiryBid, Long> {
-  public List<EnquiryBid> findByResearchEnquiry(ResearchEnquiry researchEnquiry);
-  public List<EnquiryBid> findByExpert(Expert expert);
+  List<EnquiryBid> findByResearchEnquiry(ResearchEnquiry researchEnquiry);
+  List<EnquiryBid> findByResearch(Research research);
+  List<EnquiryBid> findByExpert(Expert expert);
 }

@@ -59,6 +59,7 @@ function registerClient() {
                                 }
                             )
                         } else {
+                            $.put("/client/" + address + "/confirm")
                             $("#clientName").val('')
                             $("#clientEmailAddress").val('')
                             $("#clientDescription").val('')

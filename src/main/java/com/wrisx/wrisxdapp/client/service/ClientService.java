@@ -1,5 +1,6 @@
 package com.wrisx.wrisxdapp.client.service;
 
+import com.wrisx.wrisxdapp.common.EntityProvider;
 import com.wrisx.wrisxdapp.data.ClientData;
 import com.wrisx.wrisxdapp.domain.Client;
 import com.wrisx.wrisxdapp.domain.ClientDao;
@@ -9,7 +10,6 @@ import com.wrisx.wrisxdapp.exception.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,11 +19,14 @@ import static java.util.stream.Collectors.toList;
 public class ClientService {
     private final ClientDao clientDao;
     private final ExpertDao expertDao;
+    private final EntityProvider entityProvider;
 
     @Autowired
-    public ClientService(ClientDao clientDao, ExpertDao expertDao) {
+    public ClientService(ClientDao clientDao, ExpertDao expertDao,
+                         EntityProvider entityProvider) {
         this.clientDao = clientDao;
         this.expertDao = expertDao;
+        this.entityProvider = entityProvider;
     }
 
     public ClientData saveClient(String clientAddress, String name,
@@ -52,25 +55,23 @@ public class ClientService {
     }
 
     public ClientData getClient(String clientAddress) throws NotFoundException {
-        Client client = clientDao.findByAddress(clientAddress);
-
-        if (client == null) {
-            throw new NotFoundException(
-                    MessageFormat.format("Client not found {0}", clientAddress));
-        }
+        Client client = entityProvider.getClientByAddress(clientAddress);
 
         return new ClientData(client);
     }
 
     public void deleteClient(String clientAddress) throws NotFoundException {
-        Client client = clientDao.findByAddress(clientAddress);
-
-        if (client == null) {
-            throw new NotFoundException(
-                    MessageFormat.format("Client not found {0}", clientAddress));
-        }
+        Client client = entityProvider.getClientByAddress(clientAddress);
 
         clientDao.delete(client);
+    }
+
+    public void confirmClientCreation(String clientAddress) throws NotFoundException {
+        Client client = entityProvider.getClientByAddress(clientAddress);
+
+        client.setConfirmed(true);
+
+        clientDao.save(client);
     }
 
     public List<ClientData> getClients() {

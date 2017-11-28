@@ -1,6 +1,7 @@
 package com.wrisx.wrisxdapp.domain;
 
 import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -45,6 +46,10 @@ public class Research {
     private Date timestamp;
 
     @NotNull
+    @Setter
+    private boolean confirmed;
+
+    @NotNull
     @ManyToOne
     @JoinColumn(name = "expert_id")
     private Expert expert;
@@ -65,5 +70,6 @@ public class Research {
         this.password = password;
         this.expert = expert;
         this.timestamp = new Date(System.currentTimeMillis());
+        this.confirmed = false;
     }
 }
