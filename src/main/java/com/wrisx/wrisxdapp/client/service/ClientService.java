@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.wrisx.wrisxdapp.domain.State.CONFIRMED;
 import static java.util.stream.Collectors.toList;
 
 @Service
@@ -66,10 +67,12 @@ public class ClientService {
         clientDao.delete(client);
     }
 
-    public void confirmClientCreation(String clientAddress) throws NotFoundException {
+    public void confirmClientCreation(String clientAddress, String transactionHash)
+            throws NotFoundException {
         Client client = entityProvider.getClientByAddress(clientAddress);
 
-        client.setConfirmed(true);
+        client.setState(CONFIRMED);
+        client.setTransactionHash(transactionHash);
 
         clientDao.save(client);
     }

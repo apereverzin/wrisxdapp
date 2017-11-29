@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static com.wrisx.wrisxdapp.domain.State.CONFIRMED;
 import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.toList;
 
@@ -57,10 +58,12 @@ public class PurchaseService {
     }
 
     @Transactional
-    public void confirmPurchaseCreation(long purchaseId) throws NotFoundException {
+    public void confirmPurchaseCreation(long purchaseId, String transactionHash)
+            throws NotFoundException {
         Purchase purchase = entityProvider.getPurchaseById(purchaseId);
 
-        purchase.setConfirmed(true);
+        purchase.setState(CONFIRMED);
+        purchase.setTransactionHash(transactionHash);
 
         purchaseDao.save(purchase);
     }

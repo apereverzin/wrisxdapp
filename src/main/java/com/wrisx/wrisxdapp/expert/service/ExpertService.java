@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.wrisx.wrisxdapp.domain.State.CONFIRMED;
 import static com.wrisx.wrisxdapp.util.WrisxUtil.getKeywordList;
 import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.toList;
@@ -71,10 +72,12 @@ public class ExpertService {
         expertDao.delete(expert);
     }
 
-    public void confirmExpertCreation(String clientAddress) throws NotFoundException {
+    public void confirmExpertCreation(String clientAddress, String transactionHash)
+            throws NotFoundException {
         Expert expert = entityProvider.getExpertByAddress(clientAddress);
 
-        expert.setConfirmed(true);
+        expert.setState(CONFIRMED);
+        expert.setTransactionHash(transactionHash);
 
         expertDao.save(expert);
     }

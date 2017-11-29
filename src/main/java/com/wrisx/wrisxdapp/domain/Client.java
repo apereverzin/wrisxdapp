@@ -4,11 +4,15 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+
+import static com.wrisx.wrisxdapp.domain.State.CREATED;
 
 @Getter
 @Entity
@@ -31,8 +35,12 @@ public class Client {
     private String description;
 
     @NotNull
+    @Enumerated(EnumType.STRING)
     @Setter
-    private boolean confirmed;
+    private State state;
+
+    @Setter
+    private String transactionHash;
 
     public Client() {
         //
@@ -43,6 +51,6 @@ public class Client {
         this.name = name;
         this.emailAddress = emailAddress;
         this.description = description;
-        this.confirmed = false;
+        this.state = CREATED;
     }
 }

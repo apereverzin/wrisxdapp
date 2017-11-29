@@ -20,6 +20,7 @@ import java.nio.file.Paths;
 import java.text.MessageFormat;
 import java.util.List;
 
+import static com.wrisx.wrisxdapp.domain.State.CONFIRMED;
 import static com.wrisx.wrisxdapp.util.WrisxUtil.getKeywordList;
 import static com.wrisx.wrisxdapp.util.WrisxUtil.getListFromIterable;
 import static java.util.Comparator.comparing;
@@ -143,15 +144,17 @@ public class ResearchService {
     }
 
     @Transactional
-    public void confirmResearchCreation(String uuid) throws NotFoundException {
+    public void confirmResearchCreation(String uuid, String transactionHash)
+            throws NotFoundException {
         Research research = entityProvider.getResearchByUuid(uuid);
 
         purchaseDao.findByResearch(research).forEach(
                 purchase -> {
-                    purchase.setConfirmed(true);
+                    purchase.setState(CONFIRMED);
                     purchaseDao.save(purchase);
                 });
-        research.setConfirmed(true);
+        research.setState(CONFIRMED);
+        research.setTransactionHash(transactionHash);
 
         researchDao.save(research);
     }

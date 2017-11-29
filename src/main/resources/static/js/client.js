@@ -59,7 +59,11 @@ function registerClient() {
                                 }
                             )
                         } else {
-                            $.put("/client/" + address + "/confirm")
+                            $.put("/client/" + address + "/confirm",
+                                {
+                                    'transactionHash': result
+                                }
+                            )
                             $("#clientName").val('')
                             $("#clientEmailAddress").val('')
                             $("#clientDescription").val('')
@@ -120,7 +124,11 @@ function payForResearch(uuid) {
                             console.log(error);
                             $.delete("/purchase/" + data.id)
                         } else {
-                            $.put("/purchase/" + data.id + "/confirm")
+                            $.put("/purchase/" + data.id + "/confirm",
+                                {
+                                    'transactionHash': result
+                                }
+                            )
                             showUserBalance()
                         }
                     }
@@ -338,7 +346,11 @@ function placeEnquiry() {
                 expert2 = enquiryBid.expert
                 price2 = enquiryBid.price
             }
-            $.put("/enquiry/bid/" + enquiryBid.bidId + "/select")
+            $.put("/enquiry/bid/" + enquiryBid.bidId + "/select",
+                {
+                    'transactionHash': result
+                }
+            )
         }
         if (ind == 2) {
             break
@@ -376,13 +388,25 @@ function placeEnquiry() {
                         } else {
                             getClientEnquiries()
                             if (bidId0 > 0) {
-                                $.put("/enquiry/bid/" + bidId0 + "/confirm")
+                                $.put("/enquiry/bid/" + bidId0 + "/confirm",
+                                    {
+                                        'transactionHash': result
+                                    }
+                                )
                             }
                             if (bidId1 > 0) {
-                                $.put("/enquiry/bid/" + bidId1 + "/confirm")
+                                $.put("/enquiry/bid/" + bidId1 + "/confirm",
+                                    {
+                                        'transactionHash': result
+                                    }
+                                )
                             }
                             if (bidId2 > 0) {
-                                $.put("/enquiry/bid/" + bidId2 + "/confirm")
+                                $.put("/enquiry/bid/" + bidId2 + "/confirm",
+                                    {
+                                        'transactionHash': result
+                                    }
+                                )
                             }
                         }
                     }

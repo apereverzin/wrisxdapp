@@ -104,11 +104,12 @@ public class ResearchController {
 
     @RequestMapping(value = "/research/{uuid}/confirm", method = PUT)
     public ResponseEntity<Void> confirmResearchCreation(
-            @PathVariable("uuid") String uuid) {
+            @PathVariable("uuid") String uuid,
+            @RequestParam("transactionHash") String transactionHash) {
         logger.debug(MessageFormat.format("Confirming research creation {0}", uuid));
 
         try {
-            researchService.confirmResearchCreation(uuid);
+            researchService.confirmResearchCreation(uuid, transactionHash);
             return ResponseEntity.noContent().build();
         } catch (NotFoundException ex) {
             logger.error(ex.getMessage(), ex);

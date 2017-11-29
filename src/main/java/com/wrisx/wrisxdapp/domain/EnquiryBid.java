@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -12,6 +14,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
+
+import static com.wrisx.wrisxdapp.domain.State.CREATED;
 
 @Getter
 @Entity
@@ -35,8 +39,12 @@ public class EnquiryBid {
     private Date timestamp;
 
     @NotNull
+    @Enumerated(EnumType.STRING)
     @Setter
-    private boolean confirmed;
+    private State state;
+
+    @Setter
+    private String transactionHash;
 
     @NotNull
     @ManyToOne
@@ -65,6 +73,6 @@ public class EnquiryBid {
         this.comment = comment;
         this.selected = false;
         this.timestamp = new Date(System.currentTimeMillis());
-        this.confirmed = false;
+        this.state = CREATED;
     }
 }

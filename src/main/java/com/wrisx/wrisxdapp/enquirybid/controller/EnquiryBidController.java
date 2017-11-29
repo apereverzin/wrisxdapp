@@ -102,12 +102,13 @@ public class EnquiryBidController {
 
     @RequestMapping(value = "/enquiry/bid/{enquiryBidId}/confirm", method = PUT)
     public ResponseEntity<Void> confirmEnquiryBidCreation(
-            @PathVariable long enquiryBidId) {
+            @PathVariable long enquiryBidId,
+            @RequestParam("transactionHash") String transactionHash) {
         logger.debug(MessageFormat.format(
                 "Confirming bid creation {0} for research enquiry", enquiryBidId));
 
         try {
-            enquiryBidService.confirmEnquiryBidCreation(enquiryBidId);
+            enquiryBidService.confirmEnquiryBidCreation(enquiryBidId, transactionHash);
             return ResponseEntity.noContent().build();
         } catch (NotFoundException ex) {
             logger.error(ex.getMessage(), ex);

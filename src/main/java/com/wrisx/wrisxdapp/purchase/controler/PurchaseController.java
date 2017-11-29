@@ -64,11 +64,13 @@ public class PurchaseController {
     }
 
     @RequestMapping(value = "/purchase/{id}/confirm", method = PUT)
-    public ResponseEntity<Void> confirmResearch(@PathVariable("id") long purchaseId) {
+    public ResponseEntity<Void> confirmResearch(
+            @PathVariable("id") long purchaseId,
+            @RequestParam("transactionHash") String transactionHash) {
         logger.debug(MessageFormat.format("Confirming purchase {0}", purchaseId));
 
         try {
-            purchaseService.confirmPurchaseCreation(purchaseId);
+            purchaseService.confirmPurchaseCreation(purchaseId, transactionHash);
             return ResponseEntity.noContent().build();
         } catch (NotFoundException ex) {
             logger.error(ex.getMessage(), ex);

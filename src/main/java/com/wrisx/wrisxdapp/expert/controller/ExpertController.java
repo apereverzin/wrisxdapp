@@ -77,12 +77,13 @@ public class ExpertController {
 
     @RequestMapping(value = "/expert/{address}/confirm", method = PUT)
     public ResponseEntity<Void> confirmExpertCreation(
-            @PathVariable("address") String expertAddress) {
+            @PathVariable("address") String expertAddress,
+            @RequestParam("transactionHash") String transactionHash) {
         logger.debug(MessageFormat.format(
                 "Confirming expert creation {0}", expertAddress));
 
         try {
-            expertService.confirmExpertCreation(expertAddress);
+            expertService.confirmExpertCreation(expertAddress, transactionHash);
             return ResponseEntity.noContent().build();
         } catch (NotFoundException ex) {
             logger.error(ex.getMessage(), ex);

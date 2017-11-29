@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static com.wrisx.wrisxdapp.domain.State.CONFIRMED;
 import static com.wrisx.wrisxdapp.util.WrisxUtil.getListFromIterable;
 import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.toList;
@@ -74,10 +75,12 @@ public class EnquiryBidService {
         enquiryBidDao.delete(enquiryBid);
     }
 
-    public void confirmEnquiryBidCreation(long enquiryBidId) throws NotFoundException {
+    public void confirmEnquiryBidCreation(long enquiryBidId, String transactionHash)
+            throws NotFoundException {
         EnquiryBid enquiryBid = entityProvider.getEnquiryBidById(enquiryBidId);
 
-        enquiryBid.setConfirmed(true);
+        enquiryBid.setState(CONFIRMED);
+        enquiryBid.setTransactionHash(transactionHash);
 
         enquiryBidDao.save(enquiryBid);
     }

@@ -77,12 +77,13 @@ public class ClientController {
 
     @RequestMapping(value = "/client/{address}/confirm", method = PUT)
     public ResponseEntity<Void> confirmClientCreation(
-            @PathVariable("address") String clientAddress) {
+            @PathVariable("address") String clientAddress,
+            @RequestParam("transactionHash") String transactionHash) {
         logger.debug(MessageFormat.format(
                 "Confirming client creation {0}", clientAddress));
 
         try {
-            clientService.confirmClientCreation(clientAddress);
+            clientService.confirmClientCreation(clientAddress, transactionHash);
             return ResponseEntity.noContent().build();
         } catch (NotFoundException ex) {
             logger.error(ex.getMessage(), ex);
