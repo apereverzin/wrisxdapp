@@ -95,13 +95,12 @@ function buyTokens() {
 
     contractInstance.buyTokens({from: address, value: amount},
             function(error, result) {
-                if(!error) {
-                    showUserBalance()
+                if(error) {
+                    console.log(error);
                 } else {
-                    console.error(error);
+                    $("#clientBuyTokensAmount").val('')
+                    showUserBalance()
                 }
-                $("#clientBuyTokensAmount").val('')
-                showUserBalance()
             }
     );
 }
@@ -117,11 +116,10 @@ function payForResearch(uuid) {
         function(data) {
             contractInstance.payForResearch(uuid, {from: address},
                     function(error, result) {
-                        if(!error) {
-                            showUserBalance()
+                        if(error) {
+                            console.log(error);
                         } else {
-                            console.error(error);
-                            //document.getElementById('result').value='Error. Have you got enough tokens?'
+                            showUserBalance()
                         }
                     }
             );
@@ -134,11 +132,10 @@ function getResearch(fileName) {
 
     contractInstance.getResearch.call(fileName, {from: address},
             function(error, result) {
-                if(!error) {
-                    //document.getElementById('result').value=result
+                if(error) {
+                    console.log(error);
                 } else {
-                    console.error(error);
-                    //document.getElementById('result').value='Error. Have you paid?'
+
                 }
             }
     );
@@ -339,11 +336,7 @@ function placeEnquiry() {
                 expert2 = enquiryBid.expert
                 price2 = enquiryBid.price
             }
-            $.post("/enquiry/bid/" + enquiryBid.bidId,
-                function(data) {
-                    console.log('enquiry bid id ' + enquiryBid.bidId)
-                }
-            )
+            $.put("/enquiry/bid/" + enquiryBid.bidId + "/select")
         }
         if (ind == 2) {
             break
@@ -367,10 +360,28 @@ function placeEnquiry() {
                                               price2,
                                               {from: address},
                     function(error, result) {
-                        if(!error) {
-                            getClientEnquiries()
+                        if(error) {
+                            console.log(error);
+                            if (bidId0 > 0) {
+                                $.put("/enquiry/bid/" + bidId0 + "/unselect")
+                            }
+                            if (bidId1 > 0) {
+                                $.put("/enquiry/bid/" + bidId1 + "/unselect")
+                            }
+                            if (bidId2 > 0) {
+                                $.put("/enquiry/bid/" + bidId2 + "/unselect")
+                            }
                         } else {
-                            console.error(error);
+                            getClientEnquiries()
+                            if (bidId0 > 0) {
+                                $.put("/enquiry/bid/" + bidId0 + "/confirm")
+                            }
+                            if (bidId1 > 0) {
+                                $.put("/enquiry/bid/" + bidId1 + "/confirm")
+                            }
+                            if (bidId2 > 0) {
+                                $.put("/enquiry/bid/" + bidId2 + "/confirm")
+                            }
                         }
                     }
                 )

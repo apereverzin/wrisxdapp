@@ -151,11 +151,6 @@ public class ResearchService {
                     purchase.setConfirmed(true);
                     purchaseDao.save(purchase);
                 });
-        enquiryBidDao.findByResearch(research).forEach(
-                enquiryBid -> {
-                    enquiryBid.setConfirmed(true);
-                    enquiryBidDao.save(enquiryBid);
-                });
         research.setConfirmed(true);
 
         researchDao.save(research);

@@ -2,6 +2,7 @@ package com.wrisx.wrisxdapp.enquiry.controller;
 
 import com.wrisx.wrisxdapp.data.ResearchEnquiryData;
 import com.wrisx.wrisxdapp.enquiry.service.ResearchEnquiryService;
+import com.wrisx.wrisxdapp.exception.NotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.text.MessageFormat;
 import java.util.List;
 
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
@@ -36,10 +38,14 @@ public class ResearchEnquiryController {
             @RequestParam("description") String description) {
         logger.debug(MessageFormat.format("Creating research enquiry {0}", keywords));
 
-        ResearchEnquiryData researchEnquiry =
-                researchEnquiryService.saveEnquiry(address, keywords, description);
-
-        return new ResponseEntity<>(researchEnquiry, OK);
+        try {
+            ResearchEnquiryData researchEnquiry =
+                    researchEnquiryService.saveEnquiry(address, keywords, description);
+            return new ResponseEntity<>(researchEnquiry, OK);
+        } catch (NotFoundException ex) {
+            logger.error(ex.getMessage(), ex);
+            return new ResponseEntity<>(NOT_FOUND);
+        }
     }
 
     @RequestMapping(value = "/enquiry/client/{address}", method = GET)
@@ -48,19 +54,27 @@ public class ResearchEnquiryController {
         logger.debug(MessageFormat.format(
                 "Getting research enquiries of client {0}", clientAddress));
 
-        List<ResearchEnquiryData> researchEnquiries =
-                researchEnquiryService.getClientEnquiries(clientAddress);
-
-        return new ResponseEntity<>(researchEnquiries, OK);
+        try {
+            List<ResearchEnquiryData> researchEnquiries =
+                    researchEnquiryService.getClientEnquiries(clientAddress);
+            return new ResponseEntity<>(researchEnquiries, OK);
+        } catch (NotFoundException ex) {
+            logger.error(ex.getMessage(), ex);
+            return new ResponseEntity<>(NOT_FOUND);
+        }
     }
 
     @RequestMapping(value = "/enquiry/{id}", method = GET)
     public ResponseEntity<ResearchEnquiryData> getEnquiry(@PathVariable long id) {
         logger.debug(MessageFormat.format("Getting research enquiry {0}", id));
 
-        ResearchEnquiryData researchEnquiry = researchEnquiryService.getEnquiry(id);
-
-        return new ResponseEntity<>(researchEnquiry, OK);
+        try {
+            ResearchEnquiryData researchEnquiry = researchEnquiryService.getEnquiry(id);
+            return new ResponseEntity<>(researchEnquiry, OK);
+        } catch (NotFoundException ex) {
+            logger.error(ex.getMessage(), ex);
+            return new ResponseEntity<>(NOT_FOUND);
+        }
     }
 
     @RequestMapping(value = "/enquiry/expert/{address}/keywords/{keywords}", method = GET)
@@ -71,10 +85,7 @@ public class ResearchEnquiryController {
                 "Searching research enquiries for expert {0} {1}",
                 expertAddress, keywords));
 
-        List<ResearchEnquiryData> researchEnquiries =
-                researchEnquiryService.findExpertEnquiries(expertAddress, keywords);
-
-        return new ResponseEntity<>(researchEnquiries, OK);
+        return getExpertEnquiries(expertAddress, keywords);
     }
 
     @RequestMapping(value = "/enquiry/expert/{address}/keywords", method = GET)
@@ -84,9 +95,18 @@ public class ResearchEnquiryController {
                 "Searching research enquiries for expert {0}",
                 expertAddress));
 
-        List<ResearchEnquiryData> researchEnquiries =
-                researchEnquiryService.findExpertEnquiries(expertAddress, "");
+        return getExpertEnquiries(expertAddress, "");
+    }
 
-        return new ResponseEntity<>(researchEnquiries, OK);
+    private ResponseEntity<List<ResearchEnquiryData>> getExpertEnquiries(
+            String expertAddress, String keywords) {
+        try {
+            List<ResearchEnquiryData> researchEnquiries =
+                    researchEnquiryService.findExpertEnquiries(expertAddress, keywords);
+            return new ResponseEntity<>(researchEnquiries, OK);
+        } catch (NotFoundException ex) {
+            logger.error(ex.getMessage(), ex);
+            return new ResponseEntity<>(NOT_FOUND);
+        }
     }
 }

@@ -95,16 +95,18 @@ public class ExpertController {
             @PathVariable String keywords) {
         logger.debug(MessageFormat.format("Searching experts {0}", keywords));
 
-        List<ExpertData> experts = expertService.findExperts(keywords);
-
-        return new ResponseEntity<>(experts, OK);
+        return getExperts(keywords);
     }
 
     @RequestMapping(value = "/expert/keywords", method = GET)
     public ResponseEntity<List<ExpertData>> findAllExperts() {
         logger.debug("Searching experts");
 
-        List<ExpertData> experts = expertService.findExperts("");
+        return getExperts("");
+    }
+
+    private ResponseEntity<List<ExpertData>> getExperts(@PathVariable String keywords) {
+        List<ExpertData> experts = expertService.findExperts(keywords);
 
         return new ResponseEntity<>(experts, OK);
     }

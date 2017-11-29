@@ -153,14 +153,7 @@ public class ResearchController {
                 "Searching research items for client {0} {1}",
                 clientAddress, keywords));
 
-        try {
-            List<ResearchData> researchItems =
-                    researchService.findResearchItems(clientAddress, keywords);
-            return new ResponseEntity<>(researchItems, OK);
-        } catch (NotFoundException ex) {
-            logger.error(ex.getMessage(), ex);
-            return new ResponseEntity<>(NOT_FOUND);
-        }
+        return getResearchItems(clientAddress, keywords);
     }
 
     @RequestMapping(value = "/research/client/{address}/keywords", method = GET)
@@ -170,14 +163,7 @@ public class ResearchController {
                 "Searching research items for client {0}",
                 clientAddress));
 
-        try {
-            List<ResearchData> researchItems =
-                    researchService.findResearchItems(clientAddress, "");
-            return new ResponseEntity<>(researchItems, OK);
-        } catch (NotFoundException ex) {
-            logger.error(ex.getMessage(), ex);
-            return new ResponseEntity<>(NOT_FOUND);
-        }
+        return getResearchItems(clientAddress, "");
     }
 
     @RequestMapping(value = "/downloadFile/{uuid}", produces = "application/zip", method = GET)
@@ -218,5 +204,17 @@ public class ResearchController {
     ErrorData handleException(Exception ex, HttpServletResponse response) {
         response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         return new ErrorData(ex.getMessage(), 1001);
+    }
+
+    private ResponseEntity<List<ResearchData>> getResearchItems(
+            String clientAddress, String keywords) {
+        try {
+            List<ResearchData> researchItems =
+                    researchService.findResearchItems(clientAddress, keywords);
+            return new ResponseEntity<>(researchItems, OK);
+        } catch (NotFoundException ex) {
+            logger.error(ex.getMessage(), ex);
+            return new ResponseEntity<>(NOT_FOUND);
+        }
     }
 }

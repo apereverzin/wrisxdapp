@@ -1,11 +1,6 @@
 package com.wrisx.wrisxdapp.common;
 
-import com.wrisx.wrisxdapp.domain.Client;
-import com.wrisx.wrisxdapp.domain.ClientDao;
-import com.wrisx.wrisxdapp.domain.Expert;
-import com.wrisx.wrisxdapp.domain.ExpertDao;
-import com.wrisx.wrisxdapp.domain.Research;
-import com.wrisx.wrisxdapp.domain.ResearchDao;
+import com.wrisx.wrisxdapp.domain.*;
 import com.wrisx.wrisxdapp.exception.NotFoundException;
 import org.springframework.stereotype.Component;
 
@@ -16,12 +11,17 @@ public class EntityProvider {
     private final ExpertDao expertDao;
     private final ClientDao clientDao;
     private final ResearchDao researchDao;
+    private final EnquiryBidDao enquiryBidDao;
+    private final ResearchEnquiryDao researchEnquiryDao;
 
     public EntityProvider(ExpertDao expertDao, ClientDao clientDao,
-                          ResearchDao researchDao) {
+                          ResearchDao researchDao, EnquiryBidDao enquiryBidDao,
+                          ResearchEnquiryDao researchEnquiryDao) {
         this.expertDao = expertDao;
         this.clientDao = clientDao;
         this.researchDao = researchDao;
+        this.enquiryBidDao = enquiryBidDao;
+        this.researchEnquiryDao = researchEnquiryDao;
     }
 
     public Expert getExpertByAddress(String expertAddress) throws NotFoundException {
@@ -52,5 +52,27 @@ public class EntityProvider {
                     MessageFormat.format("Research not found {0}", uuid));
         }
         return research;
+    }
+
+    public EnquiryBid getEnquiryBidById(long enquiryBidId) throws NotFoundException {
+        EnquiryBid enquiryBid = enquiryBidDao.findOne(enquiryBidId);
+
+        if (enquiryBid == null) {
+            throw new NotFoundException(
+                    MessageFormat.format("Enquiry bid not found {0}", enquiryBid));
+        }
+
+        return enquiryBid;
+    }
+
+    public ResearchEnquiry getResearchEnquiryById(long enquiryId) throws NotFoundException {
+        ResearchEnquiry enquiry = researchEnquiryDao.findOne(enquiryId);
+
+        if (enquiry == null) {
+            throw new NotFoundException(
+                    MessageFormat.format("Enquiry not found {0}", enquiryId));
+        }
+
+        return enquiry;
     }
 }
