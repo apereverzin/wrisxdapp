@@ -13,15 +13,18 @@ public class EntityProvider {
     private final ResearchDao researchDao;
     private final EnquiryBidDao enquiryBidDao;
     private final ResearchEnquiryDao researchEnquiryDao;
+    private final PurchaseDao purchaseDao;
 
     public EntityProvider(ExpertDao expertDao, ClientDao clientDao,
                           ResearchDao researchDao, EnquiryBidDao enquiryBidDao,
-                          ResearchEnquiryDao researchEnquiryDao) {
+                          ResearchEnquiryDao researchEnquiryDao,
+                          PurchaseDao purchaseDao) {
         this.expertDao = expertDao;
         this.clientDao = clientDao;
         this.researchDao = researchDao;
         this.enquiryBidDao = enquiryBidDao;
         this.researchEnquiryDao = researchEnquiryDao;
+        this.purchaseDao = purchaseDao;
     }
 
     public Expert getExpertByAddress(String expertAddress) throws NotFoundException {
@@ -74,5 +77,16 @@ public class EntityProvider {
         }
 
         return enquiry;
+    }
+
+    public Purchase getPurchaseById(long purchaseId) throws NotFoundException {
+        Purchase purchase = purchaseDao.findOne(purchaseId);
+
+        if (purchase == null) {
+            throw new NotFoundException(
+                    MessageFormat.format("Purchase not found {0}", purchaseId));
+        }
+
+        return purchase;
     }
 }

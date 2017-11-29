@@ -1,20 +1,19 @@
 package com.wrisx.wrisxdapp.purchase.service;
 
+import com.wrisx.wrisxdapp.common.EntityProvider;
 import com.wrisx.wrisxdapp.data.PurchaseData;
 import com.wrisx.wrisxdapp.domain.Client;
-import com.wrisx.wrisxdapp.domain.ClientDao;
+import com.wrisx.wrisxdapp.domain.Expert;
 import com.wrisx.wrisxdapp.domain.Purchase;
 import com.wrisx.wrisxdapp.domain.PurchaseDao;
-import com.wrisx.wrisxdapp.domain.Expert;
-import com.wrisx.wrisxdapp.domain.ExpertDao;
 import com.wrisx.wrisxdapp.domain.Research;
-import com.wrisx.wrisxdapp.domain.ResearchDao;
+import com.wrisx.wrisxdapp.exception.NotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.text.MessageFormat;
 import java.util.List;
 
 import static java.util.Comparator.comparing;
@@ -25,71 +24,69 @@ public class PurchaseService {
     private final Logger logger = LoggerFactory.getLogger(PurchaseService.class);
 
     private final PurchaseDao purchaseDao;
-    private final ClientDao clientDao;
-    private final ResearchDao researchDao;
-    private final ExpertDao expertDao;
+    private final EntityProvider entityProvider;
 
     @Autowired
-    public PurchaseService(PurchaseDao purchaseDao, ClientDao clientDao,
-                           ResearchDao researchDao, ExpertDao expertDao) {
+    public PurchaseService(PurchaseDao purchaseDao, EntityProvider entityProvider) {
         this.purchaseDao = purchaseDao;
-        this.clientDao = clientDao;
-        this.researchDao = researchDao;
-        this.expertDao = expertDao;
+        this.entityProvider = entityProvider;
     }
 
-    public PurchaseData createPurchase(String clientAddress, String uuid) {
-        Client client = clientDao.findByAddress(clientAddress);
-        if (client == null) {
-            throw new RuntimeException(
-                    MessageFormat.format("Client not found {0}", clientAddress));
-        }
-        Research research = researchDao.findByUuid(uuid);
-        if (research == null) {
-            throw new RuntimeException(
-                    MessageFormat.format("Research not found {0}", uuid));
-        }
+    public PurchaseData createPurchase(String clientAddress, String uuid)
+            throws NotFoundException {
+        Client client = entityProvider.getClientByAddress(clientAddress);
+        Research research = entityProvider.getResearchByUuid(uuid);
+
         return createPurchase(client, research, research.getPrice());
     }
 
     public PurchaseData createPurchase(Client client, Research research, int price) {
         Purchase purchase =
                 new Purchase(price, client, research.getExpert(), research);
+
         purchase =  purchaseDao.save(purchase);
+
         return new PurchaseData(purchase);
     }
 
-    public List<PurchaseData> getClientPurchases(String clientAddress) {
-        Client client = clientDao.findByAddress(clientAddress);
-        if (client == null) {
-            throw new RuntimeException(
-                    MessageFormat.format("Client not found {0}", clientAddress));
-        }
+    @Transactional
+    public void deletePurchase(long purchaseId) throws NotFoundException {
+        Purchase purchase = entityProvider.getPurchaseById(purchaseId);
+
+        purchaseDao.delete(purchase);
+    }
+
+    @Transactional
+    public void confirmPurchaseCreation(long purchaseId) throws NotFoundException {
+        Purchase purchase = entityProvider.getPurchaseById(purchaseId);
+
+        purchase.setConfirmed(true);
+
+        purchaseDao.save(purchase);
+    }
+
+    public List<PurchaseData> getClientPurchases(String clientAddress)
+            throws NotFoundException {
+        Client client = entityProvider.getClientByAddress(clientAddress);
+
         return purchaseDao.findByClient(client).stream().
                 sorted(comparing(Purchase::getTimestamp).reversed()).
                 map(purchase -> new PurchaseData(purchase)).
                 collect(toList());
     }
 
-    public List<PurchaseData> getExpertPurchases(String expertAddress) {
-        Expert expert = expertDao.findByAddress(expertAddress);
-        if (expert == null) {
-            throw new RuntimeException(
-                    MessageFormat.format("Expert not found {0}", expertAddress));
-        }
+    public List<PurchaseData> getExpertPurchases(String expertAddress)
+            throws NotFoundException {
+        Expert expert = entityProvider.getExpertByAddress(expertAddress);
+
         return purchaseDao.findByExpert(expert).stream().
                 sorted(comparing(Purchase::getTimestamp).reversed()).
                 map(purchase -> new PurchaseData(purchase)).
                 collect(toList());
     }
 
-    public List<PurchaseData> getResearchPurchases(String uuid) {
-        Research research = researchDao.findByUuid(uuid);
-
-        if (research == null) {
-            throw new RuntimeException(
-                    MessageFormat.format("Research not found {0}", uuid));
-        }
+    public List<PurchaseData> getResearchPurchases(String uuid) throws NotFoundException {
+        Research research = entityProvider.getResearchByUuid(uuid);
 
         return purchaseDao.findByResearch(research).stream().
                 sorted(comparing(Purchase::getTimestamp).reversed()).

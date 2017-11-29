@@ -118,7 +118,9 @@ function payForResearch(uuid) {
                     function(error, result) {
                         if(error) {
                             console.log(error);
+                            $.delete("/purchase/" + data.id)
                         } else {
+                            $.put("/purchase/" + data.id + "/confirm")
                             showUserBalance()
                         }
                     }
