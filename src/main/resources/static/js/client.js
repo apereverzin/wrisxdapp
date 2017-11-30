@@ -137,8 +137,16 @@ function payForResearch(uuid) {
     )
 }
 
-function getResearch(fileName) {
+function getResearchPassword(fileName) {
     address = getAddress();
+
+    $('<div>dialog content</div>').dialog({
+        title: 'Title',
+        open: function(){
+            var closeBtn = $('.ui-dialog-titlebar-close');
+            closeBtn.append('<span class="ui-button-icon-primary ui-icon ui-icon-closethick"></span><span class="ui-button-text">close</span>');
+        }
+    })
 
     contractInstance.getResearch.call(fileName, {from: address},
             function(error, result) {
@@ -172,7 +180,7 @@ function showClientResearchItems(data) {
             )
         } else {
             items = items.concat(
-            '<td>' + '<a href="#" onclick="getResearch(&#39;' + data[val].uuid + '&#39;)" class="btn btn-primary">Password</a>' + '</td>'
+            '<td>' + '<a href="#" onclick="getResearchPassword(&#39;' + data[val].uuid + '&#39;)" class="btn btn-primary">Password</a>' + '</td>'
             )
         }
         items = items.concat(
@@ -272,7 +280,7 @@ function showEnquiryBids(enquiryId, keywords, description, data) {
             items = items.concat('<td><input type="checkbox" id="' + enquiryBidCheckboxId + '"/></td>')
         } else if (data[val].research != null) {
             items = items.concat('<td>' +
-            '<a href="#" onclick="getResearch(&#39;' + data[val].research.uuid + '&#39;)" class="btn btn-primary">Password</a>' +
+            '<a href="#" onclick="getResearchPassword(&#39;' + data[val].research.uuid + '&#39;)" class="btn btn-primary">Password</a>' +
             '&nbsp;' +
             '<a href="/downloadFile/' + data[val].research.uuid + '" class="btn btn-primary">Download</a>' +
             '</td>')

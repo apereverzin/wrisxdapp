@@ -43,7 +43,7 @@ public class Research {
     @NotNull
     private String checksum;
 
-    @NotNull
+    @Setter
     private String password;
 
     @NotNull

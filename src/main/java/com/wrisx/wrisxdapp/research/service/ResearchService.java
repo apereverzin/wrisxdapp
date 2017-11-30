@@ -153,6 +153,7 @@ public class ResearchService {
                     purchase.setState(CONFIRMED);
                     purchaseDao.save(purchase);
                 });
+        research.setPassword(null);
         research.setState(CONFIRMED);
         research.setTransactionHash(transactionHash);
 
