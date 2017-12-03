@@ -4,7 +4,7 @@ var globalEnquiryId
 function clientResearchItemsTabClicked() {
     address = getAddress()
 
-    $.get("/research/client/" + address + "/keywords",
+    $.get(contextPath + "/research/client/" + address + "/keywords",
         function(data) {
             showClientResearchItems(data)
         }
@@ -18,7 +18,7 @@ function clientResearchItemsTabClicked() {
 function clientPurchasesTabClicked() {
     address = getAddress();
 
-    $.get("/purchase/client/" + address,
+    $.get(contextPath + "/purchase/client/" + address,
         function(data) {
             showClientPurchases(data)
         }
@@ -40,7 +40,7 @@ function registerClient() {
     var emailAddress = $("#clientEmailAddress").val();
     var description = $("#clientDescription").val();
 
-    $.post("/client",
+    $.post(contextPath + "/client",
         {
             'name': name,
             'address': address,
@@ -52,14 +52,14 @@ function registerClient() {
                     function(error, result) {
                         if(error) {
                             console.log(error)
-                            $.delete("/client/" + address,
+                            $.delete(contextPath + "/client/" + address,
                                 function(data) {
                                     showUserData()
                                     showUserBalance()
                                 }
                             )
                         } else {
-                            $.put("/client/" + address + "/confirm",
+                            $.put(contextPath + "/client/" + address + "/confirm",
                                 {
                                     'transactionHash': result
                                 }
@@ -78,7 +78,7 @@ function registerClient() {
 }
 
 function viewClientResearchItem(uuid) {
-    $.get("/research/" + uuid,
+    $.get(contextPath + "/research/" + uuid,
         function(data) {
             var text = '<table style="width:100%">'
             text = text.concat('<tr><td>Title</td><td>' + data.title + '</td></tr>')
@@ -112,7 +112,7 @@ function buyTokens() {
 function payForResearch(uuid) {
     address = getAddress();
 
-    $.post("/purchase",
+    $.post(contextPath + "/purchase",
         {
             "address": address,
             "uuid": uuid
@@ -122,9 +122,9 @@ function payForResearch(uuid) {
                     function(error, result) {
                         if(error) {
                             console.log(error);
-                            $.delete("/purchase/" + data.id)
+                            $.delete(contextPath + "/purchase/" + data.id)
                         } else {
-                            $.put("/purchase/" + data.id + "/confirm",
+                            $.put(contextPath + "/purchase/" + data.id + "/confirm",
                                 {
                                     'transactionHash': result
                                 }
@@ -140,20 +140,21 @@ function payForResearch(uuid) {
 function getResearchPassword(fileName) {
     address = getAddress();
 
-    $('<div>dialog content</div>').dialog({
-        title: 'Title',
-        open: function(){
-            var closeBtn = $('.ui-dialog-titlebar-close');
-            closeBtn.append('<span class="ui-button-icon-primary ui-icon ui-icon-closethick"></span><span class="ui-button-text">close</span>');
-        }
-    })
-
     contractInstance.getResearch.call(fileName, {from: address},
             function(error, result) {
                 if(error) {
                     console.log(error);
                 } else {
-
+                    $('<div>Password: ' + result + '</div>').dialog({
+                        title: 'Password',
+                        open: function(){
+                            var closeBtn = $('.ui-dialog-titlebar-close');
+                            closeBtn.append(
+                                '<span class="ui-button-icon-primary ui-icon ui-icon-closethick"></span>' +
+                                '<span class="ui-button-text">close</span>'
+                            );
+                        }
+                    })
                 }
             }
     );
@@ -311,7 +312,7 @@ function postEnquiry() {
 
     address = getAddress();
 
-    $.post("/enquiry",
+    $.post(contextPath + "/enquiry",
         {
             'address': address,
             'keywords': keywords,
@@ -354,7 +355,7 @@ function placeEnquiry() {
                 expert2 = enquiryBid.expert
                 price2 = enquiryBid.price
             }
-            $.put("/enquiry/bid/" + enquiryBid.bidId + "/select",
+            $.put(contextPath + "/enquiry/bid/" + enquiryBid.bidId + "/select",
                 {
                     'transactionHash': result
                 }
@@ -367,7 +368,7 @@ function placeEnquiry() {
     }
 
     if (ind > 0) {
-        $.get("/enquiry/" + globalEnquiryId,
+        $.get(contextPath + "/enquiry/" + globalEnquiryId,
             function(data) {
                 contractInstance.placeEnquiry(globalEnquiryId,
                                               data.keywords,
@@ -385,32 +386,32 @@ function placeEnquiry() {
                         if(error) {
                             console.log(error);
                             if (bidId0 > 0) {
-                                $.put("/enquiry/bid/" + bidId0 + "/unselect")
+                                $.put(contextPath + "/enquiry/bid/" + bidId0 + "/unselect")
                             }
                             if (bidId1 > 0) {
-                                $.put("/enquiry/bid/" + bidId1 + "/unselect")
+                                $.put(contextPath + "/enquiry/bid/" + bidId1 + "/unselect")
                             }
                             if (bidId2 > 0) {
-                                $.put("/enquiry/bid/" + bidId2 + "/unselect")
+                                $.put(contextPath + "/enquiry/bid/" + bidId2 + "/unselect")
                             }
                         } else {
                             getClientEnquiries()
                             if (bidId0 > 0) {
-                                $.put("/enquiry/bid/" + bidId0 + "/confirm",
+                                $.put(contextPath + "/enquiry/bid/" + bidId0 + "/confirm",
                                     {
                                         'transactionHash': result
                                     }
                                 )
                             }
                             if (bidId1 > 0) {
-                                $.put("/enquiry/bid/" + bidId1 + "/confirm",
+                                $.put(contextPath + "/enquiry/bid/" + bidId1 + "/confirm",
                                     {
                                         'transactionHash': result
                                     }
                                 )
                             }
                             if (bidId2 > 0) {
-                                $.put("/enquiry/bid/" + bidId2 + "/confirm",
+                                $.put(contextPath + "/enquiry/bid/" + bidId2 + "/confirm",
                                     {
                                         'transactionHash': result
                                     }
@@ -425,7 +426,7 @@ function placeEnquiry() {
 }
 
 function getEnquiryBids(enquiryId, keywords, description) {
-    $.get("/enquiry/" + enquiryId + "/bid",
+    $.get(contextPath + "/enquiry/" + enquiryId + "/bid",
         function(data) {
             showEnquiryBids(enquiryId, keywords, description, data)
         }
@@ -436,7 +437,7 @@ function searchResearchItems() {
     address = getAddress()
     keywords = $("#clientResearchKeywords").val()
 
-    $.get("/research/client/" + address + "/keywords/" + keywords,
+    $.get(contextPath + "/research/client/" + address + "/keywords/" + keywords,
         function(data) {
             showClientResearchItems(data)
         }
@@ -446,7 +447,7 @@ function searchResearchItems() {
 function getClientEnquiries() {
     address = getAddress();
 
-    $.get("/enquiry/client/" + address,
+    $.get(contextPath + "/enquiry/client/" + address,
         function(data) {
             showClientEnquiries(data)
         }

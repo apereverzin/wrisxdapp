@@ -30,7 +30,7 @@ function registerExpert() {
     var keywords = $("#expertKeywords").val();
     var description = $("#expertDescription").val();
 
-    $.post("/expert",
+    $.post(contextPath + "/expert",
             {
                 'name': name,
                 'address': address,
@@ -43,14 +43,14 @@ function registerExpert() {
                     function(error, result) {
                         if(error) {
                             console.log(error)
-                            $.delete("/expert/" + address,
+                            $.delete(contextPath + "/expert/" + address,
                                 function(data) {
                                     showUserData()
                                     showUserBalance()
                                 }
                             )
                         } else {
-                            $.put("/expert/" + address + "/confirm",
+                            $.put(contextPath + "/expert/" + address + "/confirm",
                                 {
                                     'transactionHash': result
                                 }
@@ -81,7 +81,7 @@ function depositResearch() {
 
     var researchFile = uploadResearchFile();
 
-    $.post("/research",
+    $.post(contextPath + "/research",
            {
                'address': address,
                'uuid': researchFile.uuid,
@@ -109,7 +109,7 @@ function depositResearch() {
                    function(error, result) {
                        if(error) {
                            console.log(error);
-                           $.delete("/research/" + researchFile.uuid,
+                           $.delete(contextPath + "/research/" + researchFile.uuid,
                                function(data) {
                                    getExpertResearchItems()
                                    showUserData()
@@ -117,11 +117,12 @@ function depositResearch() {
                                }
                            )
                        } else {
-                           $.put("/research/" + researchFile.uuid + "/confirm",
+                           $.put(contextPath + "/research/" + researchFile.uuid + "/confirm",
                                {
                                    'transactionHash': result
                                }
                            )
+                           //waitForTxToBeMined(result)
                            $("#expertResearchPrice").val('')
                            $("#expertResearchTitle").val('')
                            $("#expertResearchDescription").val('')
@@ -147,7 +148,7 @@ function depositEnquiryBidResearch(clientAddress, enquiryId, bidId) {
 
     var researchFile = uploadBidFile();
 
-    $.post("/research",
+    $.post(contextPath + "/research",
            {
                'address': address,
                'uuid': researchFile.uuid,
@@ -175,7 +176,7 @@ function depositEnquiryBidResearch(clientAddress, enquiryId, bidId) {
                    function(error, result) {
                        if(error) {
                            console.log(error);
-                           $.delete("/research/" + researchFile.uuid,
+                           $.delete(contextPath + "/research/" + researchFile.uuid,
                                function(data) {
                                    getExpertEnquiryBids()
                                    showUserData()
@@ -183,7 +184,7 @@ function depositEnquiryBidResearch(clientAddress, enquiryId, bidId) {
                                }
                            )
                        } else {
-                           $.put("/research/" + researchFile.uuid + "/confirm",
+                           $.put(contextPath + "/research/" + researchFile.uuid + "/confirm",
                                {
                                    'transactionHash': result
                                }
@@ -324,7 +325,7 @@ function showExpertPurchases(data) {
 }
 
 function viewExpertResearchItem(uuid) {
-    $.get("/research/" + uuid,
+    $.get(contextPath + "/research/" + uuid,
         function(data) {
             var text = '<table style="width:100%">'
             text = text.concat('<tr><td>Title</td><td>' + data.title + '</td></tr>')
@@ -387,7 +388,7 @@ function placeBid(enquiryId) {
 
     var enquiryBid = $("#enquiryBid").val();
     var comment = $("#enquiryBidComment").val();
-    $.post("/enquiry/" + enquiryId + "/bid",
+    $.post(contextPath + "/enquiry/" + enquiryId + "/bid",
             {
                 'address': address,
                 'bid': enquiryBid,
@@ -403,7 +404,7 @@ function placeBid(enquiryId) {
 
 function getExpertResearchItems() {
     address = getAddress()
-    $.get("/research/expert/" + address,
+    $.get(contextPath + "/research/expert/" + address,
         function(data) {
             showExpertResearchItems(data)
         }
@@ -412,7 +413,7 @@ function getExpertResearchItems() {
 
 function getExpertEnquiryBids() {
     address = getAddress()
-    $.get("/enquiry/bid/expert/" + address,
+    $.get(contextPath + "/enquiry/bid/expert/" + address,
         function(data) {
             showExpertEnquiryBids(data)
         }
@@ -421,7 +422,7 @@ function getExpertEnquiryBids() {
 
 function getExpertPurchases() {
     address = getAddress()
-    $.get("/purchase/expert/" + address,
+    $.get(contextPath + "/purchase/expert/" + address,
         function(data) {
             showExpertPurchases(data)
         }
@@ -430,7 +431,7 @@ function getExpertPurchases() {
 
 function getResearchPurchases(uuid) {
     address = getAddress()
-    $.get("/purchase/research/" + uuid,
+    $.get(contextPath + "/purchase/research/" + uuid,
         function(data) {
             showExpertPurchases(data)
         }
@@ -441,7 +442,7 @@ function searchEnquiries() {
     address = getAddress()
     keywords = $("#expertEnquiryKeywords").val()
 
-    $.get("/enquiry/expert/" + address + "/keywords/" + keywords,
+    $.get(contextPath + "/enquiry/expert/" + address + "/keywords/" + keywords,
         function(data) {
             showExpertEnquiries(data)
         }
