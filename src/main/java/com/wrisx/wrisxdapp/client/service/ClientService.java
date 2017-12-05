@@ -6,7 +6,7 @@ import com.wrisx.wrisxdapp.domain.Client;
 import com.wrisx.wrisxdapp.domain.ClientDao;
 import com.wrisx.wrisxdapp.domain.Expert;
 import com.wrisx.wrisxdapp.domain.ExpertDao;
-import com.wrisx.wrisxdapp.exception.NotFoundException;
+import com.wrisx.wrisxdapp.errorhandling.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -55,20 +55,20 @@ public class ClientService {
         return new ClientData(client);
     }
 
-    public ClientData getClient(String clientAddress) throws NotFoundException {
+    public ClientData getClient(String clientAddress) throws ResourceNotFoundException {
         Client client = entityProvider.getClientByAddress(clientAddress);
 
         return new ClientData(client);
     }
 
-    public void deleteClient(String clientAddress) throws NotFoundException {
+    public void deleteClient(String clientAddress) throws ResourceNotFoundException {
         Client client = entityProvider.getClientByAddress(clientAddress);
 
         clientDao.delete(client);
     }
 
     public void confirmClientCreation(String clientAddress, String transactionHash)
-            throws NotFoundException {
+            throws ResourceNotFoundException {
         Client client = entityProvider.getClientByAddress(clientAddress);
 
         client.setState(CONFIRMED);

@@ -6,7 +6,7 @@ import com.wrisx.wrisxdapp.domain.Client;
 import com.wrisx.wrisxdapp.domain.ClientDao;
 import com.wrisx.wrisxdapp.domain.Expert;
 import com.wrisx.wrisxdapp.domain.ExpertDao;
-import com.wrisx.wrisxdapp.exception.NotFoundException;
+import com.wrisx.wrisxdapp.errorhandling.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -60,20 +60,20 @@ public class ExpertService {
         return new ExpertData(expert);
     }
 
-    public ExpertData getExpert(String expertAddress) throws NotFoundException {
+    public ExpertData getExpert(String expertAddress) throws ResourceNotFoundException {
         Expert expert = entityProvider.getExpertByAddress(expertAddress);
 
         return new ExpertData(expert);
     }
 
-    public void deleteExpert(String expertAddress) throws NotFoundException {
+    public void deleteExpert(String expertAddress) throws ResourceNotFoundException {
         Expert expert = entityProvider.getExpertByAddress(expertAddress);
 
         expertDao.delete(expert);
     }
 
     public void confirmExpertCreation(String clientAddress, String transactionHash)
-            throws NotFoundException {
+            throws ResourceNotFoundException {
         Expert expert = entityProvider.getExpertByAddress(clientAddress);
 
         expert.setState(CONFIRMED);

@@ -2,7 +2,6 @@ package com.wrisx.wrisxdapp.client.controller;
 
 import com.wrisx.wrisxdapp.client.service.ClientService;
 import com.wrisx.wrisxdapp.data.ClientData;
-import com.wrisx.wrisxdapp.exception.NotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +15,6 @@ import java.text.MessageFormat;
 import java.util.List;
 
 import static org.springframework.http.HttpStatus.CREATED;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
@@ -52,13 +50,8 @@ public class ClientController {
             @PathVariable("address") String clientAddress) {
         logger.debug(MessageFormat.format("Getting client {0}", clientAddress));
 
-        try {
-            ClientData client = clientService.getClient(clientAddress);
-            return new ResponseEntity<>(client, OK);
-        } catch (NotFoundException ex) {
-            logger.error(ex.getMessage(), ex);
-            return new ResponseEntity<>(NOT_FOUND);
-        }
+        ClientData client = clientService.getClient(clientAddress);
+        return new ResponseEntity<>(client, OK);
     }
 
     @RequestMapping(value = "/client/{address}", method = DELETE)
@@ -66,13 +59,8 @@ public class ClientController {
             @PathVariable("address") String clientAddress) {
         logger.debug(MessageFormat.format("Deleting client {0}", clientAddress));
 
-        try {
-            clientService.deleteClient(clientAddress);
-            return ResponseEntity.noContent().build();
-        } catch (NotFoundException ex) {
-            logger.error(ex.getMessage(), ex);
-            return ResponseEntity.notFound().build();
-        }
+        clientService.deleteClient(clientAddress);
+        return ResponseEntity.noContent().build();
     }
 
     @RequestMapping(value = "/client/{address}/confirm", method = PUT)
@@ -82,13 +70,8 @@ public class ClientController {
         logger.debug(MessageFormat.format(
                 "Confirming client creation {0}", clientAddress));
 
-        try {
-            clientService.confirmClientCreation(clientAddress, transactionHash);
-            return ResponseEntity.noContent().build();
-        } catch (NotFoundException ex) {
-            logger.error(ex.getMessage(), ex);
-            return ResponseEntity.notFound().build();
-        }
+        clientService.confirmClientCreation(clientAddress, transactionHash);
+        return ResponseEntity.noContent().build();
     }
 
     @RequestMapping(value = "/client", method = GET)

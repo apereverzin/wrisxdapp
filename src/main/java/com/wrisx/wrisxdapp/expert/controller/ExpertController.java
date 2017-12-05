@@ -1,7 +1,6 @@
 package com.wrisx.wrisxdapp.expert.controller;
 
 import com.wrisx.wrisxdapp.data.ExpertData;
-import com.wrisx.wrisxdapp.exception.NotFoundException;
 import com.wrisx.wrisxdapp.expert.service.ExpertService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.text.MessageFormat;
 import java.util.List;
 
-import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
@@ -52,13 +50,8 @@ public class ExpertController {
             @PathVariable("address") String expertAddress) {
         logger.debug(MessageFormat.format("Getting expert {0}", expertAddress));
 
-        try {
-            ExpertData expert = expertService.getExpert(expertAddress);
-            return new ResponseEntity<>(expert, OK);
-        } catch (NotFoundException ex) {
-            logger.error(ex.getMessage(), ex);
-            return new ResponseEntity<>(NOT_FOUND);
-        }
+        ExpertData expert = expertService.getExpert(expertAddress);
+        return new ResponseEntity<>(expert, OK);
     }
 
     @RequestMapping(value = "/expert/{address}", method = DELETE)
@@ -66,13 +59,8 @@ public class ExpertController {
             @PathVariable("address") String expertAddress) {
         logger.debug(MessageFormat.format("Deleting expert {0}", expertAddress));
 
-        try {
-            expertService.deleteExpert(expertAddress);
-            return new ResponseEntity<>(OK);
-        } catch (NotFoundException ex) {
-            logger.error(ex.getMessage(), ex);
-            return new ResponseEntity<>(NOT_FOUND);
-        }
+        expertService.deleteExpert(expertAddress);
+        return new ResponseEntity<>(OK);
     }
 
     @RequestMapping(value = "/expert/{address}/confirm", method = PUT)
@@ -82,13 +70,8 @@ public class ExpertController {
         logger.debug(MessageFormat.format(
                 "Confirming expert creation {0}", expertAddress));
 
-        try {
-            expertService.confirmExpertCreation(expertAddress, transactionHash);
-            return ResponseEntity.noContent().build();
-        } catch (NotFoundException ex) {
-            logger.error(ex.getMessage(), ex);
-            return ResponseEntity.notFound().build();
-        }
+        expertService.confirmExpertCreation(expertAddress, transactionHash);
+        return ResponseEntity.noContent().build();
     }
 
     @RequestMapping(value = "/expert/keywords/{keywords}", method = GET)
@@ -96,17 +79,18 @@ public class ExpertController {
             @PathVariable String keywords) {
         logger.debug(MessageFormat.format("Searching experts {0}", keywords));
 
-        return getExperts(keywords);
+        return getExpertsByKeywords(keywords);
     }
 
     @RequestMapping(value = "/expert/keywords", method = GET)
     public ResponseEntity<List<ExpertData>> findAllExperts() {
         logger.debug("Searching experts");
 
-        return getExperts("");
+        return getExpertsByKeywords("");
     }
 
-    private ResponseEntity<List<ExpertData>> getExperts(@PathVariable String keywords) {
+    private ResponseEntity<List<ExpertData>> getExpertsByKeywords(
+            @PathVariable String keywords) {
         List<ExpertData> experts = expertService.findExperts(keywords);
 
         return new ResponseEntity<>(experts, OK);

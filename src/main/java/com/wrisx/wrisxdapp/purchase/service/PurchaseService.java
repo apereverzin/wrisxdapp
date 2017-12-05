@@ -7,7 +7,7 @@ import com.wrisx.wrisxdapp.domain.Expert;
 import com.wrisx.wrisxdapp.domain.Purchase;
 import com.wrisx.wrisxdapp.domain.PurchaseDao;
 import com.wrisx.wrisxdapp.domain.Research;
-import com.wrisx.wrisxdapp.exception.NotFoundException;
+import com.wrisx.wrisxdapp.errorhandling.ResourceNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +34,7 @@ public class PurchaseService {
     }
 
     public PurchaseData createPurchase(String clientAddress, String uuid)
-            throws NotFoundException {
+            throws ResourceNotFoundException {
         Client client = entityProvider.getClientByAddress(clientAddress);
         Research research = entityProvider.getResearchByUuid(uuid);
 
@@ -51,7 +51,7 @@ public class PurchaseService {
     }
 
     @Transactional
-    public void deletePurchase(long purchaseId) throws NotFoundException {
+    public void deletePurchase(long purchaseId) throws ResourceNotFoundException {
         Purchase purchase = entityProvider.getPurchaseById(purchaseId);
 
         purchaseDao.delete(purchase);
@@ -59,7 +59,7 @@ public class PurchaseService {
 
     @Transactional
     public void confirmPurchaseCreation(long purchaseId, String transactionHash)
-            throws NotFoundException {
+            throws ResourceNotFoundException {
         Purchase purchase = entityProvider.getPurchaseById(purchaseId);
 
         purchase.setState(CONFIRMED);
@@ -69,7 +69,7 @@ public class PurchaseService {
     }
 
     public List<PurchaseData> getClientPurchases(String clientAddress)
-            throws NotFoundException {
+            throws ResourceNotFoundException {
         Client client = entityProvider.getClientByAddress(clientAddress);
 
         return purchaseDao.findByClient(client).stream().
@@ -79,7 +79,7 @@ public class PurchaseService {
     }
 
     public List<PurchaseData> getExpertPurchases(String expertAddress)
-            throws NotFoundException {
+            throws ResourceNotFoundException {
         Expert expert = entityProvider.getExpertByAddress(expertAddress);
 
         return purchaseDao.findByExpert(expert).stream().
@@ -88,7 +88,7 @@ public class PurchaseService {
                 collect(toList());
     }
 
-    public List<PurchaseData> getResearchPurchases(String uuid) throws NotFoundException {
+    public List<PurchaseData> getResearchPurchases(String uuid) throws ResourceNotFoundException {
         Research research = entityProvider.getResearchByUuid(uuid);
 
         return purchaseDao.findByResearch(research).stream().

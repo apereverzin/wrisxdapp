@@ -2,7 +2,6 @@ package com.wrisx.wrisxdapp.enquirybid.controller;
 
 import com.wrisx.wrisxdapp.data.EnquiryBidData;
 import com.wrisx.wrisxdapp.enquirybid.service.EnquiryBidService;
-import com.wrisx.wrisxdapp.exception.NotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.text.MessageFormat;
 import java.util.List;
 
-import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
@@ -42,14 +40,9 @@ public class EnquiryBidController {
         logger.debug(MessageFormat.format(
                 "Placing bid {0} for research enquiry {1}", bid, enquiryId));
 
-        try {
-            EnquiryBidData enquiryBid =
-                    enquiryBidService.placeEnquiryBid(enquiryId, expertAddress, bid, comment);
-            return new ResponseEntity<>(enquiryBid, OK);
-        } catch (NotFoundException ex) {
-            logger.error(ex.getMessage(), ex);
-            return new ResponseEntity<>(NOT_FOUND);
-        }
+        EnquiryBidData enquiryBid =
+                enquiryBidService.placeEnquiryBid(enquiryId, expertAddress, bid, comment);
+        return new ResponseEntity<>(enquiryBid, OK);
 
     }
 
@@ -59,14 +52,9 @@ public class EnquiryBidController {
         logger.debug(MessageFormat.format(
                 "Selecting bid {0} for research enquiry", enquiryBidId));
 
-        try {
-            EnquiryBidData enquiryBid =
-                    enquiryBidService.setEnquiryBidSelection(enquiryBidId, true);
-            return new ResponseEntity<>(enquiryBid, OK);
-        } catch (NotFoundException ex) {
-            logger.error(ex.getMessage(), ex);
-            return new ResponseEntity<>(NOT_FOUND);
-        }
+        EnquiryBidData enquiryBid =
+                enquiryBidService.setEnquiryBidSelection(enquiryBidId, true);
+        return new ResponseEntity<>(enquiryBid, OK);
     }
 
     @RequestMapping(value = "/enquiry/bid/{enquiryBidId}/unselect", method = PUT)
@@ -75,14 +63,9 @@ public class EnquiryBidController {
         logger.debug(MessageFormat.format(
                 "Unselecting bid {0} for research enquiry", enquiryBidId));
 
-        try {
-            EnquiryBidData enquiryBid =
-                    enquiryBidService.setEnquiryBidSelection(enquiryBidId, false);
-            return new ResponseEntity<>(enquiryBid, OK);
-        } catch (NotFoundException ex) {
-            logger.error(ex.getMessage(), ex);
-            return new ResponseEntity<>(NOT_FOUND);
-        }
+        EnquiryBidData enquiryBid =
+                enquiryBidService.setEnquiryBidSelection(enquiryBidId, false);
+        return new ResponseEntity<>(enquiryBid, OK);
     }
 
     @RequestMapping(value = "/enquiry/bid/{enquiryBidId}", method = DELETE)
@@ -91,13 +74,8 @@ public class EnquiryBidController {
         logger.debug(MessageFormat.format(
                 "Deleting bid {0} for research enquiry", enquiryBidId));
 
-        try {
-            enquiryBidService.deleteEnquiryBid(enquiryBidId);
-            return ResponseEntity.noContent().build();
-        } catch (NotFoundException ex) {
-            logger.error(ex.getMessage(), ex);
-            return ResponseEntity.notFound().build();
-        }
+        enquiryBidService.deleteEnquiryBid(enquiryBidId);
+        return ResponseEntity.noContent().build();
     }
 
     @RequestMapping(value = "/enquiry/bid/{enquiryBidId}/confirm", method = PUT)
@@ -107,13 +85,8 @@ public class EnquiryBidController {
         logger.debug(MessageFormat.format(
                 "Confirming bid creation {0} for research enquiry", enquiryBidId));
 
-        try {
-            enquiryBidService.confirmEnquiryBidCreation(enquiryBidId, transactionHash);
-            return ResponseEntity.noContent().build();
-        } catch (NotFoundException ex) {
-            logger.error(ex.getMessage(), ex);
-            return ResponseEntity.notFound().build();
-        }
+        enquiryBidService.confirmEnquiryBidCreation(enquiryBidId, transactionHash);
+        return ResponseEntity.noContent().build();
     }
 
     @RequestMapping(value = "/enquiry/bid/expert/{expertAddress}", method = GET)
@@ -122,14 +95,9 @@ public class EnquiryBidController {
         logger.debug(MessageFormat.format(
                 "Getting expert enquiry bids {0}", expertAddress));
 
-        try {
-            List<EnquiryBidData> researchItems =
-                    enquiryBidService.getEnquiryBidsByExpert(expertAddress);
-            return new ResponseEntity<>(researchItems, OK);
-        } catch (NotFoundException ex) {
-            logger.error(ex.getMessage(), ex);
-            return new ResponseEntity<>(NOT_FOUND);
-        }
+        List<EnquiryBidData> researchItems =
+                enquiryBidService.getEnquiryBidsByExpert(expertAddress);
+        return new ResponseEntity<>(researchItems, OK);
     }
 
     @RequestMapping(value = "/enquiry/{enquiryId}/bid", method = GET)
@@ -137,13 +105,8 @@ public class EnquiryBidController {
         logger.debug(MessageFormat.format(
                 "Getting bids for research enquiry {0}", enquiryId));
 
-        try {
-            List<EnquiryBidData> enquiryBids =
-                    enquiryBidService.getEnquiryBidsByEnquiry(enquiryId);
-            return new ResponseEntity<>(enquiryBids, OK);
-        } catch (NotFoundException ex) {
-            logger.error(ex.getMessage(), ex);
-            return new ResponseEntity<>(NOT_FOUND);
-        }
+        List<EnquiryBidData> enquiryBids =
+                enquiryBidService.getEnquiryBidsByEnquiry(enquiryId);
+        return new ResponseEntity<>(enquiryBids, OK);
     }
 }

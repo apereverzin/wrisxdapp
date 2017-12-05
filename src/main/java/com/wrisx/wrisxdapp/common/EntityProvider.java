@@ -1,13 +1,17 @@
 package com.wrisx.wrisxdapp.common;
 
 import com.wrisx.wrisxdapp.domain.*;
-import com.wrisx.wrisxdapp.exception.NotFoundException;
+import com.wrisx.wrisxdapp.errorhandling.ResourceNotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.text.MessageFormat;
 
 @Component
 public class EntityProvider {
+    private final Logger logger = LoggerFactory.getLogger(EntityProvider.class);
+
     private final ExpertDao expertDao;
     private final ClientDao clientDao;
     private final ResearchDao researchDao;
@@ -27,66 +31,74 @@ public class EntityProvider {
         this.purchaseDao = purchaseDao;
     }
 
-    public Expert getExpertByAddress(String expertAddress) throws NotFoundException {
+    public Expert getExpertByAddress(String expertAddress) throws ResourceNotFoundException {
         Expert expert = expertDao.findByAddress(expertAddress);
 
         if (expert == null) {
-            throw new NotFoundException(
-                    MessageFormat.format("Expert not found {0}", expertAddress));
+            String msg = MessageFormat.format("Expert not found {0}", expertAddress);
+            throwException(msg);
         }
+
         return expert;
     }
 
-    public Client getClientByAddress(String clientAddress) throws NotFoundException {
+    public Client getClientByAddress(String clientAddress) throws ResourceNotFoundException {
         Client client = clientDao.findByAddress(clientAddress);
 
         if (client == null) {
-            throw new NotFoundException(
-                    MessageFormat.format("Client not found {0}", clientAddress));
+            String msg = MessageFormat.format("Client not found {0}", clientAddress);
+            throwException(msg);
         }
+
         return client;
     }
 
-    public Research getResearchByUuid(String uuid) throws NotFoundException {
+    public Research getResearchByUuid(String uuid) throws ResourceNotFoundException {
         Research research = researchDao.findByUuid(uuid);
 
         if (research == null) {
-            throw new NotFoundException(
-                    MessageFormat.format("Research not found {0}", uuid));
+            String msg = MessageFormat.format("Research not found {0}", uuid);
+            throwException(msg);
         }
+
         return research;
     }
 
-    public EnquiryBid getEnquiryBidById(long enquiryBidId) throws NotFoundException {
+    public EnquiryBid getEnquiryBidById(long enquiryBidId) throws ResourceNotFoundException {
         EnquiryBid enquiryBid = enquiryBidDao.findOne(enquiryBidId);
 
         if (enquiryBid == null) {
-            throw new NotFoundException(
-                    MessageFormat.format("Enquiry bid not found {0}", enquiryBid));
+            String msg = MessageFormat.format("Enquiry bid not found {0}", enquiryBidId);
+            throwException(msg);
         }
 
         return enquiryBid;
     }
 
-    public ResearchEnquiry getResearchEnquiryById(long enquiryId) throws NotFoundException {
+    public ResearchEnquiry getResearchEnquiryById(long enquiryId) throws ResourceNotFoundException {
         ResearchEnquiry enquiry = researchEnquiryDao.findOne(enquiryId);
 
         if (enquiry == null) {
-            throw new NotFoundException(
-                    MessageFormat.format("Enquiry not found {0}", enquiryId));
+            String msg = MessageFormat.format("Enquiry not found {0}", enquiryId);
+            throwException(msg);
         }
 
         return enquiry;
     }
 
-    public Purchase getPurchaseById(long purchaseId) throws NotFoundException {
+    public Purchase getPurchaseById(long purchaseId) throws ResourceNotFoundException {
         Purchase purchase = purchaseDao.findOne(purchaseId);
 
         if (purchase == null) {
-            throw new NotFoundException(
-                    MessageFormat.format("Purchase not found {0}", purchaseId));
+            String msg = MessageFormat.format("Purchase not found {0}", purchaseId);
+            throwException(msg);
         }
 
         return purchase;
+    }
+
+    private Client throwException(String msg) {
+        logger.error(msg);
+        throw new ResourceNotFoundException(msg);
     }
 }

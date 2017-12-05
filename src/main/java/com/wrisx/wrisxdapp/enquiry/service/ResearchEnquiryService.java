@@ -8,7 +8,7 @@ import com.wrisx.wrisxdapp.domain.EnquiryBid;
 import com.wrisx.wrisxdapp.domain.EnquiryBidDao;
 import com.wrisx.wrisxdapp.domain.ResearchEnquiry;
 import com.wrisx.wrisxdapp.domain.ResearchEnquiryDao;
-import com.wrisx.wrisxdapp.exception.NotFoundException;
+import com.wrisx.wrisxdapp.errorhandling.ResourceNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +41,7 @@ public class ResearchEnquiryService {
 
     public ResearchEnquiryData saveEnquiry(String clientAddress, String keywords,
                                            String description)
-            throws NotFoundException {
+            throws ResourceNotFoundException {
         Client client = entityProvider.getClientByAddress(clientAddress);
 
         ResearchEnquiry researchEnquiry =
@@ -51,7 +51,7 @@ public class ResearchEnquiryService {
     }
 
     public List<ResearchEnquiryData> getClientEnquiries(String clientAddress)
-            throws NotFoundException {
+            throws ResourceNotFoundException {
         Client client = entityProvider.getClientByAddress(clientAddress);
 
         return getListFromIterable(researchEnquiryDao.findByClient(client)).stream().
@@ -60,7 +60,7 @@ public class ResearchEnquiryService {
                 collect(toList());
     }
 
-    public ResearchEnquiryData getEnquiry(long id) throws NotFoundException {
+    public ResearchEnquiryData getEnquiry(long id) throws ResourceNotFoundException {
         ResearchEnquiry researchEnquiry = entityProvider.getResearchEnquiryById(id);
 
         return new ResearchEnquiryData(researchEnquiry);
@@ -68,7 +68,7 @@ public class ResearchEnquiryService {
 
     public List<ResearchEnquiryData> findExpertEnquiries(String expertAddress,
                                                          String keywords)
-            throws NotFoundException {
+            throws ResourceNotFoundException {
         entityProvider.getExpertByAddress(expertAddress);
 
         List<String> keywordList = getKeywordList(keywords);

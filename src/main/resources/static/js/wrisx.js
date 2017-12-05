@@ -47,7 +47,6 @@ $(document).ready(function() {
 });
 
 function getAddress() {
-    getWeb3(startApp)
     var address = web3.eth.accounts[0]
     if (address === undefined) {
         console.log('address undefined')

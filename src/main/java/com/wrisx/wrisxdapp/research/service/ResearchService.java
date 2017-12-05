@@ -3,7 +3,7 @@ package com.wrisx.wrisxdapp.research.service;
 import com.wrisx.wrisxdapp.common.EntityProvider;
 import com.wrisx.wrisxdapp.data.ResearchData;
 import com.wrisx.wrisxdapp.domain.*;
-import com.wrisx.wrisxdapp.exception.NotFoundException;
+import com.wrisx.wrisxdapp.errorhandling.ResourceNotFoundException;
 import com.wrisx.wrisxdapp.purchase.service.PurchaseService;
 import com.wrisx.wrisxdapp.research.data.ResearchFile;
 import net.lingala.zip4j.core.ZipFile;
@@ -72,27 +72,22 @@ public class ResearchService {
     }
 
     public ResearchFile saveUploadedFile(MultipartFile file) {
-        try {
-            String directory = env.getProperty("wrisx.paths.uploadedFiles");
-            File researchFile = fileUploadProvider.uploadFile(file, directory);
+        String directory = env.getProperty("wrisx.paths.uploadedFiles");
+        File researchFile = fileUploadProvider.uploadFile(file, directory);
 
-            String password = passwordProvider.getRandomPassword(PASSWORD_LENGTH);
-            ZipFile zipFile =
-                    zipFileProvider.zipAndProtectFile(researchFile, directory, password);
+        String password = passwordProvider.getRandomPassword(PASSWORD_LENGTH);
+        ZipFile zipFile =
+                zipFileProvider.zipAndProtectFile(researchFile, directory, password);
 
-            String zipFileChecksumMD5 =
-                    checksumProvider.getFileChecksum(zipFile.getFile(), MD5_ALGORITHM);
+        String zipFileChecksumMD5 =
+                checksumProvider.getFileChecksum(zipFile.getFile(), MD5_ALGORITHM);
 
-            researchFile.delete();
+        researchFile.delete();
 
-            String zipFileName = zipFile.getFile().getName();
-            return new ResearchFile(
-                    zipFileName.substring(0, zipFileName.indexOf(ZIP_EXTENSION)),
-                    password, zipFileChecksumMD5);
-        } catch (Exception ex) {
-            logger.error(ex.getMessage(), ex);
-            throw new ResearchException(ex);
-        }
+        String zipFileName = zipFile.getFile().getName();
+        return new ResearchFile(
+                zipFileName.substring(0, zipFileName.indexOf(ZIP_EXTENSION)),
+                password, zipFileChecksumMD5);
     }
 
     @Transactional
@@ -106,7 +101,7 @@ public class ResearchService {
                                      String password,
                                      String clientAddress,
                                      long enquiryId,
-                                     long bidId) throws NotFoundException {
+                                     long bidId) throws ResourceNotFoundException {
         Research research =
                 saveResearch(expertAddress, uuid, price, title,
                         description, keywords, checksum, password);
@@ -115,7 +110,7 @@ public class ResearchService {
             EnquiryBid enquiryBid = enquiryBidDao.findOne(bidId);
 
             if (enquiryBid == null) {
-                throw new NotFoundException(MessageFormat.format(
+                throw new ResourceNotFoundException(MessageFormat.format(
                         "Bid not found {0}", bidId));
             }
 
@@ -130,7 +125,7 @@ public class ResearchService {
     }
 
     @Transactional
-    public void deleteResearch(String uuid) throws NotFoundException {
+    public void deleteResearch(String uuid) throws ResourceNotFoundException {
         Research research = entityProvider.getResearchByUuid(uuid);
 
         purchaseDao.findByResearch(research).forEach(
@@ -145,7 +140,7 @@ public class ResearchService {
 
     @Transactional
     public void confirmResearchCreation(String uuid, String transactionHash)
-            throws NotFoundException {
+            throws ResourceNotFoundException {
         Research research = entityProvider.getResearchByUuid(uuid);
 
         purchaseDao.findByResearch(research).forEach(
@@ -161,7 +156,7 @@ public class ResearchService {
     }
 
     public List<ResearchData> getExpertResearchItems(String expertAddress)
-            throws NotFoundException {
+            throws ResourceNotFoundException {
         Expert expert = entityProvider.getExpertByAddress(expertAddress);
 
         return getListFromIterable(researchDao.findByExpert(expert)).stream().
@@ -170,14 +165,14 @@ public class ResearchService {
                 collect(toList());
     }
 
-    public ResearchData getResearch(String uuid) throws NotFoundException {
+    public ResearchData getResearch(String uuid) throws ResourceNotFoundException {
         Research research = entityProvider.getResearchByUuid(uuid);
 
         return new ResearchData(research);
     }
 
     public List<ResearchData> findResearchItems(String clientAddress, String keywords)
-            throws NotFoundException {
+            throws ResourceNotFoundException {
         Client client = entityProvider.getClientByAddress(clientAddress);
 
         List<String> keywordList = getKeywordList(keywords);
@@ -219,20 +214,15 @@ public class ResearchService {
     }
 
     public File getResearchFile(String fileName) {
-        try {
-            String directory = env.getProperty("wrisx.paths.uploadedFiles");
-            String filepath = Paths.get(directory, fileName + ZIP_EXTENSION).toString();
-            return new File(filepath);
-        } catch (Exception ex) {
-            logger.error(ex.getMessage(), ex);
-            throw new ResearchException(ex);
-        }
+        String directory = env.getProperty("wrisx.paths.uploadedFiles");
+        String filepath = Paths.get(directory, fileName + ZIP_EXTENSION).toString();
+        return new File(filepath);
     }
 
     private Research saveResearch(String expertAddress, String uuid, int price,
                                   String title, String description, String keywords,
                                   String checksum, String password)
-            throws NotFoundException {
+            throws ResourceNotFoundException {
         Expert expert = entityProvider.getExpertByAddress(expertAddress);
 
         Research research = new Research(uuid, price, title, description,
@@ -243,11 +233,11 @@ public class ResearchService {
     }
 
     private void updateEnquiryBid(long enquiryId, EnquiryBid enquiryBid,
-                                  Research research) throws NotFoundException {
+                                  Research research) throws ResourceNotFoundException {
         ResearchEnquiry researchEnquiry = researchEnquiryDao.findOne(enquiryId);
 
         if (researchEnquiry == null) {
-            throw new NotFoundException(MessageFormat.format(
+            throw new ResourceNotFoundException(MessageFormat.format(
                     "Research enquiry not found {0}", enquiryId));
         }
 

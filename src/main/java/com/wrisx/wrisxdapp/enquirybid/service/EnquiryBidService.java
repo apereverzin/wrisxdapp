@@ -8,7 +8,7 @@ import com.wrisx.wrisxdapp.domain.Expert;
 import com.wrisx.wrisxdapp.domain.ExpertDao;
 import com.wrisx.wrisxdapp.domain.ResearchEnquiry;
 import com.wrisx.wrisxdapp.domain.ResearchEnquiryDao;
-import com.wrisx.wrisxdapp.exception.NotFoundException;
+import com.wrisx.wrisxdapp.errorhandling.ResourceNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +41,7 @@ public class EnquiryBidService {
     }
 
     public EnquiryBidData placeEnquiryBid(long enquiryId, String expertAddress,
-                                          int bid, String comment) throws NotFoundException {
+                                          int bid, String comment) throws ResourceNotFoundException {
         ResearchEnquiry enquiry = entityProvider.getResearchEnquiryById(enquiryId);
         Expert expert = entityProvider.getExpertByAddress(expertAddress);
 
@@ -51,7 +51,7 @@ public class EnquiryBidService {
     }
 
     public List<EnquiryBidData> getEnquiryBidsByEnquiry(long enquiryId)
-            throws NotFoundException {
+            throws ResourceNotFoundException {
         ResearchEnquiry enquiry = entityProvider.getResearchEnquiryById(enquiryId);
         return getListFromIterable(enquiryBidDao.findByResearchEnquiry(enquiry)).
                 stream().
@@ -61,7 +61,7 @@ public class EnquiryBidService {
     }
 
     public EnquiryBidData setEnquiryBidSelection(long enquiryBidId, boolean selected)
-            throws NotFoundException {
+            throws ResourceNotFoundException {
         EnquiryBid enquiryBid = entityProvider.getEnquiryBidById(enquiryBidId);
 
         enquiryBid.setSelected(selected);
@@ -69,14 +69,14 @@ public class EnquiryBidService {
         return new EnquiryBidData(enquiryBidDao.save(enquiryBid));
     }
 
-    public void deleteEnquiryBid(long enquiryBidId) throws NotFoundException {
+    public void deleteEnquiryBid(long enquiryBidId) throws ResourceNotFoundException {
         EnquiryBid enquiryBid = entityProvider.getEnquiryBidById(enquiryBidId);
 
         enquiryBidDao.delete(enquiryBid);
     }
 
     public void confirmEnquiryBidCreation(long enquiryBidId, String transactionHash)
-            throws NotFoundException {
+            throws ResourceNotFoundException {
         EnquiryBid enquiryBid = entityProvider.getEnquiryBidById(enquiryBidId);
 
         enquiryBid.setState(CONFIRMED);
@@ -86,7 +86,7 @@ public class EnquiryBidService {
     }
 
     public List<EnquiryBidData> getEnquiryBidsByExpert(String expertAddress)
-            throws NotFoundException {
+            throws ResourceNotFoundException {
         Expert expert = entityProvider.getExpertByAddress(expertAddress);
 
         return getListFromIterable(enquiryBidDao.findByExpert(expert)).
