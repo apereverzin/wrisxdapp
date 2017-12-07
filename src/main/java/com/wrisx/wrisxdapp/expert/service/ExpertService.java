@@ -6,10 +6,12 @@ import com.wrisx.wrisxdapp.domain.Client;
 import com.wrisx.wrisxdapp.domain.ClientDao;
 import com.wrisx.wrisxdapp.domain.Expert;
 import com.wrisx.wrisxdapp.domain.ExpertDao;
+import com.wrisx.wrisxdapp.errorhandling.BadRequestException;
 import com.wrisx.wrisxdapp.errorhandling.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -83,10 +85,15 @@ public class ExpertService {
         expertDao.save(expert);
     }
 
-    public void commitExpertCreation(String clientAddress)
+    public void commitExpertCreation(String expertAddress, String transactionHash)
             throws ResourceNotFoundException {
-        Expert expert = entityProvider.getExpertByAddress(clientAddress);
+        Expert expert = entityProvider.getExpertByAddressAndTransactionHash(
+                expertAddress, transactionHash);
 
+        if (expert.getState() != CONFIRMED) {
+            throw new BadRequestException(MessageFormat.format(
+                    "Illegal state of expert {0}", expertAddress));
+        }
         expert.setState(COMMITTED);
 
         expertDao.save(expert);

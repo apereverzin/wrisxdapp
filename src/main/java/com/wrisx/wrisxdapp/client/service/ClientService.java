@@ -6,10 +6,12 @@ import com.wrisx.wrisxdapp.domain.Client;
 import com.wrisx.wrisxdapp.domain.ClientDao;
 import com.wrisx.wrisxdapp.domain.Expert;
 import com.wrisx.wrisxdapp.domain.ExpertDao;
+import com.wrisx.wrisxdapp.errorhandling.BadRequestException;
 import com.wrisx.wrisxdapp.errorhandling.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -78,10 +80,15 @@ public class ClientService {
         clientDao.save(client);
     }
 
-    public void commitClientCreation(String clientAddress)
+    public void commitClientCreation(String clientAddress, String transactionHash)
             throws ResourceNotFoundException {
-        Client client = entityProvider.getClientByAddress(clientAddress);
+        Client client = entityProvider.getClientByAddressAndTransactionHash(
+                clientAddress, transactionHash);
 
+        if (client.getState() != CONFIRMED) {
+            throw new BadRequestException(MessageFormat.format(
+                    "Illegal state of client {0}", clientAddress));
+        }
         client.setState(COMMITTED);
 
         clientDao.save(client);

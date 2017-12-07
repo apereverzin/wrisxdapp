@@ -6,5 +6,6 @@ import javax.transaction.Transactional;
 
 @Transactional
 public interface FacilitatorDao extends CrudRepository<Facilitator, Long> {
-  public Facilitator findByAddress(String address);
+    Facilitator findByAddress(String address);
+    Facilitator findByAddressAndTransactionHash(String address, String transactionHash);
 }

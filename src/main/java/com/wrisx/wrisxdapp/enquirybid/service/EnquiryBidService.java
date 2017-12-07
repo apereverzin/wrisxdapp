@@ -8,12 +8,14 @@ import com.wrisx.wrisxdapp.domain.Expert;
 import com.wrisx.wrisxdapp.domain.ExpertDao;
 import com.wrisx.wrisxdapp.domain.ResearchEnquiry;
 import com.wrisx.wrisxdapp.domain.ResearchEnquiryDao;
+import com.wrisx.wrisxdapp.errorhandling.BadRequestException;
 import com.wrisx.wrisxdapp.errorhandling.ResourceNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.MessageFormat;
 import java.util.List;
 
 import static com.wrisx.wrisxdapp.domain.State.COMMITTED;
@@ -86,10 +88,15 @@ public class EnquiryBidService {
         enquiryBidDao.save(enquiryBid);
     }
 
-    public void commitEnquiryBidCreation(long enquiryBidId)
+    public void commitEnquiryBidCreation(long enquiryBidId, String transactionHash)
             throws ResourceNotFoundException {
-        EnquiryBid enquiryBid = entityProvider.getEnquiryBidById(enquiryBidId);
+        EnquiryBid enquiryBid = entityProvider.getEnquiryBidByIdAndTransactionHash(
+                enquiryBidId, transactionHash);
 
+        if (enquiryBid.getState() != CONFIRMED) {
+            throw new BadRequestException(MessageFormat.format(
+                    "Illegal state of enquiry bid {0}", enquiryBidId));
+        }
         enquiryBid.setState(COMMITTED);
 
         enquiryBidDao.save(enquiryBid);

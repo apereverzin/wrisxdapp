@@ -7,8 +7,9 @@ import java.util.List;
 
 @Transactional
 public interface PurchaseDao extends CrudRepository<Purchase, Long> {
-  public List<Purchase> findByClient(Client client);
-  public List<Purchase> findByExpert(Expert expert);
-  public List<Purchase> findByResearch(Research research);
-  public List<Purchase> findByClientAndResearch(Client client, Research research);
+    Purchase findByIdAndTransactionHash(long purchaseId, String transactionHash);
+    List<Purchase> findByClient(Client client);
+    List<Purchase> findByExpert(Expert expert);
+    List<Purchase> findByResearch(Research research);
+    List<Purchase> findByClientAndResearch(Client client, Research research);
 }

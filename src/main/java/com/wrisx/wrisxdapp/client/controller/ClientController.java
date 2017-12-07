@@ -78,11 +78,12 @@ public class ClientController {
 
     @RequestMapping(value = "/client/{address}/commit", method = PUT)
     public ResponseEntity<Void> commitClientCreation(
-            @PathVariable("address") String clientAddress) {
+            @PathVariable("address") String clientAddress,
+            @RequestParam("transactionHash") String transactionHash) {
         logger.debug(MessageFormat.format(
-                "Committing client creation {0}", clientAddress));
+                "Committing client creation {0} {1}", clientAddress, transactionHash));
 
-        clientService.commitClientCreation(clientAddress);
+        clientService.commitClientCreation(clientAddress, transactionHash);
 
         return ResponseEntity.noContent().build();
     }

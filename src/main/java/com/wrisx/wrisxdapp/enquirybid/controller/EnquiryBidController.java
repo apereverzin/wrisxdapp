@@ -96,11 +96,13 @@ public class EnquiryBidController {
 
     @RequestMapping(value = "/enquiry/bid/{enquiryBidId}/commit", method = PUT)
     public ResponseEntity<Void> commitEnquiryBidCreation(
-            @PathVariable long enquiryBidId) {
+            @PathVariable long enquiryBidId,
+            @RequestParam("transactionHash") String transactionHash) {
         logger.debug(MessageFormat.format(
-                "Committing bid creation {0} for research enquiry", enquiryBidId));
+                "Committing enquiry bid creation {0} {1}",
+                enquiryBidId, transactionHash));
 
-        enquiryBidService.commitEnquiryBidCreation(enquiryBidId);
+        enquiryBidService.commitEnquiryBidCreation(enquiryBidId, transactionHash);
 
         return ResponseEntity.noContent().build();
     }

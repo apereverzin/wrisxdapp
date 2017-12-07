@@ -6,5 +6,6 @@ import javax.transaction.Transactional;
 
 @Transactional
 public interface ExpertDao extends CrudRepository<Expert, Long> {
-  public Expert findByAddress(String address);
+    Expert findByAddress(String address);
+    Expert findByAddressAndTransactionHash(String address, String transactionHash);
 }

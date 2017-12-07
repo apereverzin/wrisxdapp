@@ -100,10 +100,12 @@ public class ResearchController {
 
     @RequestMapping(value = "/research/{uuid}/commit", method = PUT)
     public ResponseEntity<Void> commitResearchCreation(
-            @PathVariable("uuid") String uuid) {
-        logger.debug(MessageFormat.format("Committing research creation {0}", uuid));
+            @PathVariable("uuid") String uuid,
+            @RequestParam("transactionHash") String transactionHash) {
+        logger.debug(MessageFormat.format(
+                "Committing research creation {0} {1}", uuid, transactionHash));
 
-        researchService.commitResearchCreation(uuid);
+        researchService.commitResearchCreation(uuid, transactionHash);
 
         return ResponseEntity.noContent().build();
     }

@@ -64,11 +64,13 @@ public class PurchaseController {
     }
 
     @RequestMapping(value = "/purchase/{id}/commit", method = PUT)
-    public ResponseEntity<Void> commitResearch(
-            @PathVariable("id") long purchaseId) {
-        logger.debug(MessageFormat.format("Committing purchase {0}", purchaseId));
+    public ResponseEntity<Void> commitPurchase(
+            @PathVariable("id") long purchaseId,
+            @RequestParam("transactionHash") String transactionHash) {
+        logger.debug(MessageFormat.format(
+                "Committing purchase {0} {1}", purchaseId, transactionHash));
 
-        purchaseService.commitPurchaseCreation(purchaseId);
+        purchaseService.commitPurchaseCreation(purchaseId, transactionHash);
 
         return ResponseEntity.noContent().build();
     }

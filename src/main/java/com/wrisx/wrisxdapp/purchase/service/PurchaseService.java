@@ -7,6 +7,7 @@ import com.wrisx.wrisxdapp.domain.Expert;
 import com.wrisx.wrisxdapp.domain.Purchase;
 import com.wrisx.wrisxdapp.domain.PurchaseDao;
 import com.wrisx.wrisxdapp.domain.Research;
+import com.wrisx.wrisxdapp.errorhandling.BadRequestException;
 import com.wrisx.wrisxdapp.errorhandling.ResourceNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.MessageFormat;
 import java.util.List;
 
 import static com.wrisx.wrisxdapp.domain.State.COMMITTED;
@@ -70,10 +72,15 @@ public class PurchaseService {
     }
 
     @Transactional
-    public void commitPurchaseCreation(long purchaseId)
+    public void commitPurchaseCreation(long purchaseId, String transactionHash)
             throws ResourceNotFoundException {
-        Purchase purchase = entityProvider.getPurchaseById(purchaseId);
+        Purchase purchase = entityProvider.getPurchaseByIdAndTransactionHash(
+                purchaseId, transactionHash);
 
+        if (purchase.getState() != CONFIRMED) {
+            throw new BadRequestException(MessageFormat.format(
+                    "Illegal state of purchase {0}", purchaseId));
+        }
         purchase.setState(COMMITTED);
 
         purchaseDao.save(purchase);

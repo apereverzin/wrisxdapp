@@ -3,6 +3,7 @@ package com.wrisx.wrisxdapp.research.service;
 import com.wrisx.wrisxdapp.common.EntityProvider;
 import com.wrisx.wrisxdapp.data.ResearchData;
 import com.wrisx.wrisxdapp.domain.*;
+import com.wrisx.wrisxdapp.errorhandling.BadRequestException;
 import com.wrisx.wrisxdapp.errorhandling.ResourceNotFoundException;
 import com.wrisx.wrisxdapp.purchase.service.PurchaseService;
 import com.wrisx.wrisxdapp.research.data.ResearchFile;
@@ -157,12 +158,22 @@ public class ResearchService {
     }
 
     @Transactional
-    public void commitResearchCreation(String uuid)
+    public void commitResearchCreation(String uuid, String transactionHash)
             throws ResourceNotFoundException {
-        Research research = entityProvider.getResearchByUuid(uuid);
+        Research research =
+                entityProvider.getResearchByUuidAndTransactionHash(uuid, transactionHash);
+
+        if (research.getState() != CONFIRMED) {
+            throw new BadRequestException(MessageFormat.format(
+                    "Illegal state of research {0}", uuid));
+        }
 
         purchaseDao.findByResearch(research).forEach(
                 purchase -> {
+                    if (purchase.getState() != CONFIRMED) {
+                        throw new BadRequestException(MessageFormat.format(
+                                "Illegal state of purchase {0}", purchase.getId()));
+                    }
                     purchase.setState(COMMITTED);
                     purchaseDao.save(purchase);
                 });

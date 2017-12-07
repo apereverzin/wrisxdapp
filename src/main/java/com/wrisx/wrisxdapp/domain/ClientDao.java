@@ -6,5 +6,6 @@ import javax.transaction.Transactional;
 
 @Transactional
 public interface ClientDao extends CrudRepository<Client, Long> {
-  public Client findByAddress(String address);
+    Client findByAddress(String address);
+    Client findByAddressAndTransactionHash(String address, String transactionHash);
 }
