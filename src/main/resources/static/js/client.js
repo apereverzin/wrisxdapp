@@ -70,6 +70,7 @@ function registerClient() {
                             showUserData()
                             showUserBalance()
                             showClientRoleTab()
+                            waitForTransaction(result)
                         }
                     }
             )
@@ -104,6 +105,7 @@ function buyTokens() {
                 } else {
                     $("#clientBuyTokensAmount").val('')
                     showUserBalance()
+                    getTransactionReceiptMined(result, showUserBalance);
                 }
             }
     );
