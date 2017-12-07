@@ -90,6 +90,18 @@ public class EnquiryBidController {
                 "Confirming bid creation {0} for research enquiry", enquiryBidId));
 
         enquiryBidService.confirmEnquiryBidCreation(enquiryBidId, transactionHash);
+
+        return ResponseEntity.noContent().build();
+    }
+
+    @RequestMapping(value = "/enquiry/bid/{enquiryBidId}/commit", method = PUT)
+    public ResponseEntity<Void> commitEnquiryBidCreation(
+            @PathVariable long enquiryBidId) {
+        logger.debug(MessageFormat.format(
+                "Committing bid creation {0} for research enquiry", enquiryBidId));
+
+        enquiryBidService.commitEnquiryBidCreation(enquiryBidId);
+
         return ResponseEntity.noContent().build();
     }
 

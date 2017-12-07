@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static com.wrisx.wrisxdapp.domain.State.COMMITTED;
 import static com.wrisx.wrisxdapp.domain.State.CONFIRMED;
 import static com.wrisx.wrisxdapp.util.WrisxUtil.getListFromIterable;
 import static java.util.Comparator.comparing;
@@ -81,6 +82,15 @@ public class EnquiryBidService {
 
         enquiryBid.setState(CONFIRMED);
         enquiryBid.setTransactionHash(transactionHash);
+
+        enquiryBidDao.save(enquiryBid);
+    }
+
+    public void commitEnquiryBidCreation(long enquiryBidId)
+            throws ResourceNotFoundException {
+        EnquiryBid enquiryBid = entityProvider.getEnquiryBidById(enquiryBidId);
+
+        enquiryBid.setState(COMMITTED);
 
         enquiryBidDao.save(enquiryBid);
     }

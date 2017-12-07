@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.wrisx.wrisxdapp.domain.State.COMMITTED;
 import static com.wrisx.wrisxdapp.domain.State.CONFIRMED;
 import static com.wrisx.wrisxdapp.util.WrisxUtil.getKeywordList;
 import static java.util.Comparator.comparing;
@@ -78,6 +79,15 @@ public class ExpertService {
 
         expert.setState(CONFIRMED);
         expert.setTransactionHash(transactionHash);
+
+        expertDao.save(expert);
+    }
+
+    public void commitExpertCreation(String clientAddress)
+            throws ResourceNotFoundException {
+        Expert expert = entityProvider.getExpertByAddress(clientAddress);
+
+        expert.setState(COMMITTED);
 
         expertDao.save(expert);
     }

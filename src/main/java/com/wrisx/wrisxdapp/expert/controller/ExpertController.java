@@ -72,6 +72,18 @@ public class ExpertController {
                 "Confirming expert creation {0}", expertAddress));
 
         expertService.confirmExpertCreation(expertAddress, transactionHash);
+
+        return ResponseEntity.noContent().build();
+    }
+
+    @RequestMapping(value = "/expert/{address}/commit", method = PUT)
+    public ResponseEntity<Void> commitExpertCreation(
+            @PathVariable("address") String expertAddress) {
+        logger.debug(MessageFormat.format(
+                "Committing expert creation {0}", expertAddress));
+
+        expertService.commitExpertCreation(expertAddress);
+
         return ResponseEntity.noContent().build();
     }
 

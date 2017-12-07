@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.wrisx.wrisxdapp.domain.State.COMMITTED;
 import static com.wrisx.wrisxdapp.domain.State.CONFIRMED;
 import static java.util.stream.Collectors.toList;
 
@@ -73,6 +74,15 @@ public class ClientService {
 
         client.setState(CONFIRMED);
         client.setTransactionHash(transactionHash);
+
+        clientDao.save(client);
+    }
+
+    public void commitClientCreation(String clientAddress)
+            throws ResourceNotFoundException {
+        Client client = entityProvider.getClientByAddress(clientAddress);
+
+        client.setState(COMMITTED);
 
         clientDao.save(client);
     }

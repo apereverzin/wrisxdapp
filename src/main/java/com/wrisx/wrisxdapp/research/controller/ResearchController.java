@@ -94,6 +94,17 @@ public class ResearchController {
         logger.debug(MessageFormat.format("Confirming research creation {0}", uuid));
 
         researchService.confirmResearchCreation(uuid, transactionHash);
+
+        return ResponseEntity.noContent().build();
+    }
+
+    @RequestMapping(value = "/research/{uuid}/commit", method = PUT)
+    public ResponseEntity<Void> commitResearchCreation(
+            @PathVariable("uuid") String uuid) {
+        logger.debug(MessageFormat.format("Committing research creation {0}", uuid));
+
+        researchService.commitResearchCreation(uuid);
+
         return ResponseEntity.noContent().build();
     }
 

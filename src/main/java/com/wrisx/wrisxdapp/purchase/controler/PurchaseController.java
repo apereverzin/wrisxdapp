@@ -59,6 +59,17 @@ public class PurchaseController {
         logger.debug(MessageFormat.format("Confirming purchase {0}", purchaseId));
 
         purchaseService.confirmPurchaseCreation(purchaseId, transactionHash);
+
+        return ResponseEntity.noContent().build();
+    }
+
+    @RequestMapping(value = "/purchase/{id}/commit", method = PUT)
+    public ResponseEntity<Void> commitResearch(
+            @PathVariable("id") long purchaseId) {
+        logger.debug(MessageFormat.format("Committing purchase {0}", purchaseId));
+
+        purchaseService.commitPurchaseCreation(purchaseId);
+
         return ResponseEntity.noContent().build();
     }
 

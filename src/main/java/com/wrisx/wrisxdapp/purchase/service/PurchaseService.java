@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static com.wrisx.wrisxdapp.domain.State.COMMITTED;
 import static com.wrisx.wrisxdapp.domain.State.CONFIRMED;
 import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.toList;
@@ -64,6 +65,16 @@ public class PurchaseService {
 
         purchase.setState(CONFIRMED);
         purchase.setTransactionHash(transactionHash);
+
+        purchaseDao.save(purchase);
+    }
+
+    @Transactional
+    public void commitPurchaseCreation(long purchaseId)
+            throws ResourceNotFoundException {
+        Purchase purchase = entityProvider.getPurchaseById(purchaseId);
+
+        purchase.setState(COMMITTED);
 
         purchaseDao.save(purchase);
     }

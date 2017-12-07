@@ -20,6 +20,7 @@ import java.nio.file.Paths;
 import java.text.MessageFormat;
 import java.util.List;
 
+import static com.wrisx.wrisxdapp.domain.State.COMMITTED;
 import static com.wrisx.wrisxdapp.domain.State.CONFIRMED;
 import static com.wrisx.wrisxdapp.util.WrisxUtil.getKeywordList;
 import static com.wrisx.wrisxdapp.util.WrisxUtil.getListFromIterable;
@@ -151,6 +152,21 @@ public class ResearchService {
         research.setPassword(null);
         research.setState(CONFIRMED);
         research.setTransactionHash(transactionHash);
+
+        researchDao.save(research);
+    }
+
+    @Transactional
+    public void commitResearchCreation(String uuid)
+            throws ResourceNotFoundException {
+        Research research = entityProvider.getResearchByUuid(uuid);
+
+        purchaseDao.findByResearch(research).forEach(
+                purchase -> {
+                    purchase.setState(COMMITTED);
+                    purchaseDao.save(purchase);
+                });
+        research.setState(COMMITTED);
 
         researchDao.save(research);
     }

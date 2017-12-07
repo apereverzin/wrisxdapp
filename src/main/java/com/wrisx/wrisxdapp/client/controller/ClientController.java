@@ -72,6 +72,18 @@ public class ClientController {
                 "Confirming client creation {0}", clientAddress));
 
         clientService.confirmClientCreation(clientAddress, transactionHash);
+
+        return ResponseEntity.noContent().build();
+    }
+
+    @RequestMapping(value = "/client/{address}/commit", method = PUT)
+    public ResponseEntity<Void> commitClientCreation(
+            @PathVariable("address") String clientAddress) {
+        logger.debug(MessageFormat.format(
+                "Committing client creation {0}", clientAddress));
+
+        clientService.commitClientCreation(clientAddress);
+
         return ResponseEntity.noContent().build();
     }
 
