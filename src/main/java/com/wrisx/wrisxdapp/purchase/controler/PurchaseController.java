@@ -5,6 +5,7 @@ import com.wrisx.wrisxdapp.purchase.service.PurchaseService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -63,19 +64,22 @@ public class PurchaseController {
 
     @RequestMapping(value = "/purchase/client/{address}", method = GET)
     public ResponseEntity<List<PurchaseData>> getClientPurchases(
-            @PathVariable("address") String clientAddress) {
+            @PathVariable("address") String clientAddress,
+            Pageable pageable) {
         logger.debug(MessageFormat.format(
                 "Getting client purchases {0}", clientAddress));
 
         List<PurchaseData> purchases =
                 purchaseService.getClientPurchases(clientAddress);
+
         return new ResponseEntity<>(purchases, OK);
 
     }
 
     @RequestMapping(value = "/purchase/expert/{address}", method = GET)
     public ResponseEntity<List<PurchaseData>> getExpertPurchases(
-            @PathVariable("address") String expertAddress) {
+            @PathVariable("address") String expertAddress,
+            Pageable pageable) {
         logger.debug(MessageFormat.format(
                 "Getting expert purchases {0}", expertAddress));
 
@@ -86,7 +90,8 @@ public class PurchaseController {
 
     @RequestMapping(value = "/purchase/research/{uuid}", method = GET)
     public ResponseEntity<List<PurchaseData>> getResearchPurchases(
-            @PathVariable("uuid") String uuid) {
+            @PathVariable("uuid") String uuid,
+            Pageable pageable) {
         logger.debug(MessageFormat.format("Client research purchases {0}", uuid));
 
         List<PurchaseData> purchases = purchaseService.getResearchPurchases(uuid);

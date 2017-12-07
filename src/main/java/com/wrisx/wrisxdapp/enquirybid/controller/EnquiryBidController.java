@@ -5,6 +5,7 @@ import com.wrisx.wrisxdapp.enquirybid.service.EnquiryBidService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -54,6 +55,7 @@ public class EnquiryBidController {
 
         EnquiryBidData enquiryBid =
                 enquiryBidService.setEnquiryBidSelection(enquiryBidId, true);
+
         return new ResponseEntity<>(enquiryBid, OK);
     }
 
@@ -65,6 +67,7 @@ public class EnquiryBidController {
 
         EnquiryBidData enquiryBid =
                 enquiryBidService.setEnquiryBidSelection(enquiryBidId, false);
+
         return new ResponseEntity<>(enquiryBid, OK);
     }
 
@@ -75,6 +78,7 @@ public class EnquiryBidController {
                 "Deleting bid {0} for research enquiry", enquiryBidId));
 
         enquiryBidService.deleteEnquiryBid(enquiryBidId);
+
         return ResponseEntity.noContent().build();
     }
 
@@ -91,7 +95,8 @@ public class EnquiryBidController {
 
     @RequestMapping(value = "/enquiry/bid/expert/{expertAddress}", method = GET)
     public ResponseEntity<List<EnquiryBidData>> getExpertEnquiryBids(
-            @PathVariable String expertAddress) {
+            @PathVariable String expertAddress,
+            Pageable pageable) {
         logger.debug(MessageFormat.format(
                 "Getting expert enquiry bids {0}", expertAddress));
 
@@ -101,7 +106,9 @@ public class EnquiryBidController {
     }
 
     @RequestMapping(value = "/enquiry/{enquiryId}/bid", method = GET)
-    public ResponseEntity<List<EnquiryBidData>> getEnquiryBids(@PathVariable long enquiryId) {
+    public ResponseEntity<List<EnquiryBidData>> getEnquiryBids(
+            @PathVariable long enquiryId,
+            Pageable pageable) {
         logger.debug(MessageFormat.format(
                 "Getting bids for research enquiry {0}", enquiryId));
 

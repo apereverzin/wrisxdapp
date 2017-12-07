@@ -5,6 +5,7 @@ import com.wrisx.wrisxdapp.expert.service.ExpertService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -76,21 +77,23 @@ public class ExpertController {
 
     @RequestMapping(value = "/expert/keywords/{keywords}", method = GET)
     public ResponseEntity<List<ExpertData>> findExperts(
-            @PathVariable String keywords) {
+            @PathVariable String keywords,
+            Pageable pageable) {
         logger.debug(MessageFormat.format("Searching experts {0}", keywords));
 
-        return getExpertsByKeywords(keywords);
+        return getExpertsByKeywords(keywords, pageable);
     }
 
     @RequestMapping(value = "/expert/keywords", method = GET)
-    public ResponseEntity<List<ExpertData>> findAllExperts() {
+    public ResponseEntity<List<ExpertData>> findAllExperts(Pageable pageable) {
         logger.debug("Searching experts");
 
-        return getExpertsByKeywords("");
+        return getExpertsByKeywords("", pageable);
     }
 
     private ResponseEntity<List<ExpertData>> getExpertsByKeywords(
-            @PathVariable String keywords) {
+            @PathVariable String keywords,
+            Pageable pageable) {
         List<ExpertData> experts = expertService.findExperts(keywords);
 
         return new ResponseEntity<>(experts, OK);

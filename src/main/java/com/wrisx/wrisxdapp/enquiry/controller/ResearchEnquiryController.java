@@ -5,6 +5,7 @@ import com.wrisx.wrisxdapp.enquiry.service.ResearchEnquiryService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -43,12 +44,14 @@ public class ResearchEnquiryController {
 
     @RequestMapping(value = "/enquiry/client/{address}", method = GET)
     public ResponseEntity<List<ResearchEnquiryData>> getClientEnquiries(
-            @PathVariable("address") String clientAddress) {
+            @PathVariable("address") String clientAddress,
+            Pageable pageable) {
         logger.debug(MessageFormat.format(
                 "Getting research enquiries of client {0}", clientAddress));
 
         List<ResearchEnquiryData> researchEnquiries =
                 researchEnquiryService.getClientEnquiries(clientAddress);
+
         return new ResponseEntity<>(researchEnquiries, OK);
     }
 
@@ -63,26 +66,28 @@ public class ResearchEnquiryController {
     @RequestMapping(value = "/enquiry/expert/{address}/keywords/{keywords}", method = GET)
     public ResponseEntity<List<ResearchEnquiryData>> findExpertEnquiries(
             @PathVariable String keywords,
-            @PathVariable(("address")) String expertAddress) {
+            @PathVariable(("address")) String expertAddress,
+            Pageable pageable) {
         logger.debug(MessageFormat.format(
                 "Searching research enquiries for expert {0} {1}",
                 expertAddress, keywords));
 
-        return getExpertEnquiries(expertAddress, keywords);
+        return getExpertEnquiries(expertAddress, keywords, pageable);
     }
 
     @RequestMapping(value = "/enquiry/expert/{address}/keywords", method = GET)
     public ResponseEntity<List<ResearchEnquiryData>> findAllExpertEnquiries(
-            @PathVariable("address") String expertAddress) {
+            @PathVariable("address") String expertAddress,
+            Pageable pageable) {
         logger.debug(MessageFormat.format(
                 "Searching research enquiries for expert {0}",
                 expertAddress));
 
-        return getExpertEnquiries(expertAddress, "");
+        return getExpertEnquiries(expertAddress, "", pageable);
     }
 
     private ResponseEntity<List<ResearchEnquiryData>> getExpertEnquiries(
-            String expertAddress, String keywords) {
+            String expertAddress, String keywords, Pageable pageable) {
         List<ResearchEnquiryData> researchEnquiries =
                 researchEnquiryService.findExpertEnquiries(expertAddress, keywords);
         return new ResponseEntity<>(researchEnquiries, OK);

@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -98,12 +99,13 @@ public class ResearchController {
 
     @RequestMapping(value = "/research/expert/{address}", method = GET)
     public ResponseEntity<List<ResearchData>> getExpertResearchItems(
-            @PathVariable String address) {
+            @PathVariable String address, Pageable pageable) {
         logger.debug(MessageFormat.format(
                 "Getting expert research items {0}", address));
 
         List<ResearchData> researchItems =
                 researchService.getExpertResearchItems(address);
+
         return new ResponseEntity<>(researchItems, OK);
     }
 
@@ -112,28 +114,31 @@ public class ResearchController {
         logger.debug(MessageFormat.format("Getting research {0}", uuid));
 
         ResearchData research = researchService.getResearch(uuid);
+
         return new ResponseEntity<>(research, OK);
     }
 
     @RequestMapping(value = "/research/client/{address}/keywords/{keywords}", method = GET)
     public ResponseEntity<List<ResearchData>> findClientResearchItems(
             @PathVariable String keywords,
-            @PathVariable("address") String clientAddress) {
+            @PathVariable("address") String clientAddress,
+            Pageable pageable) {
         logger.debug(MessageFormat.format(
                 "Searching research items for client {0} {1}",
                 clientAddress, keywords));
 
-        return getResearchItemsByKeywords(clientAddress, keywords);
+        return getResearchItemsByKeywords(clientAddress, keywords, pageable);
     }
 
     @RequestMapping(value = "/research/client/{address}/keywords", method = GET)
     public ResponseEntity<List<ResearchData>> findAllClientResearchItems(
-            @PathVariable("address") String clientAddress) {
+            @PathVariable("address") String clientAddress,
+            Pageable pageable) {
         logger.debug(MessageFormat.format(
                 "Searching research items for client {0}",
                 clientAddress));
 
-        return getResearchItemsByKeywords(clientAddress, "");
+        return getResearchItemsByKeywords(clientAddress, "", pageable);
     }
 
     @RequestMapping(value = "/downloadFile/{uuid}", produces = "application/zip", method = GET)
@@ -151,7 +156,7 @@ public class ResearchController {
 
     @RequestMapping(value = "/research/keywords/{keywords}", method = GET)
     public ResponseEntity<List<ResearchData>> findResearchItems(
-            @PathVariable String keywords) {
+            @PathVariable String keywords, Pageable pageable) {
         logger.debug(MessageFormat.format("Searching research {0}", keywords));
 
         List<ResearchData> researchItems =
@@ -161,7 +166,7 @@ public class ResearchController {
     }
 
     @RequestMapping(value = "/research/keywords", method = GET)
-    public ResponseEntity<List<ResearchData>> findAllResearchItems() {
+    public ResponseEntity<List<ResearchData>> findAllResearchItems(Pageable pageable) {
         logger.debug("Searching research");
 
         List<ResearchData> researchItems = researchService.findResearchItemsByKeywords("");
@@ -170,7 +175,7 @@ public class ResearchController {
     }
 
     private ResponseEntity<List<ResearchData>> getResearchItemsByKeywords(
-            String clientAddress, String keywords) {
+            String clientAddress, String keywords, Pageable pageable) {
         List<ResearchData> researchItems =
                 researchService.findResearchItems(clientAddress, keywords);
         return new ResponseEntity<>(researchItems, OK);
