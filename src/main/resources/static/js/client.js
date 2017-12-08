@@ -104,8 +104,7 @@ function buyTokens() {
                     console.log(error);
                 } else {
                     $("#clientBuyTokensAmount").val('')
-                    showUserBalance()
-                    getTransactionReceiptMined(result, showUserBalance);
+                    waitForTransactionToBeMined(result, showUserBalance);
                 }
             }
     );
@@ -357,11 +356,7 @@ function placeEnquiry() {
                 expert2 = enquiryBid.expert
                 price2 = enquiryBid.price
             }
-            $.put(contextPath + "/enquiry/bid/" + enquiryBid.bidId + "/select",
-                {
-                    'transactionHash': result
-                }
-            )
+            $.put(contextPath + "/enquiry/bid/" + enquiryBid.bidId + "/select")
         }
         if (ind == 2) {
             break

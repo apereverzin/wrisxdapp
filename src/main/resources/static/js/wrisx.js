@@ -44,7 +44,7 @@ function getAddress() {
     return address
 }
 
-function getTransactionReceiptMined(txHash, func, param) {
+function waitForTransactionToBeMined(txHash, func, param1, param2) {
     const transactionReceiptAsync = function(resolve, reject) {
         web3.eth.getTransactionReceipt(txHash, (error, receipt) => {
             if (error) {
@@ -55,14 +55,21 @@ function getTransactionReceiptMined(txHash, func, param) {
                     interval);
             } else {
                 resolve(receipt);
-                if (param === undefined) {
+                if (param1 === undefined) {
                     setTimeout(
                         () => func(),
-                        interval * 4);
+                        interval * 4
+                    );
+                } else if (param2 === undefined) {
+                    setTimeout(
+                        () => func(param1),
+                        interval * 4
+                    );
                 } else {
                     setTimeout(
-                        () => func(param),
-                        interval * 4);
+                        () => func(param1, param2),
+                        interval * 4
+                    );
                 }
             }
         });

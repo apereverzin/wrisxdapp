@@ -138,19 +138,6 @@ public class EntityProvider {
         return enquiry;
     }
 
-    public ResearchEnquiry getResearchEnquiryByIdAndTransactionHash(
-            long enquiryId, String transactionHash) throws ResourceNotFoundException {
-        ResearchEnquiry enquiry =
-                researchEnquiryDao.findByIdAndTransactionHash(enquiryId, transactionHash);
-
-        if (enquiry == null) {
-            throwException(MessageFormat.format(
-                    "Enquiry not found {0} {1}", enquiryId, transactionHash));
-        }
-
-        return enquiry;
-    }
-
     public Purchase getPurchaseById(long purchaseId) throws ResourceNotFoundException {
         Purchase purchase = purchaseDao.findOne(purchaseId);
 

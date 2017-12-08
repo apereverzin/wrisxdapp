@@ -55,18 +55,30 @@ function registerExpert() {
                                     'transactionHash': result
                                 }
                             )
-                            $("#expertName").val('')
-                            $("#expertEmailAddress").val('')
-                            $("#expertKeywords").val('')
-                            $("#expertDescription").val('')
-                            showUserData()
-                            showUserBalance()
-                            showExpertRoleTab()
+                            $("#expertName").val('');
+                            $("#expertEmailAddress").val('');
+                            $("#expertKeywords").val('');
+                            $("#expertDescription").val('');
+                            expertRegistered(address, result);
                         }
                     }
                 )
             }
     )
+}
+
+function expertRegistered(address, transactionHash) {
+    $.put(contextPath + "/expert/" + address + "/commit",
+        {
+            'transactionHash': transactionHash
+        },
+        function(data) {
+            showUserData();
+            showUserBalance();
+            showExpertRoleTab();
+        }
+    )
+    showUserBalance();
 }
 
 function depositResearch() {
@@ -111,29 +123,40 @@ function depositResearch() {
                            console.log(error);
                            $.delete(contextPath + "/research/" + researchFile.uuid,
                                function(data) {
-                                   getExpertResearchItems()
-                                   showUserData()
-                                   showUserBalance()
+                                   getExpertResearchItems();
+                                   showUserData();
+                                   showUserBalance();
                                }
-                           )
+                           );
                        } else {
                            $.put(contextPath + "/research/" + researchFile.uuid + "/confirm",
                                {
                                    'transactionHash': result
                                }
                            )
-                           //waitForTxToBeMined(result)
-                           $("#expertResearchPrice").val('')
-                           $("#expertResearchTitle").val('')
-                           $("#expertResearchDescription").val('')
-                           $("#expertResearchKeywords").val('')
-                           $("#expertResearch-upload-file-input").val('')
-                           getExpertResearchItems()
+                           $("#expertResearchPrice").val('');
+                           $("#expertResearchTitle").val('');
+                           $("#expertResearchDescription").val('');
+                           $("#expertResearchKeywords").val('');
+                           $("#expertResearch-upload-file-input").val('');
+                           waitForTransactionToBeMined(result, researchDeposited, researchFile.uuid, result);
                        }
                    }
                );
            }
     )
+}
+
+function researchDeposited(uuid, transactionHash) {
+    $.put(contextPath + "/research/" + uuid + "/commit",
+        {
+            'transactionHash': transactionHash
+        },
+        function(data) {
+            getExpertResearchItems();
+        }
+    )
+    showUserBalance();
 }
 
 function depositEnquiryBidResearch(clientAddress, enquiryId, bidId) {
@@ -178,23 +201,23 @@ function depositEnquiryBidResearch(clientAddress, enquiryId, bidId) {
                            console.log(error);
                            $.delete(contextPath + "/research/" + researchFile.uuid,
                                function(data) {
-                                   getExpertEnquiryBids()
-                                   showUserData()
-                                   showUserBalance()
+                                   getExpertEnquiryBids();
+                                   showUserData();
+                                   showUserBalance();
                                }
-                           )
+                           );
                        } else {
                            $.put(contextPath + "/research/" + researchFile.uuid + "/confirm",
                                {
                                    'transactionHash': result
                                }
-                           )
-                           $("#expertBidPrice").val('')
-                           $("#expertBidTitle").val('')
-                           $("#expertBidDescription").val('')
-                           $("#expertBidKeywords").val('')
-                           $("#bid-upload-file-input").val('')
-                           getExpertEnquiryBids()
+                           );
+                           $("#expertBidPrice").val('');
+                           $("#expertBidTitle").val('');
+                           $("#expertBidDescription").val('');
+                           $("#expertBidKeywords").val('');
+                           $("#bid-upload-file-input").val('');
+                           waitForTransactionToBeMined(result, enquiryBidResearchDeposited, researchFile.uuid, result);
                        }
                    }
                );
@@ -202,11 +225,24 @@ function depositEnquiryBidResearch(clientAddress, enquiryId, bidId) {
     )
 }
 
+function enquiryBidResearchDeposited(uuid, transactionHash) {
+    $.put(contextPath + "/research/" + uuid + "/commit",
+        {
+            'transactionHash': transactionHash
+        },
+        function(data) {
+            getExpertEnquiryBids();
+            getExpertResearchItems();
+        }
+    )
+    showUserBalance();
+}
+
 function uploadBidFile() {
     var res;
     var formData = new FormData($("#bid-upload-file-form")[0]);
     $.ajax({
-        url: "/uploadFile",
+        url: contextPath + "/uploadFile",
         type: "POST",
         data: formData,
         enctype: 'multipart/form-data',
@@ -229,7 +265,7 @@ function uploadResearchFile() {
     var res;
     var formData = new FormData($("#research-upload-file-form")[0]);
     $.ajax({
-        url: "/uploadFile",
+        url: contextPath + "/uploadFile",
         type: "POST",
         data: formData,
         enctype: 'multipart/form-data',
@@ -353,20 +389,21 @@ function showExpertEnquiries(data) {
     $.each(data, function(val) {
         enquiriesExist = true
         items = items.concat(
-        '<tr>' +
-        '<td>' + data[val].keywords + '</td>' +
-        '<td>' + data[val].description + '</td>');
+            '<tr>' +
+            '<td>' + data[val].keywords + '</td>' +
+            '<td>' + data[val].description + '</td>'
+        );
         if (data[val].enquiryBid == null) {
-        items = items.concat(
-        '<td>' + '<a href="#" onclick="placeBid(&#39;' + data[val].id + '&#39;)" class="btn btn-primary">Place bid</a>' + '</td>'
-        )
+            items = items.concat(
+                '<td>' + '<a href="#" onclick="placeBid(&#39;' + data[val].id + '&#39;)" class="btn btn-primary">Place bid</a>' + '</td>'
+            )
         } else {
-        items = items.concat(
-        '<td>' + data[val].enquiryBid.price + '&nbsp;' + data[val].enquiryBid.comment + '</td>'
-        )
+            items = items.concat(
+                '<td>' + data[val].enquiryBid.price + '&nbsp;' + data[val].enquiryBid.comment + '</td>'
+            )
         }
         items = items.concat(
-        '</tr>\n'
+            '</tr>\n'
         );
     })
 
