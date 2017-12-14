@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.text.MessageFormat;
 import java.util.List;
 
+import static java.util.stream.Collectors.toList;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
@@ -107,7 +108,11 @@ public class ExpertController {
     private ResponseEntity<List<ExpertData>> getExpertsByKeywords(
             @PathVariable String keywords,
             Pageable pageable) {
-        List<ExpertData> experts = expertService.findExperts(keywords);
+        List<ExpertData> experts =
+                expertService.findExperts(keywords).stream().
+                        skip(pageable.getPageNumber() * pageable.getPageSize()).
+                        limit(pageable.getPageSize()).
+                        collect(toList());
 
         return new ResponseEntity<>(experts, OK);
     }

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.text.MessageFormat;
 import java.util.List;
 
+import static java.util.stream.Collectors.toList;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
@@ -115,7 +116,11 @@ public class EnquiryBidController {
                 "Getting expert enquiry bids {0}", expertAddress));
 
         List<EnquiryBidData> researchItems =
-                enquiryBidService.getEnquiryBidsByExpert(expertAddress);
+                enquiryBidService.getEnquiryBidsByExpert(expertAddress).stream().
+                        skip(pageable.getPageNumber() * pageable.getPageSize()).
+                        limit(pageable.getPageSize()).
+                        collect(toList());
+
         return new ResponseEntity<>(researchItems, OK);
     }
 
@@ -127,7 +132,11 @@ public class EnquiryBidController {
                 "Getting bids for research enquiry {0}", enquiryId));
 
         List<EnquiryBidData> enquiryBids =
-                enquiryBidService.getEnquiryBidsByEnquiry(enquiryId);
+                enquiryBidService.getEnquiryBidsByEnquiry(enquiryId).stream().
+                        skip(pageable.getPageNumber() * pageable.getPageSize()).
+                        limit(pageable.getPageSize()).
+                        collect(toList());
+
         return new ResponseEntity<>(enquiryBids, OK);
     }
 }

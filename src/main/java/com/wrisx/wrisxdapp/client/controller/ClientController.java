@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.text.MessageFormat;
 import java.util.List;
 
+import static java.util.stream.Collectors.toList;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
@@ -92,7 +93,11 @@ public class ClientController {
     public ResponseEntity<List<ClientData>> getClients(Pageable pageable) {
         logger.debug("Getting clients");
 
-        List<ClientData> clients = clientService.getClients();
+        List<ClientData> clients =
+                clientService.getClients().stream().
+                        skip(pageable.getPageNumber() * pageable.getPageSize()).
+                        limit(pageable.getPageSize()).
+                        collect(toList());
 
         return new ResponseEntity<>(clients, OK);
     }

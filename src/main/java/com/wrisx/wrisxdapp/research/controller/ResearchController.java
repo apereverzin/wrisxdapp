@@ -23,6 +23,7 @@ import java.io.FileNotFoundException;
 import java.text.MessageFormat;
 import java.util.List;
 
+import static java.util.stream.Collectors.toList;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
@@ -117,7 +118,10 @@ public class ResearchController {
                 "Getting expert research items {0}", address));
 
         List<ResearchData> researchItems =
-                researchService.getExpertResearchItems(address);
+                researchService.getExpertResearchItems(address).stream().
+                        skip(pageable.getPageNumber() * pageable.getPageSize()).
+                        limit(pageable.getPageSize()).
+                        collect(toList());
 
         return new ResponseEntity<>(researchItems, OK);
     }
@@ -173,7 +177,10 @@ public class ResearchController {
         logger.debug(MessageFormat.format("Searching research {0}", keywords));
 
         List<ResearchData> researchItems =
-                researchService.findResearchItemsByKeywords(keywords);
+                researchService.findResearchItemsByKeywords(keywords).stream().
+                        skip(pageable.getPageNumber() * pageable.getPageSize()).
+                        limit(pageable.getPageSize()).
+                        collect(toList());
 
         return new ResponseEntity<>(researchItems, OK);
     }
@@ -182,7 +189,11 @@ public class ResearchController {
     public ResponseEntity<List<ResearchData>> findAllResearchItems(Pageable pageable) {
         logger.debug("Searching research");
 
-        List<ResearchData> researchItems = researchService.findResearchItemsByKeywords("");
+        List<ResearchData> researchItems =
+                researchService.findResearchItemsByKeywords("").stream().
+                        skip(pageable.getPageNumber() * pageable.getPageSize()).
+                        limit(pageable.getPageSize()).
+                        collect(toList());
 
         return new ResponseEntity<>(researchItems, OK);
     }
@@ -190,7 +201,11 @@ public class ResearchController {
     private ResponseEntity<List<ResearchData>> getResearchItemsByKeywords(
             String clientAddress, String keywords, Pageable pageable) {
         List<ResearchData> researchItems =
-                researchService.findResearchItems(clientAddress, keywords);
+                researchService.findResearchItems(clientAddress, keywords).stream().
+                        skip(pageable.getPageNumber() * pageable.getPageSize()).
+                        limit(pageable.getPageSize()).
+                        collect(toList());
+
         return new ResponseEntity<>(researchItems, OK);
     }
 }

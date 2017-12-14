@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.text.MessageFormat;
 import java.util.List;
 
+import static java.util.stream.Collectors.toList;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
@@ -83,7 +84,10 @@ public class PurchaseController {
                 "Getting client purchases {0}", clientAddress));
 
         List<PurchaseData> purchases =
-                purchaseService.getClientPurchases(clientAddress);
+                purchaseService.getClientPurchases(clientAddress).stream().
+                        skip(pageable.getPageNumber() * pageable.getPageSize()).
+                        limit(pageable.getPageSize()).
+                        collect(toList());
 
         return new ResponseEntity<>(purchases, OK);
 
@@ -97,7 +101,11 @@ public class PurchaseController {
                 "Getting expert purchases {0}", expertAddress));
 
         List<PurchaseData> purchases =
-                purchaseService.getExpertPurchases(expertAddress);
+                purchaseService.getExpertPurchases(expertAddress).stream().
+                        skip(pageable.getPageNumber() * pageable.getPageSize()).
+                        limit(pageable.getPageSize()).
+                        collect(toList());
+
         return new ResponseEntity<>(purchases, OK);
     }
 
@@ -107,7 +115,12 @@ public class PurchaseController {
             Pageable pageable) {
         logger.debug(MessageFormat.format("Client research purchases {0}", uuid));
 
-        List<PurchaseData> purchases = purchaseService.getResearchPurchases(uuid);
+        List<PurchaseData> purchases =
+                purchaseService.getResearchPurchases(uuid).stream().
+                        skip(pageable.getPageNumber() * pageable.getPageSize()).
+                        limit(pageable.getPageSize()).
+                        collect(toList());
+
         return new ResponseEntity<>(purchases, OK);
     }
 }

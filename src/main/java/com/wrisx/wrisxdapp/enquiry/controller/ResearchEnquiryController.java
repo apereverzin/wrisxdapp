@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.text.MessageFormat;
 import java.util.List;
 
+import static java.util.stream.Collectors.toList;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
@@ -39,6 +40,7 @@ public class ResearchEnquiryController {
 
         ResearchEnquiryData researchEnquiry =
                 researchEnquiryService.saveEnquiry(address, keywords, description);
+
         return new ResponseEntity<>(researchEnquiry, OK);
     }
 
@@ -50,7 +52,10 @@ public class ResearchEnquiryController {
                 "Getting research enquiries of client {0}", clientAddress));
 
         List<ResearchEnquiryData> researchEnquiries =
-                researchEnquiryService.getClientEnquiries(clientAddress);
+                researchEnquiryService.getClientEnquiries(clientAddress).stream().
+                        skip(pageable.getPageNumber() * pageable.getPageSize()).
+                        limit(pageable.getPageSize()).
+                        collect(toList());
 
         return new ResponseEntity<>(researchEnquiries, OK);
     }
@@ -89,7 +94,12 @@ public class ResearchEnquiryController {
     private ResponseEntity<List<ResearchEnquiryData>> getExpertEnquiries(
             String expertAddress, String keywords, Pageable pageable) {
         List<ResearchEnquiryData> researchEnquiries =
-                researchEnquiryService.findExpertEnquiries(expertAddress, keywords);
+                researchEnquiryService.findExpertEnquiries(expertAddress, keywords).
+                        stream().
+                        skip(pageable.getPageNumber() * pageable.getPageSize()).
+                        limit(pageable.getPageSize()).
+                        collect(toList());
+
         return new ResponseEntity<>(researchEnquiries, OK);
     }
 }
