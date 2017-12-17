@@ -9,6 +9,14 @@ function startApp(web3) {
     contractInstance = WrisxContract.at('0xf315b00e1af87915cbf3a47df2415bd1c009e83c');
     console.log(web3.eth.accounts[0]);
 
+    $.ajax({
+        url: contextPath + "/init",
+        type: "GET",
+        beforeSend: function(xhr) {
+            xhr.setRequestHeader('User-Address', web3.eth.accounts[0]);
+        }
+    });
+
     contractInstance.getTokenPrice.call(
             function(error, result) {
                 if(!error) {
@@ -110,7 +118,7 @@ function showUserData() {
     } else {
         $("#userAddress").text(address)
         $.get({
-            url: contextPath + "/user/" + address,
+            url: contextPath + "/user",
             success: function(data) {
                 $("#userName").text(data.name)
             },
@@ -129,7 +137,7 @@ function showRolePanels() {
 function showExpertRoleTab() {
     address = getAddress()
     $.get({
-        url: contextPath + "/expert/" + address,
+        url: contextPath + "/expert",
         success: function(data) {
             $("#roleExpertTabTitle").text('Expert')
             $("#roleExpertTabs").show()
@@ -140,7 +148,7 @@ function showExpertRoleTab() {
             $("#roleExpertTabs").hide()
             $("#registerExpertPanel").show()
             $.get({
-                url: contextPath + "/user/" + address,
+                url: contextPath + "/user",
                 success: function(data) {
                     $("#expertName").val(data.name)
                     $("#expertEmailAddress").val(data.emailAddress)
@@ -162,7 +170,7 @@ function showExpertRoleTab() {
 function showClientRoleTab() {
     address = getAddress()
     $.get({
-        url: contextPath + "/client/" + address,
+        url: contextPath + "/client",
         success: function(data) {
             $("#roleClientTabTitle").text('Client')
             $("#roleClientTabs").show()
@@ -173,7 +181,7 @@ function showClientRoleTab() {
             $("#roleClientTabs").hide()
             $("#registerClient").show()
             $.get({
-                url: contextPath + "/user/" + address,
+                url: contextPath + "/user",
                 success: function(data) {
                     $("#clientName").val(data.name)
                     $("#clientEmailAddress").val(data.emailAddress)

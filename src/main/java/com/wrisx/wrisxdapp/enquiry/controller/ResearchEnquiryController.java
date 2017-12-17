@@ -11,10 +11,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttribute;
 
 import java.text.MessageFormat;
 import java.util.List;
 
+import static com.wrisx.wrisxdapp.init.controller.InitController.USER_ADDRESS;
 import static java.util.stream.Collectors.toList;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
@@ -33,7 +35,7 @@ public class ResearchEnquiryController {
 
     @RequestMapping(value = "/enquiry", method = POST)
     public ResponseEntity<ResearchEnquiryData> createEnquiry(
-            @RequestParam("address") String address,
+            @SessionAttribute(USER_ADDRESS) String address,
             @RequestParam("keywords") String keywords,
             @RequestParam("description") String description) {
         logger.debug(MessageFormat.format("Creating research enquiry {0}", keywords));
@@ -44,9 +46,9 @@ public class ResearchEnquiryController {
         return new ResponseEntity<>(researchEnquiry, OK);
     }
 
-    @RequestMapping(value = "/enquiry/client/{address}", method = GET)
+    @RequestMapping(value = "/enquiry/client", method = GET)
     public ResponseEntity<List<ResearchEnquiryData>> getClientEnquiries(
-            @PathVariable("address") String clientAddress,
+            @SessionAttribute(USER_ADDRESS) String clientAddress,
             Pageable pageable) {
         logger.debug(MessageFormat.format(
                 "Getting research enquiries of client {0}", clientAddress));
@@ -68,10 +70,10 @@ public class ResearchEnquiryController {
         return new ResponseEntity<>(researchEnquiry, OK);
     }
 
-    @RequestMapping(value = "/enquiry/expert/{address}/keywords/{keywords}", method = GET)
+    @RequestMapping(value = "/enquiry/expert/keywords/{keywords}", method = GET)
     public ResponseEntity<List<ResearchEnquiryData>> findExpertEnquiries(
             @PathVariable String keywords,
-            @PathVariable(("address")) String expertAddress,
+            @SessionAttribute(USER_ADDRESS) String expertAddress,
             Pageable pageable) {
         logger.debug(MessageFormat.format(
                 "Searching research enquiries for expert {0} {1}",
@@ -80,9 +82,9 @@ public class ResearchEnquiryController {
         return getExpertEnquiries(expertAddress, keywords, pageable);
     }
 
-    @RequestMapping(value = "/enquiry/expert/{address}/keywords", method = GET)
+    @RequestMapping(value = "/enquiry/expert/keywords", method = GET)
     public ResponseEntity<List<ResearchEnquiryData>> findAllExpertEnquiries(
-            @PathVariable("address") String expertAddress,
+            @SessionAttribute(USER_ADDRESS) String expertAddress,
             Pageable pageable) {
         logger.debug(MessageFormat.format(
                 "Searching research enquiries for expert {0}",

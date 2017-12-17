@@ -1,7 +1,7 @@
 package com.wrisx.wrisxdapp.facilitator.controller;
 
-import com.wrisx.wrisxdapp.facilitator.service.FacilitatorService;
 import com.wrisx.wrisxdapp.domain.Facilitator;
+import com.wrisx.wrisxdapp.facilitator.service.FacilitatorService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,10 +10,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttribute;
 
 import java.text.MessageFormat;
 import java.util.List;
 
+import static com.wrisx.wrisxdapp.init.controller.InitController.USER_ADDRESS;
 import static java.util.stream.Collectors.toList;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
@@ -32,7 +34,7 @@ public class FacilitatorController {
 
     @RequestMapping(value = "/facilitator", method = POST)
     public ResponseEntity<?> createFacilitator(
-            @RequestParam("address") String address,
+            @SessionAttribute(USER_ADDRESS) String address,
             @RequestParam("name") String name,
             @RequestParam("emailAddress") String emailAddress,
             @RequestParam("description") String description) {

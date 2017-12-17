@@ -11,10 +11,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttribute;
 
 import java.text.MessageFormat;
 import java.util.List;
 
+import static com.wrisx.wrisxdapp.init.controller.InitController.USER_ADDRESS;
 import static java.util.stream.Collectors.toList;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
@@ -35,7 +37,7 @@ public class ExpertController {
 
     @RequestMapping(value = "/expert", method = POST)
     public ResponseEntity<?> createExpert(
-            @RequestParam("address") String address,
+            @SessionAttribute(USER_ADDRESS) String address,
             @RequestParam("name") String name,
             @RequestParam("emailAddress") String emailAddress,
             @RequestParam("keyWords") String keyWords,
@@ -47,27 +49,27 @@ public class ExpertController {
         return new ResponseEntity<>(OK);
     }
 
-    @RequestMapping(value = "/expert/{address}", method = GET)
+    @RequestMapping(value = "/expert", method = GET)
     public ResponseEntity<ExpertData> getExpert(
-            @PathVariable("address") String expertAddress) {
+            @SessionAttribute(USER_ADDRESS) String expertAddress) {
         logger.debug(MessageFormat.format("Getting expert {0}", expertAddress));
 
         ExpertData expert = expertService.getExpert(expertAddress);
         return new ResponseEntity<>(expert, OK);
     }
 
-    @RequestMapping(value = "/expert/{address}", method = DELETE)
+    @RequestMapping(value = "/expert", method = DELETE)
     public ResponseEntity<?> deleteExpert(
-            @PathVariable("address") String expertAddress) {
+            @SessionAttribute(USER_ADDRESS) String expertAddress) {
         logger.debug(MessageFormat.format("Deleting expert {0}", expertAddress));
 
         expertService.deleteExpert(expertAddress);
         return new ResponseEntity<>(OK);
     }
 
-    @RequestMapping(value = "/expert/{address}/confirm", method = PUT)
+    @RequestMapping(value = "/expert/confirm", method = PUT)
     public ResponseEntity<Void> confirmExpertCreation(
-            @PathVariable("address") String expertAddress,
+            @SessionAttribute(USER_ADDRESS) String expertAddress,
             @RequestParam("transactionHash") String transactionHash) {
         logger.debug(MessageFormat.format(
                 "Confirming expert creation {0}", expertAddress));
@@ -77,9 +79,9 @@ public class ExpertController {
         return ResponseEntity.noContent().build();
     }
 
-    @RequestMapping(value = "/expert/{address}/commit", method = PUT)
+    @RequestMapping(value = "/expert/commit", method = PUT)
     public ResponseEntity<Void> commitExpertCreation(
-            @PathVariable("address") String expertAddress,
+            @SessionAttribute(USER_ADDRESS) String expertAddress,
             @RequestParam("transactionHash") String transactionHash) {
         logger.debug(MessageFormat.format(
                 "Committing expert creation {0} {1}", expertAddress, transactionHash));

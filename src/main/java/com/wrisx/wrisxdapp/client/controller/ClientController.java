@@ -8,13 +8,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttribute;
 
 import java.text.MessageFormat;
 import java.util.List;
 
+import static com.wrisx.wrisxdapp.init.controller.InitController.USER_ADDRESS;
 import static java.util.stream.Collectors.toList;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
@@ -36,7 +37,7 @@ public class ClientController {
 
     @RequestMapping(value = "/client", method = POST)
     public ResponseEntity<?> createClient(
-            @RequestParam("address") String address,
+            @SessionAttribute(USER_ADDRESS) String address,
             @RequestParam("name") String name,
             @RequestParam("emailAddress") String emailAddress,
             @RequestParam("description") String description) {
@@ -47,27 +48,27 @@ public class ClientController {
         return new ResponseEntity<>(CREATED);
     }
 
-    @RequestMapping(value = "/client/{address}", method = GET)
+    @RequestMapping(value = "/client", method = GET)
     public ResponseEntity<ClientData> getClient(
-            @PathVariable("address") String clientAddress) {
+            @SessionAttribute(USER_ADDRESS) String clientAddress) {
         logger.debug(MessageFormat.format("Getting client {0}", clientAddress));
 
         ClientData client = clientService.getClient(clientAddress);
         return new ResponseEntity<>(client, OK);
     }
 
-    @RequestMapping(value = "/client/{address}", method = DELETE)
+    @RequestMapping(value = "/client", method = DELETE)
     public ResponseEntity<Void> deleteClient(
-            @PathVariable("address") String clientAddress) {
+            @SessionAttribute(USER_ADDRESS) String clientAddress) {
         logger.debug(MessageFormat.format("Deleting client {0}", clientAddress));
 
         clientService.deleteClient(clientAddress);
         return ResponseEntity.noContent().build();
     }
 
-    @RequestMapping(value = "/client/{address}/confirm", method = PUT)
+    @RequestMapping(value = "/client/confirm", method = PUT)
     public ResponseEntity<Void> confirmClientCreation(
-            @PathVariable("address") String clientAddress,
+            @SessionAttribute(USER_ADDRESS) String clientAddress,
             @RequestParam("transactionHash") String transactionHash) {
         logger.debug(MessageFormat.format(
                 "Confirming client creation {0}", clientAddress));
@@ -77,9 +78,9 @@ public class ClientController {
         return ResponseEntity.noContent().build();
     }
 
-    @RequestMapping(value = "/client/{address}/commit", method = PUT)
+    @RequestMapping(value = "/client/commit", method = PUT)
     public ResponseEntity<Void> commitClientCreation(
-            @PathVariable("address") String clientAddress,
+            @SessionAttribute(USER_ADDRESS) String clientAddress,
             @RequestParam("transactionHash") String transactionHash) {
         logger.debug(MessageFormat.format(
                 "Committing client creation {0} {1}", clientAddress, transactionHash));
@@ -89,7 +90,7 @@ public class ClientController {
         return ResponseEntity.noContent().build();
     }
 
-    @RequestMapping(value = "/client", method = GET)
+    @RequestMapping(value = "/clients", method = GET)
     public ResponseEntity<List<ClientData>> getClients(Pageable pageable) {
         logger.debug("Getting clients");
 

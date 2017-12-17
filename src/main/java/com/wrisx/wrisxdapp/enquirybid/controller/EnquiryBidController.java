@@ -11,10 +11,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttribute;
 
 import java.text.MessageFormat;
 import java.util.List;
 
+import static com.wrisx.wrisxdapp.init.controller.InitController.USER_ADDRESS;
 import static java.util.stream.Collectors.toList;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
@@ -36,7 +38,7 @@ public class EnquiryBidController {
     @RequestMapping(value = "/enquiry/{enquiryId}/bid", method = POST)
     public ResponseEntity<EnquiryBidData> placeEnquiryBid(
             @PathVariable long enquiryId,
-            @RequestParam("address") String expertAddress,
+            @SessionAttribute(USER_ADDRESS) String expertAddress,
             @RequestParam("bid") int bid,
             @RequestParam("comment") String comment) {
         logger.debug(MessageFormat.format(
@@ -108,9 +110,9 @@ public class EnquiryBidController {
         return ResponseEntity.noContent().build();
     }
 
-    @RequestMapping(value = "/enquiry/bid/expert/{expertAddress}", method = GET)
+    @RequestMapping(value = "/enquiry/bid/expert", method = GET)
     public ResponseEntity<List<EnquiryBidData>> getExpertEnquiryBids(
-            @PathVariable String expertAddress,
+            @SessionAttribute(USER_ADDRESS) String expertAddress,
             Pageable pageable) {
         logger.debug(MessageFormat.format(
                 "Getting expert enquiry bids {0}", expertAddress));

@@ -7,7 +7,7 @@ function showAnonymousSearchExpertTab() {
 }
 
 function viewAnonymousResearchItem(uuid) {
-    $.get("/research/" + uuid,
+    $.get(contextPath + "/research/" + uuid,
         function(data) {
             var text = '<table style="width:100%">'
             text = text.concat('<tr><td>Title</td><td>' + data.title + '</td></tr>')
@@ -45,7 +45,7 @@ function showAnonymousResearchItems(data) {
 }
 
 function viewAnonymousExpert(address) {
-    $.get("/expert/" + address,
+    $.get(contextPath + "/expert/" + address,
         function(data) {
             var text = '<table style="width:100%">'
             text = text.concat('<tr><td><b>Name</b></td><td>' + data.name + '</td></tr>')
@@ -84,7 +84,7 @@ function anonymousSearchResearchItems() {
     address = getAddress()
     keywords = $("#anonymousResearchKeywords").val()
 
-    $.get("/research/keywords/" + keywords,
+    $.get(contextPath + "/research/keywords/" + keywords,
         function(data) {
             showAnonymousResearchItems(data)
             $("#anonymousResearchKeywords").val('')
@@ -96,7 +96,7 @@ function anonymousSearchExperts() {
     address = getAddress()
     keywords = $("#anonymousExpertKeywords").val()
 
-    $.get("/expert/keywords/" + keywords,
+    $.get(contextPath + "/expert/keywords/" + keywords,
         function(data) {
             showAnonymousExperts(data)
             $("#anonymousExpertKeywords").val('')

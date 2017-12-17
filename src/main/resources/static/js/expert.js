@@ -33,7 +33,6 @@ function registerExpert() {
     $.post(contextPath + "/expert",
             {
                 'name': name,
-                'address': address,
                 'emailAddress': emailAddress,
                 'keyWords': keywords,
                 'description': description
@@ -43,14 +42,14 @@ function registerExpert() {
                     function(error, result) {
                         if(error) {
                             console.log(error)
-                            $.delete(contextPath + "/expert/" + address,
+                            $.delete(contextPath + "/expert",
                                 function(data) {
                                     showUserData()
                                     showUserBalance()
                                 }
                             )
                         } else {
-                            $.put(contextPath + "/expert/" + address + "/confirm",
+                            $.put(contextPath + "/expert/confirm",
                                 {
                                     'transactionHash': result
                                 }
@@ -68,7 +67,7 @@ function registerExpert() {
 }
 
 function expertRegistered(address, transactionHash) {
-    $.put(contextPath + "/expert/" + address + "/commit",
+    $.put(contextPath + "/expert/commit",
         {
             'transactionHash': transactionHash
         },
@@ -95,7 +94,6 @@ function depositResearch() {
 
     $.post(contextPath + "/research",
            {
-               'address': address,
                'uuid': researchFile.uuid,
                'price': price,
                'title': title,
@@ -173,7 +171,6 @@ function depositEnquiryBidResearch(clientAddress, enquiryId, bidId) {
 
     $.post(contextPath + "/research",
            {
-               'address': address,
                'uuid': researchFile.uuid,
                'price': price,
                'title': title,
@@ -427,7 +424,6 @@ function placeBid(enquiryId) {
     var comment = $("#enquiryBidComment").val();
     $.post(contextPath + "/enquiry/" + enquiryId + "/bid",
             {
-                'address': address,
                 'bid': enquiryBid,
                 'comment': comment
             },
@@ -441,7 +437,7 @@ function placeBid(enquiryId) {
 
 function getExpertResearchItems() {
     address = getAddress()
-    $.get(contextPath + "/research/expert/" + address,
+    $.get(contextPath + "/research/expert",
         function(data) {
             showExpertResearchItems(data)
         }
@@ -450,7 +446,7 @@ function getExpertResearchItems() {
 
 function getExpertEnquiryBids() {
     address = getAddress()
-    $.get(contextPath + "/enquiry/bid/expert/" + address,
+    $.get(contextPath + "/enquiry/bid/expert",
         function(data) {
             showExpertEnquiryBids(data)
         }
@@ -459,7 +455,7 @@ function getExpertEnquiryBids() {
 
 function getExpertPurchases() {
     address = getAddress()
-    $.get(contextPath + "/purchase/expert/" + address,
+    $.get(contextPath + "/purchase/expert",
         function(data) {
             showExpertPurchases(data)
         }
@@ -479,7 +475,7 @@ function searchEnquiries() {
     address = getAddress()
     keywords = $("#expertEnquiryKeywords").val()
 
-    $.get(contextPath + "/enquiry/expert/" + address + "/keywords/" + keywords,
+    $.get(contextPath + "/enquiry/expert/keywords/" + keywords,
         function(data) {
             showExpertEnquiries(data)
         }

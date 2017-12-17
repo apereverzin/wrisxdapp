@@ -11,10 +11,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttribute;
 
 import java.text.MessageFormat;
 import java.util.List;
 
+import static com.wrisx.wrisxdapp.init.controller.InitController.USER_ADDRESS;
 import static java.util.stream.Collectors.toList;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
@@ -35,7 +37,7 @@ public class PurchaseController {
 
     @RequestMapping(value = "/purchase", method = POST)
     public ResponseEntity<PurchaseData> payForResearch(
-            @RequestParam("address") String clientAddress,
+            @SessionAttribute(USER_ADDRESS) String clientAddress,
             @RequestParam("uuid") String uuid) {
         logger.debug(MessageFormat.format(
                 "Client {0} is paying for {1}", clientAddress, uuid));
@@ -76,9 +78,9 @@ public class PurchaseController {
         return ResponseEntity.noContent().build();
     }
 
-    @RequestMapping(value = "/purchase/client/{address}", method = GET)
+    @RequestMapping(value = "/purchase/client", method = GET)
     public ResponseEntity<List<PurchaseData>> getClientPurchases(
-            @PathVariable("address") String clientAddress,
+            @SessionAttribute(USER_ADDRESS) String clientAddress,
             Pageable pageable) {
         logger.debug(MessageFormat.format(
                 "Getting client purchases {0}", clientAddress));
@@ -93,9 +95,9 @@ public class PurchaseController {
 
     }
 
-    @RequestMapping(value = "/purchase/expert/{address}", method = GET)
+    @RequestMapping(value = "/purchase/expert", method = GET)
     public ResponseEntity<List<PurchaseData>> getExpertPurchases(
-            @PathVariable("address") String expertAddress,
+            @SessionAttribute(USER_ADDRESS) String expertAddress,
             Pageable pageable) {
         logger.debug(MessageFormat.format(
                 "Getting expert purchases {0}", expertAddress));

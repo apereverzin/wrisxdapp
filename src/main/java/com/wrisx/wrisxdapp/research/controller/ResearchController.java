@@ -15,14 +15,17 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.text.MessageFormat;
 import java.util.List;
 
+import static com.wrisx.wrisxdapp.init.controller.InitController.USER_ADDRESS;
 import static java.util.stream.Collectors.toList;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
@@ -41,11 +44,6 @@ public class ResearchController {
         this.researchService = researchService;
     }
 
-    @RequestMapping("/a")
-    public String index() {
-        return "index.html";
-    }
-
     @RequestMapping(value = "/uploadFile", method = POST)
     public ResponseEntity<ResearchFile> uploadFile(
             @RequestParam("uploadfile") MultipartFile uploadfile) {
@@ -59,7 +57,7 @@ public class ResearchController {
 
     @RequestMapping(value = "/research", method = POST)
     public ResponseEntity<?> setFileAttributes(
-            @RequestParam("address") String expertAddress,
+            @SessionAttribute(USER_ADDRESS) String expertAddress,
             @RequestParam("uuid") String uuid,
             @RequestParam("price") int price,
             @RequestParam("title") String title,
@@ -111,14 +109,15 @@ public class ResearchController {
         return ResponseEntity.noContent().build();
     }
 
-    @RequestMapping(value = "/research/expert/{address}", method = GET)
+    @RequestMapping(value = "/research/expert", method = GET)
     public ResponseEntity<List<ResearchData>> getExpertResearchItems(
-            @PathVariable String address, Pageable pageable) {
+            @SessionAttribute(USER_ADDRESS) String userAddress,
+            Pageable pageable, HttpServletRequest request) {
         logger.debug(MessageFormat.format(
-                "Getting expert research items {0}", address));
+                "Getting expert research items {0}", userAddress));
 
         List<ResearchData> researchItems =
-                researchService.getExpertResearchItems(address).stream().
+                researchService.getExpertResearchItems(userAddress).stream().
                         skip(pageable.getPageNumber() * pageable.getPageSize()).
                         limit(pageable.getPageSize()).
                         collect(toList());
@@ -135,10 +134,10 @@ public class ResearchController {
         return new ResponseEntity<>(research, OK);
     }
 
-    @RequestMapping(value = "/research/client/{address}/keywords/{keywords}", method = GET)
+    @RequestMapping(value = "/research/clientkeywords/{keywords}", method = GET)
     public ResponseEntity<List<ResearchData>> findClientResearchItems(
             @PathVariable String keywords,
-            @PathVariable("address") String clientAddress,
+            @SessionAttribute(USER_ADDRESS) String clientAddress,
             Pageable pageable) {
         logger.debug(MessageFormat.format(
                 "Searching research items for client {0} {1}",
@@ -147,9 +146,9 @@ public class ResearchController {
         return getResearchItemsByKeywords(clientAddress, keywords, pageable);
     }
 
-    @RequestMapping(value = "/research/client/{address}/keywords", method = GET)
+    @RequestMapping(value = "/research/client/keywords", method = GET)
     public ResponseEntity<List<ResearchData>> findAllClientResearchItems(
-            @PathVariable("address") String clientAddress,
+            @SessionAttribute(USER_ADDRESS) String clientAddress,
             Pageable pageable) {
         logger.debug(MessageFormat.format(
                 "Searching research items for client {0}",

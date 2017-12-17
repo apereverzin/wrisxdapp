@@ -5,7 +5,6 @@ function registerFacilitator() {
     $.post("/facilitator",
            {
                'name': name,
-               'address': address,
                'emailAddress': '',
                'comment': ''
            }
