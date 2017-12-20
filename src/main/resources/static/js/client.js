@@ -10,8 +10,8 @@ function clientResearchItemsTabClicked() {
         }
     )
 
-    showUserData()
-    showUserBalance()
+    showMemberData()
+    showMemberBalance()
     $("#clientResearchItemPanel").html('')
 }
 
@@ -24,14 +24,14 @@ function clientPurchasesTabClicked() {
         }
     );
 
-    showUserData()
-    showUserBalance()
+    showMemberData()
+    showMemberBalance()
 }
 
 function clientEnquiriesTabClicked() {
     getClientEnquiries()
-    showUserData()
-    showUserBalance()
+    showMemberData()
+    showMemberBalance()
 }
 
 function registerClient() {
@@ -39,22 +39,24 @@ function registerClient() {
     var name = $("#clientName").val();
     var emailAddress = $("#clientEmailAddress").val();
     var description = $("#clientDescription").val();
+    var secret = getSecret();
 
     $.post(contextPath + "/client",
         {
             'name': name,
             'emailAddress': emailAddress,
-            'description': description
+            'description': description,
+            'secret': secret
         },
         function(data) {
-            contractInstance.registerClient(name, {from: address},
+            contractInstance.registerClient(name, secret, {from: address},
                     function(error, result) {
                         if(error) {
                             console.log(error)
                             $.delete(contextPath + "/client",
                                 function(data) {
-                                    showUserData()
-                                    showUserBalance()
+                                    showMemberData()
+                                    showMemberBalance()
                                 }
                             )
                         } else {
@@ -66,13 +68,25 @@ function registerClient() {
                             $("#clientName").val('')
                             $("#clientEmailAddress").val('')
                             $("#clientDescription").val('')
-                            showUserData()
-                            showUserBalance()
+                            showMemberData()
+                            showMemberBalance()
                             showClientRoleTab()
-                            waitForTransaction(result)
+                            waitForTransactionToBeMined(result, clientRegistered, result)
                         }
                     }
             )
+        }
+    )
+}
+
+function clientRegistered(transactionHash) {
+    $.put(contextPath + "/client/commit",
+        {
+            'transactionHash': transactionHash
+        },
+        function(data) {
+            showMemberData();
+            showMemberBalance();
         }
     )
 }
@@ -103,7 +117,7 @@ function buyTokens() {
                     console.log(error);
                 } else {
                     $("#clientBuyTokensAmount").val('')
-                    waitForTransactionToBeMined(result, showUserBalance);
+                    waitForTransactionToBeMined(result, showMemberBalance);
                 }
             }
     );
@@ -128,7 +142,7 @@ function payForResearch(uuid) {
                                     'transactionHash': result
                                 }
                             )
-                            showUserBalance()
+                            showMemberBalance()
                         }
                     }
             );
@@ -190,7 +204,7 @@ function showClientResearchItems(data) {
     })
     items.concat('</tbody></table>')
     $("#clientResearchItemsPanel").html(items)
-    showUserBalance()
+    showMemberBalance()
 }
 
 function showClientEnquiries(data) {
@@ -216,7 +230,7 @@ function showClientEnquiries(data) {
 
     $("#clientEnquiriesPanel").html(items)
 
-    showUserBalance()
+    showMemberBalance()
 }
 
 function showClientPurchases(data) {
@@ -239,7 +253,7 @@ function showClientPurchases(data) {
 
     $("#clientPurchasesPanel").html(items)
 
-    showUserBalance()
+    showMemberBalance()
 }
 
 function showEnquiryBids(enquiryId, keywords, description, data) {
@@ -302,7 +316,7 @@ function showEnquiryBids(enquiryId, keywords, description, data) {
     globalEnquiryId = enquiryId
     globalKeywords = keywords
 
-    showUserBalance()
+    showMemberBalance()
 }
 
 function postEnquiry() {

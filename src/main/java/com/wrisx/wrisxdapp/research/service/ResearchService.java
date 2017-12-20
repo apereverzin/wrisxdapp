@@ -1,6 +1,8 @@
 package com.wrisx.wrisxdapp.research.service;
 
+import com.wrisx.wrisxdapp.common.DigestProvider;
 import com.wrisx.wrisxdapp.common.EntityProvider;
+import com.wrisx.wrisxdapp.common.RandomStringProvider;
 import com.wrisx.wrisxdapp.data.ResearchData;
 import com.wrisx.wrisxdapp.domain.*;
 import com.wrisx.wrisxdapp.errorhandling.BadRequestException;
@@ -23,6 +25,7 @@ import java.util.List;
 
 import static com.wrisx.wrisxdapp.domain.State.COMMITTED;
 import static com.wrisx.wrisxdapp.domain.State.CONFIRMED;
+import static com.wrisx.wrisxdapp.user.service.UserService.MD5_ALGORITHM;
 import static com.wrisx.wrisxdapp.util.WrisxUtil.getKeywordList;
 import static com.wrisx.wrisxdapp.util.WrisxUtil.getListFromIterable;
 import static java.util.Comparator.comparing;
@@ -34,15 +37,14 @@ public class ResearchService {
 
     public static final String ZIP_EXTENSION = ".zip";
     private static final int PASSWORD_LENGTH = 10;
-    private static final String MD5_ALGORITHM = "MD5";
 
     @Autowired
     private Environment env;
 
     private final FileUploadProvider fileUploadProvider;
-    private final PasswordProvider passwordProvider;
+    private final RandomStringProvider randomStringProvider;
     private final ZipFileProvider zipFileProvider;
-    private final ChecksumProvider checksumProvider;
+    private final DigestProvider digestProvider;
     private final ResearchDao researchDao;
     private final EntityProvider entityProvider;
     private final ResearchEnquiryDao researchEnquiryDao;
@@ -52,9 +54,9 @@ public class ResearchService {
 
     @Autowired
     public ResearchService(FileUploadProvider fileUploadProvider,
-                           PasswordProvider passwordProvider,
+                           RandomStringProvider randomStringProvider,
                            ZipFileProvider zipFileProvider,
-                           ChecksumProvider checksumProvider,
+                           DigestProvider digestProvider,
                            ResearchDao researchDao,
                            EntityProvider entityProvider,
                            ResearchEnquiryDao researchEnquiryDao,
@@ -62,9 +64,9 @@ public class ResearchService {
                            PurchaseService purchaseService,
                            PurchaseDao purchaseDao) {
         this.fileUploadProvider = fileUploadProvider;
-        this.passwordProvider = passwordProvider;
+        this.randomStringProvider = randomStringProvider;
         this.zipFileProvider = zipFileProvider;
-        this.checksumProvider = checksumProvider;
+        this.digestProvider = digestProvider;
         this.researchDao = researchDao;
         this.entityProvider = entityProvider;
         this.researchEnquiryDao = researchEnquiryDao;
@@ -77,12 +79,12 @@ public class ResearchService {
         String directory = env.getProperty("wrisx.paths.uploadedFiles");
         File researchFile = fileUploadProvider.uploadFile(file, directory);
 
-        String password = passwordProvider.getRandomPassword(PASSWORD_LENGTH);
+        String password = randomStringProvider.getRandomString(PASSWORD_LENGTH);
         ZipFile zipFile =
                 zipFileProvider.zipAndProtectFile(researchFile, directory, password);
 
         String zipFileChecksumMD5 =
-                checksumProvider.getFileChecksum(zipFile.getFile(), MD5_ALGORITHM);
+                digestProvider.getFileDigest(zipFile.getFile(), MD5_ALGORITHM);
 
         researchFile.delete();
 

@@ -9,6 +9,8 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
@@ -26,12 +28,6 @@ public class Expert {
     private String address;
 
     @NotNull
-    private String name;
-
-    @NotNull
-    private String emailAddress;
-
-    @NotNull
     private String keywords;
 
     @NotNull
@@ -45,17 +41,24 @@ public class Expert {
     @Setter
     private String transactionHash;
 
+    @NotNull
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    public String getName() {
+        return this.getUser().getName();
+    }
+
     public Expert() {
         //
     }
 
-    public Expert(String address, String name, String emailAddress,
-                  String keywords, String description) {
+    public Expert(String address, String keywords, String description, User user) {
         this.address = address;
-        this.name = name;
-        this.emailAddress = emailAddress;
         this.keywords = keywords;
         this.description = description;
+        this.user = user;
         this.state = CREATED;
     }
 }

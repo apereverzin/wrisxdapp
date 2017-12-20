@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.SessionAttribute;
 import java.text.MessageFormat;
 import java.util.List;
 
-import static com.wrisx.wrisxdapp.init.controller.InitController.USER_ADDRESS;
+import static com.wrisx.wrisxdapp.user.controller.UserController.USER_ADDRESS;
+import static com.wrisx.wrisxdapp.user.controller.UserController.USER_AUTHORISED;
+import static com.wrisx.wrisxdapp.util.WrisxUtil.verifyUserAuthorisation;
 import static java.util.stream.Collectors.toList;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
@@ -36,24 +38,29 @@ public class ClientController {
     }
 
     @RequestMapping(value = "/client", method = POST)
-    public ResponseEntity<?> createClient(
+    public ResponseEntity<Void> createClient(
             @SessionAttribute(USER_ADDRESS) String address,
             @RequestParam("name") String name,
             @RequestParam("emailAddress") String emailAddress,
-            @RequestParam("description") String description) {
+            @RequestParam("description") String description,
+            @RequestParam("secret") String secret) {
         logger.debug(MessageFormat.format("Creating client {0}", address));
 
-        clientService.saveClient(address, name, emailAddress, description);
+        clientService.createClient(address, name, emailAddress, description, secret);
 
         return new ResponseEntity<>(CREATED);
     }
 
     @RequestMapping(value = "/client", method = GET)
     public ResponseEntity<ClientData> getClient(
-            @SessionAttribute(USER_ADDRESS) String clientAddress) {
+            @SessionAttribute(USER_ADDRESS) String clientAddress,
+            @SessionAttribute(name = USER_AUTHORISED, required = false) String userAuthorised) {
         logger.debug(MessageFormat.format("Getting client {0}", clientAddress));
 
+        verifyUserAuthorisation(clientAddress, userAuthorised);
+
         ClientData client = clientService.getClient(clientAddress);
+
         return new ResponseEntity<>(client, OK);
     }
 
@@ -63,6 +70,7 @@ public class ClientController {
         logger.debug(MessageFormat.format("Deleting client {0}", clientAddress));
 
         clientService.deleteClient(clientAddress);
+
         return ResponseEntity.noContent().build();
     }
 
@@ -91,8 +99,13 @@ public class ClientController {
     }
 
     @RequestMapping(value = "/clients", method = GET)
-    public ResponseEntity<List<ClientData>> getClients(Pageable pageable) {
+    public ResponseEntity<List<ClientData>> getClients(
+            @SessionAttribute(USER_ADDRESS) String clientAddress,
+            @SessionAttribute(name = USER_AUTHORISED, required = false) String userAuthorised,
+            Pageable pageable) {
         logger.debug("Getting clients");
+
+        verifyUserAuthorisation(clientAddress, userAuthorised);
 
         List<ClientData> clients =
                 clientService.getClients().stream().

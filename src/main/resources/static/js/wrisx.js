@@ -4,28 +4,52 @@ const contextPath = "/wwa"
 const interval = 500
 
 function startApp(web3) {
-    abi = JSON.parse('[{"constant":false,"inputs":[{"name":"_name","type":"string"}],"name":"registerExpert","outputs":[{"name":"success","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"addr","type":"address"}],"name":"getClientInitialized","outputs":[{"name":"init","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_uuid","type":"string"}],"name":"payForResearch","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"getBalance","outputs":[{"name":"balance","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"}],"name":"experts","outputs":[{"name":"totalRating","type":"uint256"},{"name":"number","type":"uint256"},{"name":"initialized","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"totalSupply","outputs":[{"name":"totalSupply","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_name","type":"string"}],"name":"registerFacilitator","outputs":[{"name":"success","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"uuid","type":"string"}],"name":"getResearchPrice","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"decimals","outputs":[{"name":"","type":"uint8"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[],"name":"kill","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"}],"name":"facilitators","outputs":[{"name":"initialized","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"getTokenPrice","outputs":[{"name":"","type":"uint8"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_name","type":"string"}],"name":"registerClient","outputs":[{"name":"success","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"addr","type":"address"}],"name":"getExpertInitialized","outputs":[{"name":"init","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"}],"name":"clients","outputs":[{"name":"initialized","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"researchCount","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"addr","type":"address"}],"name":"getFacilitatorInitialized","outputs":[{"name":"init","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"expertAddress","type":"address"}],"name":"getExpertRating","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_uuid","type":"string"},{"name":"_rate","type":"uint256"},{"name":"_comment","type":"string"}],"name":"rateResearchByFacilitator","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"_owner","type":"address"}],"name":"balanceOf","outputs":[{"name":"balance","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_price","type":"uint256"},{"name":"_uuid","type":"string"},{"name":"_password","type":"string"},{"name":"_zipFileChecksumMD5","type":"string"},{"name":"_clientAddress","type":"address"},{"name":"_enquiryId","type":"uint256"},{"name":"_bidId","type":"uint256"}],"name":"depositResearch","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"_uuid","type":"string"}],"name":"getResearch","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"owner","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"_uuid","type":"string"}],"name":"getResearchRatingByFacilitator","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"symbol","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_enquiryId","type":"uint256"},{"name":"_keywords","type":"string"},{"name":"_bidId0","type":"uint256"},{"name":"_expert0","type":"address"},{"name":"_price0","type":"uint256"},{"name":"_bidId1","type":"uint256"},{"name":"_expert1","type":"address"},{"name":"_price1","type":"uint256"},{"name":"_bidId2","type":"uint256"},{"name":"_expert2","type":"address"},{"name":"_price2","type":"uint256"}],"name":"placeEnquiry","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"expertAddress","type":"address"}],"name":"getExpertTotalRating","outputs":[{"name":"totalRating","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_newOwner","type":"address"}],"name":"changeOwner","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"}],"name":"users","outputs":[{"name":"name","type":"string"},{"name":"balance","type":"uint256"},{"name":"initialized","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_to","type":"address"},{"name":"_amount","type":"uint256"}],"name":"transfer","outputs":[{"name":"success","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"tokenPriceEther","outputs":[{"name":"","type":"uint8"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"uuid","type":"string"}],"name":"withdrawResearch","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[],"name":"buyTokens","outputs":[],"payable":true,"stateMutability":"payable","type":"function"},{"constant":false,"inputs":[{"name":"uuid","type":"string"}],"name":"requestResearch","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"_uuid","type":"string"},{"name":"_rate","type":"uint256"},{"name":"_comment","type":"string"}],"name":"rateResearchByClient","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"escrowBalance","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"_uuid","type":"string"}],"name":"getResearchRatingByClient","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"inputs":[{"name":"_name","type":"string"},{"name":"_symbol","type":"string"},{"name":"_decimals","type":"uint8"},{"name":"_totalSupply","type":"uint256"},{"name":"_tokenPriceEther","type":"uint8"}],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"payable":true,"stateMutability":"payable","type":"fallback"},{"anonymous":false,"inputs":[{"indexed":true,"name":"addr","type":"address"},{"indexed":false,"name":"name","type":"string"}],"name":"ExpertRegistered","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"addr","type":"address"},{"indexed":false,"name":"name","type":"string"}],"name":"ClientRegistered","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"addr","type":"address"},{"indexed":false,"name":"name","type":"string"}],"name":"FacilitatorRegistered","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"member","type":"address"},{"indexed":false,"name":"tokens","type":"uint256"}],"name":"TokensBought","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"expert","type":"address"},{"indexed":true,"name":"uuid","type":"string"}],"name":"ResearchDeposited","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"expert","type":"address"},{"indexed":true,"name":"uuid","type":"string"}],"name":"ResearchWithdrawn","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"client","type":"address"},{"indexed":true,"name":"uuid","type":"string"}],"name":"ResearchPaid","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"client","type":"address"},{"indexed":true,"name":"enquiryId","type":"uint256"}],"name":"EnquiryPlaced","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"enquiryId","type":"uint256"},{"indexed":true,"name":"bidId","type":"uint256"},{"indexed":true,"name":"expert","type":"address"},{"indexed":false,"name":"price","type":"uint256"}],"name":"BidPlaced","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"bidId","type":"uint256"},{"indexed":true,"name":"researchUuid","type":"string"}],"name":"BidExecuted","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"client","type":"address"},{"indexed":true,"name":"uuid","type":"string"}],"name":"ResearchSent","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"client","type":"address"},{"indexed":true,"name":"uuid","type":"string"},{"indexed":false,"name":"rate","type":"uint256"}],"name":"ResearchRatedByClient","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"client","type":"address"},{"indexed":true,"name":"uuid","type":"string"},{"indexed":false,"name":"rate","type":"uint256"}],"name":"ResearchRatedByFacilitator","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"_from","type":"address"},{"indexed":true,"name":"_to","type":"address"},{"indexed":false,"name":"_value","type":"uint256"}],"name":"Transfer","type":"event"}]')
+    abi = JSON.parse('[{"constant":true,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"addr","type":"address"}],"name":"getClientInitialized","outputs":[{"name":"init","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_uuid","type":"string"}],"name":"payForResearch","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"getBalance","outputs":[{"name":"balance","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"}],"name":"experts","outputs":[{"name":"totalRating","type":"uint256"},{"name":"number","type":"uint256"},{"name":"initialized","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"totalSupply","outputs":[{"name":"_totalSupply","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_name","type":"string"},{"name":"_secret","type":"string"}],"name":"registerFacilitator","outputs":[{"name":"success","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"uuid","type":"string"}],"name":"getResearchPrice","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"decimals","outputs":[{"name":"","type":"uint8"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[],"name":"kill","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"_name","type":"string"},{"name":"_secret","type":"string"}],"name":"registerClient","outputs":[{"name":"success","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"}],"name":"facilitators","outputs":[{"name":"initialized","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"getTokenPrice","outputs":[{"name":"","type":"uint8"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"getSecret","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"addr","type":"address"}],"name":"getExpertInitialized","outputs":[{"name":"init","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"}],"name":"clients","outputs":[{"name":"initialized","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"researchCount","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"addr","type":"address"}],"name":"getFacilitatorInitialized","outputs":[{"name":"init","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"expertAddress","type":"address"}],"name":"getExpertRating","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_uuid","type":"string"},{"name":"_rate","type":"uint256"},{"name":"_comment","type":"string"}],"name":"rateResearchByFacilitator","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"_owner","type":"address"}],"name":"balanceOf","outputs":[{"name":"balance","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_price","type":"uint256"},{"name":"_uuid","type":"string"},{"name":"_password","type":"string"},{"name":"_zipFileChecksumMD5","type":"string"},{"name":"_clientAddress","type":"address"},{"name":"_enquiryId","type":"uint256"},{"name":"_bidId","type":"uint256"}],"name":"depositResearch","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"_name","type":"string"},{"name":"_secret","type":"string"}],"name":"registerExpert","outputs":[{"name":"success","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"_uuid","type":"string"}],"name":"getResearch","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"getOwner","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"owner","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"_uuid","type":"string"}],"name":"getResearchRatingByFacilitator","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"symbol","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_enquiryId","type":"uint256"},{"name":"_keywords","type":"string"},{"name":"_bidId0","type":"uint256"},{"name":"_expert0","type":"address"},{"name":"_price0","type":"uint256"},{"name":"_bidId1","type":"uint256"},{"name":"_expert1","type":"address"},{"name":"_price1","type":"uint256"},{"name":"_bidId2","type":"uint256"},{"name":"_expert2","type":"address"},{"name":"_price2","type":"uint256"}],"name":"placeEnquiry","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"expertAddress","type":"address"}],"name":"getExpertTotalRating","outputs":[{"name":"totalRating","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_newOwner","type":"address"}],"name":"changeOwner","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"}],"name":"users","outputs":[{"name":"name","type":"string"},{"name":"balance","type":"uint256"},{"name":"initialized","type":"uint256"},{"name":"secret","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_to","type":"address"},{"name":"_amount","type":"uint256"}],"name":"transfer","outputs":[{"name":"success","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"tokenPriceEther","outputs":[{"name":"","type":"uint8"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"uuid","type":"string"}],"name":"withdrawResearch","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[],"name":"buyTokens","outputs":[],"payable":true,"stateMutability":"payable","type":"function"},{"constant":true,"inputs":[{"name":"uuid","type":"string"}],"name":"requestResearch","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_uuid","type":"string"},{"name":"_rate","type":"uint256"},{"name":"_comment","type":"string"}],"name":"rateResearchByClient","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"escrowBalance","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"_uuid","type":"string"}],"name":"getResearchRatingByClient","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"inputs":[{"name":"_name","type":"string"},{"name":"_symbol","type":"string"},{"name":"_decimals","type":"uint8"},{"name":"_totalSupply","type":"uint256"},{"name":"_tokenPriceEther","type":"uint8"}],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"payable":true,"stateMutability":"payable","type":"fallback"},{"anonymous":false,"inputs":[{"indexed":true,"name":"addr","type":"address"},{"indexed":false,"name":"name","type":"string"}],"name":"ExpertRegistered","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"addr","type":"address"},{"indexed":false,"name":"name","type":"string"}],"name":"ClientRegistered","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"addr","type":"address"},{"indexed":false,"name":"name","type":"string"}],"name":"FacilitatorRegistered","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"user","type":"address"},{"indexed":false,"name":"tokens","type":"uint256"}],"name":"TokensBought","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"expert","type":"address"},{"indexed":true,"name":"uuid","type":"string"}],"name":"ResearchDeposited","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"expert","type":"address"},{"indexed":true,"name":"uuid","type":"string"}],"name":"ResearchWithdrawn","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"client","type":"address"},{"indexed":true,"name":"uuid","type":"string"}],"name":"ResearchPaid","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"client","type":"address"},{"indexed":true,"name":"enquiryId","type":"uint256"}],"name":"EnquiryPlaced","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"enquiryId","type":"uint256"},{"indexed":true,"name":"bidId","type":"uint256"},{"indexed":true,"name":"expert","type":"address"},{"indexed":false,"name":"price","type":"uint256"}],"name":"BidPlaced","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"bidId","type":"uint256"},{"indexed":true,"name":"researchUuid","type":"string"}],"name":"BidExecuted","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"client","type":"address"},{"indexed":true,"name":"uuid","type":"string"}],"name":"ResearchSent","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"client","type":"address"},{"indexed":true,"name":"uuid","type":"string"},{"indexed":false,"name":"rate","type":"uint256"}],"name":"ResearchRatedByClient","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"client","type":"address"},{"indexed":true,"name":"uuid","type":"string"},{"indexed":false,"name":"rate","type":"uint256"}],"name":"ResearchRatedByFacilitator","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"_from","type":"address"},{"indexed":true,"name":"_to","type":"address"},{"indexed":false,"name":"_value","type":"uint256"}],"name":"Transfer","type":"event"}]')
     WrisxContract = web3.eth.contract(abi);
-    contractInstance = WrisxContract.at('0xf315b00e1af87915cbf3a47df2415bd1c009e83c');
+    contractInstance = WrisxContract.at('0x1c8dd5e984030385787751361759ba305fb341bd');
     console.log(web3.eth.accounts[0]);
 
-    $.ajax({
-        url: contextPath + "/init",
-        type: "GET",
-        beforeSend: function(xhr) {
-            xhr.setRequestHeader('User-Address', web3.eth.accounts[0]);
-        }
-    });
-
     contractInstance.getTokenPrice.call(
-            function(error, result) {
-                if(!error) {
-                    tokenPrice=result;
-                } else {
-                    console.error(error);
-                }
+        function(error, result) {
+            if(error) {
+                console.error(error);
+            } else {
+                tokenPrice=result;
             }
+        }
     );
+
+    $.get(contextPath + "/nonce?address=" + web3.eth.accounts[0],
+        function(data) {
+            if (data != undefined) {
+                var nonce = data;
+                contractInstance.getSecret.call({from: web3.eth.accounts[0]},
+                    function(error, result) {
+                        if(error) {
+                            console.log(error);
+                        } else {
+                            var hash = md5(result + nonce);
+                            $.post(contextPath + "/authorise",
+                                {
+                                    'hash': hash
+                                },
+                                function(data) {
+                                    console.log(data);
+                                }
+                            )
+                        }
+                    }
+                );
+            }
+        }
+    );
+//    $.ajax({
+//        url: contextPath + "/nonce",
+//        type: "GET",
+//        beforeSend: function(xhr) {
+//            xhr.setRequestHeader('User-Address', web3.eth.accounts[0]);
+//        }
+//    });
 }
 
 function getWeb3(callback) {
@@ -85,7 +109,7 @@ function waitForTransactionToBeMined(txHash, func, param1, param2) {
     return new Promise(transactionReceiptAsync);
 };
 
-function showUserBalance() {
+function showMemberBalance() {
     address = getAddress()
     if (address === undefined) {
         $("#tokenBalance").text('')
@@ -111,19 +135,19 @@ function showUserBalance() {
     }
 }
 
-function showUserData() {
+function showMemberData() {
     address = getAddress()
     if (address === undefined) {
-        $("#userAddress").text("Undefined")
+        $("#memberAddress").text("Undefined")
     } else {
-        $("#userAddress").text(address)
+        $("#memberAddress").text(address)
         $.get({
             url: contextPath + "/user",
             success: function(data) {
-                $("#userName").text(data.name)
+                $("#memberName").text(data.name)
             },
             error: function() {
-                $("#userName").text('')
+                $("#memberName").text('')
             }
         })
     }
@@ -164,7 +188,7 @@ function showExpertRoleTab() {
             })
         }
     })
-    showUserData()
+    showMemberData()
 }
 
 function showClientRoleTab() {
@@ -174,12 +198,12 @@ function showClientRoleTab() {
         success: function(data) {
             $("#roleClientTabTitle").text('Client')
             $("#roleClientTabs").show()
-            $("#registerClient").hide()
+            $("#registerClientPanel").hide()
         },
         error: function() {
             $("#roleClientTabTitle").text('Become a Client')
             $("#roleClientTabs").hide()
-            $("#registerClient").show()
+            $("#registerClientPanel").show()
             $.get({
                 url: contextPath + "/user",
                 success: function(data) {
@@ -197,7 +221,7 @@ function showClientRoleTab() {
             })
         }
     })
-    showUserData()
+    showMemberData()
 }
 
 function showDateTime(timestamp) {
@@ -216,6 +240,10 @@ function showDateTime(timestamp) {
     sec = (sec < 10 ? "0" : "") + sec;
 
     return date.getFullYear() + "-" + month + "-" + day + " " +  hour + ":" + min + ":" + sec;
+}
+
+function getSecret() {
+    return '' + (Math.random() * 100000000000000000 + 1);
 }
 
 jQuery.each( [ "put", "delete" ], function( i, method ) {

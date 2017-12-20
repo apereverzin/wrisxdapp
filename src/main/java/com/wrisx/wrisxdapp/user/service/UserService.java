@@ -1,37 +1,56 @@
 package com.wrisx.wrisxdapp.user.service;
 
+import com.wrisx.wrisxdapp.common.DigestProvider;
+import com.wrisx.wrisxdapp.common.EntityProvider;
+import com.wrisx.wrisxdapp.common.RandomStringProvider;
 import com.wrisx.wrisxdapp.data.UserData;
-import com.wrisx.wrisxdapp.domain.Client;
-import com.wrisx.wrisxdapp.domain.ClientDao;
-import com.wrisx.wrisxdapp.domain.Expert;
-import com.wrisx.wrisxdapp.domain.ExpertDao;
+import com.wrisx.wrisxdapp.domain.User;
+import com.wrisx.wrisxdapp.errorhandling.UnauthorizedException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.MessageFormat;
+
 @Service
 public class UserService {
-    private final ClientDao clientDao;
-    private final ExpertDao expertDao;
+    private final Logger logger = LoggerFactory.getLogger(UserService.class);
+
+    public static final String MD5_ALGORITHM = "MD5";
+    private static final int NONCE_LENGTH = 10;
+
+    private final EntityProvider entityProvider;
+    private final RandomStringProvider randomStringProvider;
+    private final DigestProvider digestProvider;
 
     @Autowired
-    public UserService(ClientDao clientDao, ExpertDao expertDao) {
-        this.clientDao = clientDao;
-        this.expertDao = expertDao;
+    public UserService(EntityProvider entityProvider,
+                       RandomStringProvider randomStringProvider,
+                       DigestProvider digestProvider) {
+        this.entityProvider = entityProvider;
+        this.randomStringProvider = randomStringProvider;
+        this.digestProvider = digestProvider;
     }
 
     public UserData getUser(String userAddress) {
-        Client client = clientDao.findByAddress(userAddress);
-        if (client == null) {
-            return getExpert(userAddress);
-        }
-        return new UserData(client);
+        User user = entityProvider.getUserByAddress(userAddress);
+
+        return new UserData(user);
     }
 
-    private UserData getExpert(String userAddress) {
-        Expert expert = expertDao.findByAddress(userAddress);
-        if (expert == null) {
-            return null;
+    public String getNonce() {
+        return randomStringProvider.getRandomString(NONCE_LENGTH);
+    }
+
+    public void verifyHash(String userAddress, String nonce, String hash) {
+        User user = entityProvider.getUserByAddress(userAddress);
+
+        String str = user.getSecret() + nonce;
+        String res = digestProvider.getStringDigest(str, MD5_ALGORITHM);
+        if (!res.equals(hash)) {
+            throw new UnauthorizedException(MessageFormat.format(
+                    "Cannot authorize {0}", userAddress));
         }
-        return new UserData(expert);
     }
 }

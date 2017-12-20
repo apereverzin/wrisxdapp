@@ -41,7 +41,7 @@ function showAnonymousResearchItems(data) {
     })
     items.concat('</tbody></table>')
     $("#anonymousResearchItemsPanel").html(items)
-    showUserBalance()
+    showMemberBalance()
 }
 
 function viewAnonymousExpert(address) {
@@ -49,7 +49,7 @@ function viewAnonymousExpert(address) {
         function(data) {
             var text = '<table style="width:100%">'
             text = text.concat('<tr><td><b>Name</b></td><td>' + data.name + '</td></tr>')
-            text = text.concat('<tr><td><b>Email</b></td><td>' + data.email + '</td></tr>')
+            text = text.concat('<tr><td><b>Email</b></td><td>' + data.emailAddress + '</td></tr>')
             text = text.concat('<tr><td><b>Key words</b></td><td>' + data.keywords + '</td></tr>')
             text = text.concat('<tr><td><b>Description</b></td><td>' + data.description + '</td></tr>')
             text = text.concat('<tr><td></td><td>Researches</td></tr>')
@@ -77,7 +77,7 @@ function showAnonymousExperts(data) {
     })
     items.concat('</tbody></table>')
     $("#anonymousExpertsPanel").html(items)
-    showUserBalance()
+    showMemberBalance()
 }
 
 function anonymousSearchResearchItems() {

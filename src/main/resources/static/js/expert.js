@@ -1,26 +1,26 @@
 function expertEnquiriesTabClicked() {
     searchEnquiries()
-    showUserData()
-    showUserBalance()
+    showMemberData()
+    showMemberBalance()
 }
 
 function expertResearchItemsTabClicked() {
     getExpertResearchItems()
-    showUserData()
-    showUserBalance()
+    showMemberData()
+    showMemberBalance()
     $("#expertResearchItemPanel").html('')
 }
 
 function expertPurchasesTabClicked() {
     getExpertPurchases()
-    showUserData()
-    showUserBalance()
+    showMemberData()
+    showMemberBalance()
 }
 
 function expertBidsTabClicked() {
     getExpertEnquiryBids()
-    showUserData()
-    showUserBalance()
+    showMemberData()
+    showMemberBalance()
 }
 
 function registerExpert() {
@@ -29,55 +29,56 @@ function registerExpert() {
     var emailAddress = $("#expertEmailAddress").val();
     var keywords = $("#expertKeywords").val();
     var description = $("#expertDescription").val();
+    var secret = getSecret();
 
     $.post(contextPath + "/expert",
-            {
-                'name': name,
-                'emailAddress': emailAddress,
-                'keyWords': keywords,
-                'description': description
-            },
-            function(data) {
-                contractInstance.registerExpert(name, {from: address},
-                    function(error, result) {
-                        if(error) {
-                            console.log(error)
-                            $.delete(contextPath + "/expert",
-                                function(data) {
-                                    showUserData()
-                                    showUserBalance()
-                                }
-                            )
-                        } else {
-                            $.put(contextPath + "/expert/confirm",
-                                {
-                                    'transactionHash': result
-                                }
-                            )
-                            $("#expertName").val('');
-                            $("#expertEmailAddress").val('');
-                            $("#expertKeywords").val('');
-                            $("#expertDescription").val('');
-                            expertRegistered(address, result);
-                        }
+        {
+            'name': name,
+            'emailAddress': emailAddress,
+            'keyWords': keywords,
+            'description': description,
+            'secret': secret
+        },
+        function(data) {
+            contractInstance.registerExpert(name, secret, {from: address},
+                function(error, result) {
+                    if(error) {
+                        console.log(error)
+                        $.delete(contextPath + "/expert",
+                            function(data) {
+                                showMemberData()
+                                showMemberBalance()
+                            }
+                        )
+                    } else {
+                        $.put(contextPath + "/expert/confirm",
+                            {
+                                'transactionHash': result
+                            }
+                        )
+                        $("#expertName").val('');
+                        $("#expertEmailAddress").val('');
+                        $("#expertKeywords").val('');
+                        $("#expertDescription").val('');
+                        waitForTransactionToBeMined(result, expertRegistered, result)
                     }
-                )
-            }
+                }
+            )
+        }
     )
 }
 
-function expertRegistered(address, transactionHash) {
+function expertRegistered(transactionHash) {
     $.put(contextPath + "/expert/commit",
         {
             'transactionHash': transactionHash
         },
         function(data) {
-            showUserData();
-            showUserBalance();
+            showMemberData();
+            showMemberBalance();
             showExpertRoleTab();
         }
-    )
-    showUserBalance();
+    );
 }
 
 function depositResearch() {
@@ -93,55 +94,55 @@ function depositResearch() {
     var researchFile = uploadResearchFile();
 
     $.post(contextPath + "/research",
-           {
-               'uuid': researchFile.uuid,
-               'price': price,
-               'title': title,
-               'description': description,
-               'keywords': keywords,
-               'checksum': researchFile.zipFileChecksumMD5,
-               'password': researchFile.password,
+        {
+            'uuid': researchFile.uuid,
+            'price': price,
+            'title': title,
+            'description': description,
+            'keywords': keywords,
+            'checksum': researchFile.zipFileChecksumMD5,
+            'password': researchFile.password,
 
-               'clientAddress': 0,
-               'enquiryId': 0,
-               'bidId': 0,
-           },
-           function(data) {
-               contractInstance.depositResearch(price,
-                                                researchFile.uuid,
-                                                researchFile.password,
-                                                researchFile.zipFileChecksumMD5,
+            'clientAddress': 0,
+            'enquiryId': 0,
+            'bidId': 0,
+        },
+        function(data) {
+            contractInstance.depositResearch(price,
+                                             researchFile.uuid,
+                                             researchFile.password,
+                                             researchFile.zipFileChecksumMD5,
 
-                                                0,
-                                                0,
-                                                0,
-                                                {from: address},
-                   function(error, result) {
-                       if(error) {
-                           console.log(error);
-                           $.delete(contextPath + "/research/" + researchFile.uuid,
-                               function(data) {
-                                   getExpertResearchItems();
-                                   showUserData();
-                                   showUserBalance();
-                               }
-                           );
-                       } else {
-                           $.put(contextPath + "/research/" + researchFile.uuid + "/confirm",
-                               {
-                                   'transactionHash': result
-                               }
-                           )
-                           $("#expertResearchPrice").val('');
-                           $("#expertResearchTitle").val('');
-                           $("#expertResearchDescription").val('');
-                           $("#expertResearchKeywords").val('');
-                           $("#expertResearch-upload-file-input").val('');
-                           waitForTransactionToBeMined(result, researchDeposited, researchFile.uuid, result);
-                       }
-                   }
-               );
-           }
+                                             0,
+                                             0,
+                                             0,
+                                             {from: address},
+                function(error, result) {
+                    if(error) {
+                        console.log(error);
+                        $.delete(contextPath + "/research/" + researchFile.uuid,
+                            function(data) {
+                                getExpertResearchItems();
+                                showMemberData();
+                                showMemberBalance();
+                            }
+                        );
+                    } else {
+                        $.put(contextPath + "/research/" + researchFile.uuid + "/confirm",
+                            {
+                               'transactionHash': result
+                            }
+                        )
+                        $("#expertResearchPrice").val('');
+                        $("#expertResearchTitle").val('');
+                        $("#expertResearchDescription").val('');
+                        $("#expertResearchKeywords").val('');
+                        $("#expertResearch-upload-file-input").val('');
+                        waitForTransactionToBeMined(result, researchDeposited, researchFile.uuid, result);
+                    }
+                }
+            );
+        }
     )
 }
 
@@ -154,7 +155,7 @@ function researchDeposited(uuid, transactionHash) {
             getExpertResearchItems();
         }
     )
-    showUserBalance();
+    showMemberBalance();
 }
 
 function depositEnquiryBidResearch(clientAddress, enquiryId, bidId) {
@@ -199,8 +200,8 @@ function depositEnquiryBidResearch(clientAddress, enquiryId, bidId) {
                            $.delete(contextPath + "/research/" + researchFile.uuid,
                                function(data) {
                                    getExpertEnquiryBids();
-                                   showUserData();
-                                   showUserBalance();
+                                   showMemberData();
+                                   showMemberBalance();
                                }
                            );
                        } else {
@@ -232,7 +233,7 @@ function enquiryBidResearchDeposited(uuid, transactionHash) {
             getExpertResearchItems();
         }
     )
-    showUserBalance();
+    showMemberBalance();
 }
 
 function uploadBidFile() {
@@ -302,7 +303,7 @@ function showExpertResearchItems(data) {
 
     $("#expertResearchItemsPanel").html(items)
 
-    showUserBalance()
+    showMemberBalance()
 }
 
 function showExpertEnquiryBids(data) {
@@ -331,7 +332,7 @@ function showExpertEnquiryBids(data) {
     });
     items = items.concat('</tbody></table>')
     $("#expertEnquiryBidsPanel").html(items)
-    showUserBalance()
+    showMemberBalance()
 }
 
 function showExpertPurchases(data) {
@@ -354,7 +355,7 @@ function showExpertPurchases(data) {
 
     $("#expertPurchasesPanel").html(items)
 
-    showUserBalance()
+    showMemberBalance()
 }
 
 function viewExpertResearchItem(uuid) {
@@ -414,7 +415,7 @@ function showExpertEnquiries(data) {
     }
 
     $("#expertEnquiriesPanel").html(items)
-    showUserBalance()
+    showMemberBalance()
 }
 
 function placeBid(enquiryId) {

@@ -19,6 +19,7 @@
     <script type="text/javascript" src="./js/jquery-ui.js"></script>
     <script type="text/javascript" src="./js/bootstrap.min.js"></script>
     <script type="text/javascript" src="./js/web3.js"></script>
+    <script type="text/javascript" src="./js/md5.min.js"></script>
     <script type="text/javascript" src="./js/wrisx.js"></script>
     <script type="text/javascript" src="./js/main.js"></script>
     <script type="text/javascript" src="./js/client.js"></script>
@@ -34,8 +35,8 @@
             showRolePanels()
             clientResearchItemsTabClicked()
             expertEnquiriesTabClicked()
-            showUserData()
-            showUserBalance()
+            showMemberData()
+            showMemberBalance()
         })
     </script>
 </head>
@@ -51,11 +52,11 @@
     <div>
         <p>
             <span>Address:</span>
-            <span id="userAddress"/>
+            <span id="memberAddress"/>
         </p>
         <p>
             <span>Name:</span>
-            <span id="userName"/>
+            <span id="memberName"/>
         </p>
         <p>
             <span>Balance (tokens):</span>
@@ -102,7 +103,7 @@
             </div>
         </div>
 
-        <div id="registerClient">
+        <div id="registerClientPanel">
             <p>
                 Name: <input type="text" id="clientName"/><br/>
                 Email address: <input type="text" id="clientEmailAddress"/><br/>

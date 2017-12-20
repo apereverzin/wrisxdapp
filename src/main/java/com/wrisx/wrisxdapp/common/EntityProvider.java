@@ -4,6 +4,7 @@ import com.wrisx.wrisxdapp.domain.*;
 import com.wrisx.wrisxdapp.errorhandling.ResourceNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.text.MessageFormat;
@@ -14,17 +15,20 @@ public class EntityProvider {
 
     private final ExpertDao expertDao;
     private final ClientDao clientDao;
+    private final UserDao userDao;
     private final ResearchDao researchDao;
     private final EnquiryBidDao enquiryBidDao;
     private final ResearchEnquiryDao researchEnquiryDao;
     private final PurchaseDao purchaseDao;
 
-    public EntityProvider(ExpertDao expertDao, ClientDao clientDao,
+    @Autowired
+    public EntityProvider(ExpertDao expertDao, ClientDao clientDao, UserDao userDao,
                           ResearchDao researchDao, EnquiryBidDao enquiryBidDao,
                           ResearchEnquiryDao researchEnquiryDao,
                           PurchaseDao purchaseDao) {
         this.expertDao = expertDao;
         this.clientDao = clientDao;
+        this.userDao = userDao;
         this.researchDao = researchDao;
         this.enquiryBidDao = enquiryBidDao;
         this.researchEnquiryDao = researchEnquiryDao;
@@ -35,7 +39,7 @@ public class EntityProvider {
         Expert expert = expertDao.findByAddress(expertAddress);
 
         if (expert == null) {
-            throwException(MessageFormat.format("Expert not found {0}", expertAddress));
+            throwNotFoundException(MessageFormat.format("Expert not found {0}", expertAddress));
         }
 
         return expert;
@@ -48,7 +52,7 @@ public class EntityProvider {
                 expertDao.findByAddressAndTransactionHash(expertAddress, transactionHash);
 
         if (expert == null) {
-            throwException(MessageFormat.format(
+            throwNotFoundException(MessageFormat.format(
                     "Expert not found {0} {1}", expertAddress, transactionHash));
         }
 
@@ -59,7 +63,7 @@ public class EntityProvider {
         Client client = clientDao.findByAddress(clientAddress);
 
         if (client == null) {
-            throwException(MessageFormat.format(
+            throwNotFoundException(MessageFormat.format(
                     "Client not found {0}", clientAddress));
         }
 
@@ -73,18 +77,42 @@ public class EntityProvider {
                 clientDao.findByAddressAndTransactionHash(clientAddress, transactionHash);
 
         if (client == null) {
-            throwException(MessageFormat.format(
+            throwNotFoundException(MessageFormat.format(
                     "Client not found {0} {1}", clientAddress, transactionHash));
         }
 
         return client;
     }
 
+    public User getUserByAddress(String userAddress) throws ResourceNotFoundException {
+        User user = userDao.findByAddress(userAddress);
+
+        if (user == null) {
+            throwNotFoundException(MessageFormat.format(
+                    "User not found {0}", userAddress));
+        }
+
+        return user;
+    }
+
+    public User getUserByAddressAndTransactionHash(String userAddress,
+                                                   String transactionHash)
+            throws ResourceNotFoundException {
+        User user = userDao.findByAddressAndTransactionHash(userAddress, transactionHash);
+
+        if (user == null) {
+            throwNotFoundException(MessageFormat.format(
+                    "User not found {0} {1}", userAddress, transactionHash));
+        }
+
+        return user;
+    }
+
     public Research getResearchByUuid(String uuid) throws ResourceNotFoundException {
         Research research = researchDao.findByUuid(uuid);
 
         if (research == null) {
-            throwException(MessageFormat.format("Research not found {0}", uuid));
+            throwNotFoundException(MessageFormat.format("Research not found {0}", uuid));
         }
 
         return research;
@@ -96,7 +124,7 @@ public class EntityProvider {
         Research research = researchDao.findByUuidAndTransactionHash(uuid, transactionHash);
 
         if (research == null) {
-            throwException(MessageFormat.format(
+            throwNotFoundException(MessageFormat.format(
                     "Research not found {0} {1}", uuid, transactionHash));
         }
 
@@ -107,7 +135,7 @@ public class EntityProvider {
         EnquiryBid enquiryBid = enquiryBidDao.findOne(enquiryBidId);
 
         if (enquiryBid == null) {
-            throwException(MessageFormat.format(
+            throwNotFoundException(MessageFormat.format(
                     "Enquiry bid not found {0}", enquiryBidId));
         }
 
@@ -121,7 +149,7 @@ public class EntityProvider {
                 enquiryBidDao.findByIdAndTransactionHash(enquiryBidId, transactionHash);
 
         if (enquiryBid == null) {
-            throwException(MessageFormat.format(
+            throwNotFoundException(MessageFormat.format(
                     "Enquiry bid not found {0} {1}", enquiryBidId, transactionHash));
         }
 
@@ -132,7 +160,7 @@ public class EntityProvider {
         ResearchEnquiry enquiry = researchEnquiryDao.findOne(enquiryId);
 
         if (enquiry == null) {
-            throwException(MessageFormat.format("Enquiry not found {0}", enquiryId));
+            throwNotFoundException(MessageFormat.format("Enquiry not found {0}", enquiryId));
         }
 
         return enquiry;
@@ -142,7 +170,7 @@ public class EntityProvider {
         Purchase purchase = purchaseDao.findOne(purchaseId);
 
         if (purchase == null) {
-            throwException(MessageFormat.format("Purchase not found {0}", purchaseId));
+            throwNotFoundException(MessageFormat.format("Purchase not found {0}", purchaseId));
         }
 
         return purchase;
@@ -155,14 +183,14 @@ public class EntityProvider {
                 purchaseDao.findByIdAndTransactionHash(purchaseId, transactionHash);
 
         if (purchase == null) {
-            throwException(MessageFormat.format(
+            throwNotFoundException(MessageFormat.format(
                     "Purchase not found {0} {1}", purchaseId, transactionHash));
         }
 
         return purchase;
     }
 
-    private void throwException(String msg) {
+    private void throwNotFoundException(String msg) {
         logger.error(msg);
         throw new ResourceNotFoundException(msg);
     }

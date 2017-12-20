@@ -9,8 +9,6 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
@@ -18,8 +16,8 @@ import static com.wrisx.wrisxdapp.domain.State.CREATED;
 
 @Getter
 @Entity
-@Table(name = "client")
-public class Client {
+@Table(name = "user")
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
@@ -28,7 +26,13 @@ public class Client {
     private String address;
 
     @NotNull
-    private String description;
+    private String name;
+
+    @NotNull
+    private String emailAddress;
+
+    @NotNull
+    private String secret;
 
     @NotNull
     @Enumerated(EnumType.STRING)
@@ -38,19 +42,15 @@ public class Client {
     @Setter
     private String transactionHash;
 
-    @NotNull
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
-
-    public Client() {
+    public User() {
         //
     }
 
-    public Client(String address, String description, User user) {
+    public User(String address, String name, String emailAddress, String secret) {
         this.address = address;
-        this.description = description;
-        this.user = user;
+        this.name = name;
+        this.emailAddress = emailAddress;
+        this.secret = secret;
         this.state = CREATED;
     }
 }

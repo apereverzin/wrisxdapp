@@ -1,4 +1,4 @@
-package com.wrisx.wrisxdapp.research.service;
+package com.wrisx.wrisxdapp.common;
 
 import com.wrisx.wrisxdapp.errorhandling.BadRequestException;
 import com.wrisx.wrisxdapp.errorhandling.InternalServerErrorException;
@@ -14,10 +14,10 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 @Component
-public class ChecksumProvider {
-    private final Logger logger = LoggerFactory.getLogger(ChecksumProvider.class);
+public class DigestProvider {
+    private final Logger logger = LoggerFactory.getLogger(DigestProvider.class);
 
-    public String getFileChecksum(File file, String algorithm) {
+    public String getFileDigest(File file, String algorithm) {
         try {
             MessageDigest md = MessageDigest.getInstance(algorithm);
             FileInputStream fis = new FileInputStream(file);
@@ -29,14 +29,9 @@ public class ChecksumProvider {
                 md.update(dataBytes, 0, nread);
             }
 
-            byte[] mdbytes = md.digest();
+            byte[] digestBytes = md.digest();
 
-            StringBuffer sb = new StringBuffer("");
-            for (int i = 0; i < mdbytes.length; i++) {
-                sb.append(Integer.toString((mdbytes[i] & 0xff) + 0x100, 16).substring(1));
-            }
-
-            return sb.toString();
+            return getDigestString(digestBytes);
         } catch (NoSuchAlgorithmException ex) {
             logger.error(ex.getMessage(), ex);
             throw new InternalServerErrorException(ex);
@@ -47,5 +42,26 @@ public class ChecksumProvider {
             logger.error(ex.getMessage(), ex);
             throw new BadRequestException(ex);
         }
+    }
+
+    public String getStringDigest(String str, String algorithm) {
+        try {
+            MessageDigest md = MessageDigest.getInstance(algorithm);
+
+            byte[] digestBytes = md.digest(str.getBytes());
+            return getDigestString(digestBytes);
+        } catch (NoSuchAlgorithmException ex) {
+            logger.error(ex.getMessage(), ex);
+            throw new InternalServerErrorException(ex);
+        }
+    }
+
+    private String getDigestString(byte[] digestBytes) {
+        StringBuffer sb = new StringBuffer("");
+        for (int i = 0; i < digestBytes.length; i++) {
+            sb.append(Integer.toString((digestBytes[i] & 0xff) + 0x100, 16).substring(1));
+        }
+
+        return sb.toString();
     }
 }

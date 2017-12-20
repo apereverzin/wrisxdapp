@@ -1,5 +1,8 @@
 package com.wrisx.wrisxdapp.util;
 
+import com.wrisx.wrisxdapp.errorhandling.UnauthorizedException;
+
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -18,5 +21,12 @@ public class WrisxUtil {
             keywordList.add(tokenizer.nextToken().toUpperCase());
         }
         return keywordList;
+    }
+
+    public static void verifyUserAuthorisation(String userAddress, String userAuthorised) {
+        if (!Boolean.valueOf(userAuthorised)) {
+            throw new UnauthorizedException(MessageFormat.format(
+                    "Not authorised {0}", userAddress));
+        }
     }
 }

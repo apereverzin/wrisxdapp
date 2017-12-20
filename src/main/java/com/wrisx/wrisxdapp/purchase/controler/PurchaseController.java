@@ -16,7 +16,9 @@ import org.springframework.web.bind.annotation.SessionAttribute;
 import java.text.MessageFormat;
 import java.util.List;
 
-import static com.wrisx.wrisxdapp.init.controller.InitController.USER_ADDRESS;
+import static com.wrisx.wrisxdapp.user.controller.UserController.USER_ADDRESS;
+import static com.wrisx.wrisxdapp.user.controller.UserController.USER_AUTHORISED;
+import static com.wrisx.wrisxdapp.util.WrisxUtil.verifyUserAuthorisation;
 import static java.util.stream.Collectors.toList;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
@@ -38,28 +40,42 @@ public class PurchaseController {
     @RequestMapping(value = "/purchase", method = POST)
     public ResponseEntity<PurchaseData> payForResearch(
             @SessionAttribute(USER_ADDRESS) String clientAddress,
+            @SessionAttribute(name = USER_AUTHORISED, required = false) String userAuthorised,
             @RequestParam("uuid") String uuid) {
         logger.debug(MessageFormat.format(
                 "Client {0} is paying for {1}", clientAddress, uuid));
 
+        verifyUserAuthorisation(clientAddress, userAuthorised);
+
         PurchaseData purchaseData =
                 purchaseService.createPurchase(clientAddress, uuid);
+
         return new ResponseEntity<>(purchaseData, OK);
     }
 
     @RequestMapping(value = "/purchase/{id}", method = DELETE)
-    public ResponseEntity<Void> deleteResearch(@PathVariable("id") long purchaseId) {
+    public ResponseEntity<Void> deleteResearch(
+            @SessionAttribute(USER_ADDRESS) String clientAddress,
+            @SessionAttribute(name = USER_AUTHORISED, required = false) String userAuthorised,
+            @PathVariable("id") long purchaseId) {
         logger.debug(MessageFormat.format("Deleting purchase {0}", purchaseId));
 
+        verifyUserAuthorisation(clientAddress, userAuthorised);
+
         purchaseService.deletePurchase(purchaseId);
+
         return ResponseEntity.noContent().build();
     }
 
     @RequestMapping(value = "/purchase/{id}/confirm", method = PUT)
     public ResponseEntity<Void> confirmResearch(
+            @SessionAttribute(USER_ADDRESS) String clientAddress,
+            @SessionAttribute(name = USER_AUTHORISED, required = false) String userAuthorised,
             @PathVariable("id") long purchaseId,
             @RequestParam("transactionHash") String transactionHash) {
         logger.debug(MessageFormat.format("Confirming purchase {0}", purchaseId));
+
+        verifyUserAuthorisation(clientAddress, userAuthorised);
 
         purchaseService.confirmPurchaseCreation(purchaseId, transactionHash);
 
@@ -68,10 +84,14 @@ public class PurchaseController {
 
     @RequestMapping(value = "/purchase/{id}/commit", method = PUT)
     public ResponseEntity<Void> commitPurchase(
+            @SessionAttribute(USER_ADDRESS) String clientAddress,
+            @SessionAttribute(name = USER_AUTHORISED, required = false) String userAuthorised,
             @PathVariable("id") long purchaseId,
             @RequestParam("transactionHash") String transactionHash) {
         logger.debug(MessageFormat.format(
                 "Committing purchase {0} {1}", purchaseId, transactionHash));
+
+        verifyUserAuthorisation(clientAddress, userAuthorised);
 
         purchaseService.commitPurchaseCreation(purchaseId, transactionHash);
 
@@ -81,9 +101,12 @@ public class PurchaseController {
     @RequestMapping(value = "/purchase/client", method = GET)
     public ResponseEntity<List<PurchaseData>> getClientPurchases(
             @SessionAttribute(USER_ADDRESS) String clientAddress,
+            @SessionAttribute(name = USER_AUTHORISED, required = false) String userAuthorised,
             Pageable pageable) {
         logger.debug(MessageFormat.format(
                 "Getting client purchases {0}", clientAddress));
+
+        verifyUserAuthorisation(clientAddress, userAuthorised);
 
         List<PurchaseData> purchases =
                 purchaseService.getClientPurchases(clientAddress).stream().
@@ -98,9 +121,12 @@ public class PurchaseController {
     @RequestMapping(value = "/purchase/expert", method = GET)
     public ResponseEntity<List<PurchaseData>> getExpertPurchases(
             @SessionAttribute(USER_ADDRESS) String expertAddress,
+            @SessionAttribute(name = USER_AUTHORISED, required = false) String userAuthorised,
             Pageable pageable) {
         logger.debug(MessageFormat.format(
                 "Getting expert purchases {0}", expertAddress));
+
+        verifyUserAuthorisation(expertAddress, userAuthorised);
 
         List<PurchaseData> purchases =
                 purchaseService.getExpertPurchases(expertAddress).stream().
@@ -113,9 +139,13 @@ public class PurchaseController {
 
     @RequestMapping(value = "/purchase/research/{uuid}", method = GET)
     public ResponseEntity<List<PurchaseData>> getResearchPurchases(
+            @SessionAttribute(USER_ADDRESS) String clientAddress,
+            @SessionAttribute(name = USER_AUTHORISED, required = false) String userAuthorised,
             @PathVariable("uuid") String uuid,
             Pageable pageable) {
         logger.debug(MessageFormat.format("Client research purchases {0}", uuid));
+
+        verifyUserAuthorisation(clientAddress, userAuthorised);
 
         List<PurchaseData> purchases =
                 purchaseService.getResearchPurchases(uuid).stream().

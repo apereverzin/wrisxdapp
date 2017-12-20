@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.SessionAttribute;
 import java.text.MessageFormat;
 import java.util.List;
 
-import static com.wrisx.wrisxdapp.init.controller.InitController.USER_ADDRESS;
+import static com.wrisx.wrisxdapp.user.controller.UserController.USER_ADDRESS;
 import static java.util.stream.Collectors.toList;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
@@ -37,10 +37,11 @@ public class FacilitatorController {
             @SessionAttribute(USER_ADDRESS) String address,
             @RequestParam("name") String name,
             @RequestParam("emailAddress") String emailAddress,
-            @RequestParam("description") String description) {
+            @RequestParam("description") String description,
+            @RequestParam("secret") String secret) {
         logger.debug(MessageFormat.format("Creating facilitator {0}", address));
 
-        facilitatorService.saveFacilitator(address, name, emailAddress, description);
+        facilitatorService.createFacilitator(address, name, emailAddress, description, secret);
 
         return new ResponseEntity<>(OK);
     }

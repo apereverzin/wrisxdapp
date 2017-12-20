@@ -9,6 +9,8 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
@@ -26,12 +28,6 @@ public class Facilitator {
     private String address;
 
     @NotNull
-    private String name;
-
-    @NotNull
-    private String emailAddress;
-
-    @NotNull
     private String description;
 
     @NotNull
@@ -42,15 +38,19 @@ public class Facilitator {
     @Setter
     private String transactionHash;
 
+    @NotNull
+    @ManyToOne
+    @JoinColumn(name = "member_id")
+    private User user;
+
     public Facilitator() {
         //
     }
 
-    public Facilitator(String address, String name, String emailAddress, String description) {
+    public Facilitator(String address, String description, User user) {
         this.address = address;
-        this.name = name;
-        this.emailAddress = emailAddress;
         this.description = description;
+        this.user = user;
         this.state = CREATED;
     }
 }

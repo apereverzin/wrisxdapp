@@ -2,12 +2,14 @@ package com.wrisx.wrisxdapp.expert.service;
 
 import com.wrisx.wrisxdapp.common.EntityProvider;
 import com.wrisx.wrisxdapp.data.ExpertData;
-import com.wrisx.wrisxdapp.domain.Client;
-import com.wrisx.wrisxdapp.domain.ClientDao;
 import com.wrisx.wrisxdapp.domain.Expert;
 import com.wrisx.wrisxdapp.domain.ExpertDao;
+import com.wrisx.wrisxdapp.domain.User;
+import com.wrisx.wrisxdapp.domain.UserDao;
 import com.wrisx.wrisxdapp.errorhandling.BadRequestException;
 import com.wrisx.wrisxdapp.errorhandling.ResourceNotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,50 +19,47 @@ import java.util.List;
 
 import static com.wrisx.wrisxdapp.domain.State.COMMITTED;
 import static com.wrisx.wrisxdapp.domain.State.CONFIRMED;
+import static com.wrisx.wrisxdapp.domain.State.CREATED;
 import static com.wrisx.wrisxdapp.util.WrisxUtil.getKeywordList;
 import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.toList;
 
 @Service
 public class ExpertService {
+    private final Logger logger = LoggerFactory.getLogger(ExpertService.class);
+
     private final ExpertDao expertDao;
-    private final ClientDao clientDao;
+    private final UserDao userDao;
     private final EntityProvider entityProvider;
 
     @Autowired
-    public ExpertService(ExpertDao expertDao, ClientDao clientDao,
+    public ExpertService(ExpertDao expertDao, UserDao userDao,
                          EntityProvider entityProvider) {
         this.expertDao = expertDao;
-        this.clientDao = clientDao;
+        this.userDao = userDao;
         this.entityProvider = entityProvider;
     }
 
-    public ExpertData saveExpert(String expertAddress, String name,
-                                 String emailAddress, String expertKeywords,
-                                 String description) {
+    public ExpertData createExpert(String expertAddress, String name,
+                                   String emailAddress, String expertKeywords,
+                                   String description, String secret) {
         Expert expert = expertDao.findByAddress(expertAddress);
 
         if (expert == null) {
-            String expertName;
-            String expertEmailAddress;
-            String expertDescription;
-
-            Client client = clientDao.findByAddress(expertAddress);
-            if (client != null) {
-                expertName = client.getName();
-                expertEmailAddress = client.getEmailAddress();
-            } else {
-                expertName = name;
-                expertEmailAddress = emailAddress;
+            User user = userDao.findByAddress(expertAddress);
+            if (user == null) {
+                user = new User(expertAddress, name, emailAddress, secret);
+                user = userDao.save(user);
             }
-            expertDescription = description;
 
-            expert = new Expert(expertAddress, expertName,
-                    expertEmailAddress, expertKeywords, expertDescription);
+            expert = new Expert(expertAddress, expertKeywords, description, user);
             expert = expertDao.save(expert);
+            return new ExpertData(expert);
         }
 
-        return new ExpertData(expert);
+        String msg = MessageFormat.format("Expert already exists {0}", expertAddress);
+        logger.error(msg);
+        throw new BadRequestException(msg);
     }
 
     public ExpertData getExpert(String expertAddress) throws ResourceNotFoundException {
@@ -82,6 +81,13 @@ public class ExpertService {
         expert.setState(CONFIRMED);
         expert.setTransactionHash(transactionHash);
 
+        User user = entityProvider.getUserByAddress(clientAddress);
+        if (user.getState() == CREATED) {
+            user.setState(CONFIRMED);
+            user.setTransactionHash(transactionHash);
+            userDao.save(user);
+        }
+
         expertDao.save(expert);
     }
 
@@ -95,6 +101,13 @@ public class ExpertService {
                     "Illegal state of expert {0}", expertAddress));
         }
         expert.setState(COMMITTED);
+
+        User user = entityProvider.getUserByAddress(expertAddress);
+        if (user.getState() == CONFIRMED) {
+            user.setState(COMMITTED);
+            user.setTransactionHash(transactionHash);
+            userDao.save(user);
+        }
 
         expertDao.save(expert);
     }

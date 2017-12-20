@@ -4,10 +4,12 @@ import com.wrisx.wrisxdapp.common.EntityProvider;
 import com.wrisx.wrisxdapp.data.ClientData;
 import com.wrisx.wrisxdapp.domain.Client;
 import com.wrisx.wrisxdapp.domain.ClientDao;
-import com.wrisx.wrisxdapp.domain.Expert;
-import com.wrisx.wrisxdapp.domain.ExpertDao;
+import com.wrisx.wrisxdapp.domain.User;
+import com.wrisx.wrisxdapp.domain.UserDao;
 import com.wrisx.wrisxdapp.errorhandling.BadRequestException;
 import com.wrisx.wrisxdapp.errorhandling.ResourceNotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,45 +19,45 @@ import java.util.List;
 
 import static com.wrisx.wrisxdapp.domain.State.COMMITTED;
 import static com.wrisx.wrisxdapp.domain.State.CONFIRMED;
+import static com.wrisx.wrisxdapp.domain.State.CREATED;
 import static java.util.stream.Collectors.toList;
 
 @Service
 public class ClientService {
+    private final Logger logger = LoggerFactory.getLogger(ClientService.class);
+
     private final ClientDao clientDao;
-    private final ExpertDao expertDao;
+    private final UserDao userDao;
     private final EntityProvider entityProvider;
 
     @Autowired
-    public ClientService(ClientDao clientDao, ExpertDao expertDao,
+    public ClientService(ClientDao clientDao, UserDao userDao,
                          EntityProvider entityProvider) {
         this.clientDao = clientDao;
-        this.expertDao = expertDao;
+        this.userDao = userDao;
         this.entityProvider = entityProvider;
     }
 
-    public ClientData saveClient(String clientAddress, String name,
-                                 String emailAddress, String description) {
+    public ClientData createClient(String clientAddress, String name,
+                                   String emailAddress, String description,
+                                   String secret) {
         Client client = clientDao.findByAddress(clientAddress);
+
         if (client == null) {
-            String clientName;
-            String clientEmailAddress;
-            String clientDescription;
-
-            Expert expert = expertDao.findByAddress(clientAddress);
-            if (expert != null) {
-                clientName = expert.getName();
-                clientEmailAddress = expert.getEmailAddress();
-            } else {
-                clientName = name;
-                clientEmailAddress = emailAddress;
+            User user = userDao.findByAddress(clientAddress);
+            if (user == null) {
+                user = new User(clientAddress, name, emailAddress, secret);
+                user = userDao.save(user);
             }
-            clientDescription = description;
 
-            client = new Client(clientAddress, clientName,
-                    clientEmailAddress, clientDescription);
+            client = new Client(clientAddress, description, user);
             client = clientDao.save(client);
+            return new ClientData(client);
         }
-        return new ClientData(client);
+
+        String msg = MessageFormat.format("Client already exists {0}", clientAddress);
+        logger.error(msg);
+        throw new BadRequestException(msg);
     }
 
     public ClientData getClient(String clientAddress) throws ResourceNotFoundException {
@@ -77,6 +79,13 @@ public class ClientService {
         client.setState(CONFIRMED);
         client.setTransactionHash(transactionHash);
 
+        User user = entityProvider.getUserByAddress(clientAddress);
+        if (user.getState() == CREATED) {
+            user.setState(CONFIRMED);
+            user.setTransactionHash(transactionHash);
+            userDao.save(user);
+        }
+
         clientDao.save(client);
     }
 
@@ -90,6 +99,13 @@ public class ClientService {
                     "Illegal state of client {0}", clientAddress));
         }
         client.setState(COMMITTED);
+
+        User user = entityProvider.getUserByAddress(clientAddress);
+        if (user.getState() == CONFIRMED) {
+            user.setState(COMMITTED);
+            user.setTransactionHash(transactionHash);
+            userDao.save(user);
+        }
 
         clientDao.save(client);
     }

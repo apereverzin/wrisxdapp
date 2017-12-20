@@ -27,8 +27,8 @@ public class ExpertData implements Serializable {
     public ExpertData(Expert expert) {
         this.id = expert.getId();
         this.address = expert.getAddress();
-        this.name = expert.getName();
-        this.emailAddress = expert.getEmailAddress();
+        this.name = expert.getUser().getName();
+        this.emailAddress = expert.getUser().getEmailAddress();
         this.keywords = expert.getKeywords();
         this.description = expert.getDescription();
     }
