@@ -10,12 +10,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.SessionAttribute;
 
 import java.text.MessageFormat;
 import java.util.List;
 
-import static com.wrisx.wrisxdapp.user.controller.UserController.USER_ADDRESS;
 import static java.util.stream.Collectors.toList;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
@@ -34,7 +32,7 @@ public class FacilitatorController {
 
     @RequestMapping(value = "/facilitator", method = POST)
     public ResponseEntity<?> createFacilitator(
-            @SessionAttribute(USER_ADDRESS) String address,
+            @RequestParam("address") String address,
             @RequestParam("name") String name,
             @RequestParam("emailAddress") String emailAddress,
             @RequestParam("description") String description,

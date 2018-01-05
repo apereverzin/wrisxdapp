@@ -11,14 +11,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.SessionAttribute;
 
 import java.text.MessageFormat;
 import java.util.List;
 
-import static com.wrisx.wrisxdapp.user.controller.UserController.USER_ADDRESS;
-import static com.wrisx.wrisxdapp.user.controller.UserController.USER_AUTHORISED;
-import static com.wrisx.wrisxdapp.util.WrisxUtil.verifyUserAuthorisation;
 import static java.util.stream.Collectors.toList;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
@@ -37,13 +33,10 @@ public class ResearchEnquiryController {
 
     @RequestMapping(value = "/enquiry", method = POST)
     public ResponseEntity<ResearchEnquiryData> createEnquiry(
-            @SessionAttribute(USER_ADDRESS) String address,
-            @SessionAttribute(name = USER_AUTHORISED, required = false) String userAuthorised,
+            @RequestParam("address") String address,
             @RequestParam("keywords") String keywords,
             @RequestParam("description") String description) {
         logger.debug(MessageFormat.format("Creating research enquiry {0}", keywords));
-
-        verifyUserAuthorisation(address, userAuthorised);
 
         ResearchEnquiryData researchEnquiry =
                 researchEnquiryService.saveEnquiry(address, keywords, description);
@@ -53,13 +46,10 @@ public class ResearchEnquiryController {
 
     @RequestMapping(value = "/enquiry/client", method = GET)
     public ResponseEntity<List<ResearchEnquiryData>> getClientEnquiries(
-            @SessionAttribute(USER_ADDRESS) String clientAddress,
-            @SessionAttribute(name = USER_AUTHORISED, required = false) String userAuthorised,
+            @PathVariable("address") String clientAddress,
             Pageable pageable) {
         logger.debug(MessageFormat.format(
                 "Getting research enquiries of client {0}", clientAddress));
-
-        verifyUserAuthorisation(clientAddress, userAuthorised);
 
         List<ResearchEnquiryData> researchEnquiries =
                 researchEnquiryService.getClientEnquiries(clientAddress).stream().
@@ -72,43 +62,33 @@ public class ResearchEnquiryController {
 
     @RequestMapping(value = "/enquiry/{id}", method = GET)
     public ResponseEntity<ResearchEnquiryData> getEnquiry(
-            @SessionAttribute(USER_ADDRESS) String expertAddress,
-            @SessionAttribute(name = USER_AUTHORISED, required = false) String userAuthorised,
             @PathVariable long id) {
         logger.debug(MessageFormat.format("Getting research enquiry {0}", id));
-
-        verifyUserAuthorisation(expertAddress, userAuthorised);
 
         ResearchEnquiryData researchEnquiry = researchEnquiryService.getEnquiry(id);
 
         return new ResponseEntity<>(researchEnquiry, OK);
     }
 
-    @RequestMapping(value = "/enquiry/expert/keywords/{keywords}", method = GET)
+    @RequestMapping(value = "/enquiry/expert/{address}/keywords/{keywords}", method = GET)
     public ResponseEntity<List<ResearchEnquiryData>> findExpertEnquiries(
-            @SessionAttribute(USER_ADDRESS) String expertAddress,
-            @SessionAttribute(name = USER_AUTHORISED, required = false) String userAuthorised,
+            @PathVariable("address") String expertAddress,
             @PathVariable String keywords,
             Pageable pageable) {
         logger.debug(MessageFormat.format(
                 "Searching research enquiries for expert {0} {1}",
                 expertAddress, keywords));
 
-        verifyUserAuthorisation(expertAddress, userAuthorised);
-
         return getExpertEnquiries(expertAddress, keywords, pageable);
     }
 
-    @RequestMapping(value = "/enquiry/expert/keywords", method = GET)
+    @RequestMapping(value = "/enquiry/expert/{address}/keywords", method = GET)
     public ResponseEntity<List<ResearchEnquiryData>> findAllExpertEnquiries(
-            @SessionAttribute(USER_ADDRESS) String expertAddress,
-            @SessionAttribute(name = USER_AUTHORISED, required = false) String userAuthorised,
+            @PathVariable("address") String expertAddress,
             Pageable pageable) {
         logger.debug(MessageFormat.format(
                 "Searching research enquiries for expert {0}",
                 expertAddress));
-
-        verifyUserAuthorisation(expertAddress, userAuthorised);
 
         return getExpertEnquiries(expertAddress, "", pageable);
     }

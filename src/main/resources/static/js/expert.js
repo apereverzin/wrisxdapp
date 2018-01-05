@@ -34,6 +34,7 @@ function registerExpert() {
     $.post(contextPath + "/expert",
         {
             'name': name,
+            'address': address,
             'emailAddress': emailAddress,
             'keyWords': keywords,
             'description': description,
@@ -44,14 +45,14 @@ function registerExpert() {
                 function(error, result) {
                     if(error) {
                         console.log(error)
-                        $.delete(contextPath + "/expert",
+                        $.delete(contextPath + "/expert/" + address,
                             function(data) {
                                 showMemberData()
                                 showMemberBalance()
                             }
                         )
                     } else {
-                        $.put(contextPath + "/expert/confirm",
+                        $.put(contextPath + "/expert/" + address + "/confirm",
                             {
                                 'transactionHash': result
                             }
@@ -69,7 +70,7 @@ function registerExpert() {
 }
 
 function expertRegistered(transactionHash) {
-    $.put(contextPath + "/expert/commit",
+    $.put(contextPath + "/expert/" + address + "/commit",
         {
             'transactionHash': transactionHash
         },
@@ -95,6 +96,7 @@ function depositResearch() {
 
     $.post(contextPath + "/research",
         {
+            'address': address,
             'uuid': researchFile.uuid,
             'price': price,
             'title': title,
@@ -171,55 +173,56 @@ function depositEnquiryBidResearch(clientAddress, enquiryId, bidId) {
     var researchFile = uploadBidFile();
 
     $.post(contextPath + "/research",
-           {
-               'uuid': researchFile.uuid,
-               'price': price,
-               'title': title,
-               'description': description,
-               'keywords': keywords,
-               'checksum': researchFile.zipFileChecksumMD5,
-               'password': researchFile.password,
+        {
+            'address': address,
+            'uuid': researchFile.uuid,
+            'price': price,
+            'title': title,
+            'description': description,
+            'keywords': keywords,
+            'checksum': researchFile.zipFileChecksumMD5,
+            'password': researchFile.password,
 
-               'clientAddress': clientAddress,
-               'enquiryId': enquiryId,
-               'bidId': bidId,
-           },
-           function(data) {
-               contractInstance.depositResearch(price,
-                                                researchFile.uuid,
-                                                researchFile.password,
-                                                researchFile.zipFileChecksumMD5,
+            'clientAddress': clientAddress,
+            'enquiryId': enquiryId,
+            'bidId': bidId,
+        },
+        function(data) {
+            contractInstance.depositResearch(price,
+                                             researchFile.uuid,
+                                             researchFile.password,
+                                             researchFile.zipFileChecksumMD5,
 
-                                                clientAddress,
-                                                enquiryId,
-                                                bidId,
-                                                {from: address},
-                   function(error, result) {
-                       if(error) {
-                           console.log(error);
-                           $.delete(contextPath + "/research/" + researchFile.uuid,
-                               function(data) {
-                                   getExpertEnquiryBids();
-                                   showMemberData();
-                                   showMemberBalance();
-                               }
-                           );
-                       } else {
-                           $.put(contextPath + "/research/" + researchFile.uuid + "/confirm",
-                               {
-                                   'transactionHash': result
-                               }
-                           );
-                           $("#expertBidPrice").val('');
-                           $("#expertBidTitle").val('');
-                           $("#expertBidDescription").val('');
-                           $("#expertBidKeywords").val('');
-                           $("#bid-upload-file-input").val('');
-                           waitForTransactionToBeMined(result, enquiryBidResearchDeposited, researchFile.uuid, result);
-                       }
-                   }
-               );
-           }
+                                             clientAddress,
+                                             enquiryId,
+                                             bidId,
+                                             {from: address},
+                function(error, result) {
+                    if(error) {
+                        console.log(error);
+                        $.delete(contextPath + "/research/" + researchFile.uuid,
+                            function(data) {
+                                getExpertEnquiryBids();
+                                showMemberData();
+                                showMemberBalance();
+                            }
+                        );
+                    } else {
+                        $.put(contextPath + "/research/" + researchFile.uuid + "/confirm",
+                            {
+                                'transactionHash': result
+                            }
+                        );
+                        $("#expertBidPrice").val('');
+                        $("#expertBidTitle").val('');
+                        $("#expertBidDescription").val('');
+                        $("#expertBidKeywords").val('');
+                        $("#bid-upload-file-input").val('');
+                        waitForTransactionToBeMined(result, enquiryBidResearchDeposited, researchFile.uuid, result);
+                    }
+                }
+            );
+        }
     )
 }
 
@@ -424,13 +427,14 @@ function placeBid(enquiryId) {
     var enquiryBid = $("#enquiryBid").val();
     var comment = $("#enquiryBidComment").val();
     $.post(contextPath + "/enquiry/" + enquiryId + "/bid",
-            {
-                'bid': enquiryBid,
-                'comment': comment
-            },
-            function() {
-                searchEnquiries()
-            }
+        {
+            'address': address,
+            'bid': enquiryBid,
+            'comment': comment
+        },
+        function() {
+            searchEnquiries()
+        }
     )
     $("#enquiryBid").val('')
     $("#enquiryBidComment").val('')
@@ -438,7 +442,7 @@ function placeBid(enquiryId) {
 
 function getExpertResearchItems() {
     address = getAddress()
-    $.get(contextPath + "/research/expert",
+    $.get(contextPath + "/research/expert/" + address,
         function(data) {
             showExpertResearchItems(data)
         }
@@ -447,7 +451,7 @@ function getExpertResearchItems() {
 
 function getExpertEnquiryBids() {
     address = getAddress()
-    $.get(contextPath + "/enquiry/bid/expert",
+    $.get(contextPath + "/enquiry/bid/expert/" + address,
         function(data) {
             showExpertEnquiryBids(data)
         }
@@ -456,7 +460,7 @@ function getExpertEnquiryBids() {
 
 function getExpertPurchases() {
     address = getAddress()
-    $.get(contextPath + "/purchase/expert",
+    $.get(contextPath + "/purchase/expert/" + address,
         function(data) {
             showExpertPurchases(data)
         }
@@ -476,7 +480,7 @@ function searchEnquiries() {
     address = getAddress()
     keywords = $("#expertEnquiryKeywords").val()
 
-    $.get(contextPath + "/enquiry/expert/keywords/" + keywords,
+    $.get(contextPath + "/enquiry/expert/"  + address + "/keywords/" + keywords,
         function(data) {
             showExpertEnquiries(data)
         }

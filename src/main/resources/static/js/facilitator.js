@@ -3,20 +3,22 @@ function registerFacilitator() {
     name = $("#name").val();
 
     $.post("/facilitator",
-           {
-               'name': name,
-               'emailAddress': '',
-               'comment': ''
-           }
+        {
+            'name': name,
+            'address': address,
+            'emailAddress': '',
+            'comment': ''
+        }
     )
 
     contractInstance.registerFacilitator(name, {from: address},
-            function(error, result) {
-                if(!error) {
-                } else {
-                    console.error(error);
-                }
-                document.getElementById('name').value=''
+        function(error, result) {
+            if(!error) {
+
+            } else {
+                console.error(error);
             }
+            document.getElementById('name').value=''
+        }
     )
 }

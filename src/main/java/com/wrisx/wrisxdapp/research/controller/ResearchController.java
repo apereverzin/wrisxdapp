@@ -48,12 +48,8 @@ public class ResearchController {
 
     @RequestMapping(value = "/uploadFile", method = POST)
     public ResponseEntity<ResearchFile> uploadFile(
-            @SessionAttribute(USER_ADDRESS) String expertAddress,
-            @SessionAttribute(name = USER_AUTHORISED, required = false) String userAuthorised,
             @RequestParam("uploadfile") MultipartFile uploadfile) {
         logger.debug(MessageFormat.format("Uploading file {0}", uploadfile.getName()));
-
-        verifyUserAuthorisation(expertAddress, userAuthorised);
 
         ResearchFile researchFile =
                 researchService.saveUploadedFile(uploadfile);
@@ -63,8 +59,7 @@ public class ResearchController {
 
     @RequestMapping(value = "/research", method = POST)
     public ResponseEntity<?> setFileAttributes(
-            @SessionAttribute(USER_ADDRESS) String expertAddress,
-            @SessionAttribute(name = USER_AUTHORISED, required = false) String userAuthorised,
+            @RequestParam("address") String expertAddress,
             @RequestParam("uuid") String uuid,
             @RequestParam("price") int price,
             @RequestParam("title") String title,
@@ -76,8 +71,6 @@ public class ResearchController {
             @RequestParam("enquiryId") long enquiryId,
             @RequestParam("bidId") long bidId) {
         logger.debug(MessageFormat.format("Setting file attributes {0}", title));
-
-        verifyUserAuthorisation(expertAddress, userAuthorised);
 
         ResearchData research =
                 researchService.saveResearch(expertAddress, uuid, price, title,
@@ -102,13 +95,9 @@ public class ResearchController {
 
     @RequestMapping(value = "/research/{uuid}/confirm", method = PUT)
     public ResponseEntity<Void> confirmResearchCreation(
-            @SessionAttribute(USER_ADDRESS) String expertAddress,
-            @SessionAttribute(name = USER_AUTHORISED, required = false) String userAuthorised,
             @PathVariable("uuid") String uuid,
             @RequestParam("transactionHash") String transactionHash) {
         logger.debug(MessageFormat.format("Confirming research creation {0}", uuid));
-
-        verifyUserAuthorisation(expertAddress, userAuthorised);
 
         researchService.confirmResearchCreation(uuid, transactionHash);
 
@@ -117,29 +106,22 @@ public class ResearchController {
 
     @RequestMapping(value = "/research/{uuid}/commit", method = PUT)
     public ResponseEntity<Void> commitResearchCreation(
-            @SessionAttribute(USER_ADDRESS) String expertAddress,
-            @SessionAttribute(name = USER_AUTHORISED, required = false) String userAuthorised,
             @PathVariable("uuid") String uuid,
             @RequestParam("transactionHash") String transactionHash) {
         logger.debug(MessageFormat.format(
                 "Committing research creation {0} {1}", uuid, transactionHash));
-
-        verifyUserAuthorisation(expertAddress, userAuthorised);
 
         researchService.commitResearchCreation(uuid, transactionHash);
 
         return ResponseEntity.noContent().build();
     }
 
-    @RequestMapping(value = "/research/expert", method = GET)
+    @RequestMapping(value = "/research/expert/{address}", method = GET)
     public ResponseEntity<List<ResearchData>> getExpertResearchItems(
-            @SessionAttribute(USER_ADDRESS) String expertAddress,
-            @SessionAttribute(name = USER_AUTHORISED, required = false) String userAuthorised,
+            @PathVariable("address") String expertAddress,
             Pageable pageable, HttpServletRequest request) {
         logger.debug(MessageFormat.format(
                 "Getting expert research items {0}", expertAddress));
-
-        verifyUserAuthorisation(expertAddress, userAuthorised);
 
         List<ResearchData> researchItems =
                 researchService.getExpertResearchItems(expertAddress).stream().
@@ -159,31 +141,25 @@ public class ResearchController {
         return new ResponseEntity<>(research, OK);
     }
 
-    @RequestMapping(value = "/research/clientkeywords/{keywords}", method = GET)
+    @RequestMapping(value = "/research/client/{address}/keywords/{keywords}", method = GET)
     public ResponseEntity<List<ResearchData>> findClientResearchItems(
-            @SessionAttribute(USER_ADDRESS) String clientAddress,
-            @SessionAttribute(name = USER_AUTHORISED, required = false) String userAuthorised,
             @PathVariable String keywords,
+            @PathVariable("address") String clientAddress,
             Pageable pageable) {
         logger.debug(MessageFormat.format(
                 "Searching research items for client {0} {1}",
                 clientAddress, keywords));
 
-        verifyUserAuthorisation(clientAddress, userAuthorised);
-
         return getResearchItemsByKeywords(clientAddress, keywords, pageable);
     }
 
-    @RequestMapping(value = "/research/client/keywords", method = GET)
+    @RequestMapping(value = "/research/client/{address}/keywords", method = GET)
     public ResponseEntity<List<ResearchData>> findAllClientResearchItems(
-            @SessionAttribute(USER_ADDRESS) String clientAddress,
-            @SessionAttribute(name = USER_AUTHORISED, required = false) String userAuthorised,
+            @PathVariable("address") String clientAddress,
             Pageable pageable) {
         logger.debug(MessageFormat.format(
                 "Searching research items for client {0}",
                 clientAddress));
-
-        verifyUserAuthorisation(clientAddress, userAuthorised);
 
         return getResearchItemsByKeywords(clientAddress, "", pageable);
     }

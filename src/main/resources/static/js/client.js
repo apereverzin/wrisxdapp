@@ -4,7 +4,7 @@ var globalEnquiryId
 function clientResearchItemsTabClicked() {
     address = getAddress()
 
-    $.get(contextPath + "/research/client/keywords",
+    $.get(contextPath + "/research/client/" + address + "/keywords",
         function(data) {
             showClientResearchItems(data)
         }
@@ -18,7 +18,7 @@ function clientResearchItemsTabClicked() {
 function clientPurchasesTabClicked() {
     address = getAddress();
 
-    $.get(contextPath + "/purchase/client",
+    $.get(contextPath + "/purchase/client/" + address,
         function(data) {
             showClientPurchases(data)
         }
@@ -43,6 +43,7 @@ function registerClient() {
 
     $.post(contextPath + "/client",
         {
+            'address': address,
             'name': name,
             'emailAddress': emailAddress,
             'description': description,
@@ -53,7 +54,7 @@ function registerClient() {
                     function(error, result) {
                         if(error) {
                             console.log(error)
-                            $.delete(contextPath + "/client",
+                            $.delete(contextPath + "/client/" + address,
                                 function(data) {
                                     showMemberData()
                                     showMemberBalance()
@@ -128,6 +129,7 @@ function payForResearch(uuid) {
 
     $.post(contextPath + "/purchase",
         {
+            'address': address,
             "uuid": uuid
         },
         function(data) {
@@ -327,6 +329,7 @@ function postEnquiry() {
 
     $.post(contextPath + "/enquiry",
         {
+            'address': address,
             'keywords': keywords,
             'description': description
         },
@@ -445,7 +448,7 @@ function searchResearchItems() {
     address = getAddress()
     keywords = $("#clientResearchKeywords").val()
 
-    $.get(contextPath + "/research/client/keywords/" + keywords,
+    $.get(contextPath + "/research/client/" + address + "/keywords/" + keywords,
         function(data) {
             showClientResearchItems(data)
         }
@@ -455,7 +458,7 @@ function searchResearchItems() {
 function getClientEnquiries() {
     address = getAddress();
 
-    $.get(contextPath + "/enquiry/client",
+    $.get(contextPath + "/enquiry/client/" + address,
         function(data) {
             showClientEnquiries(data)
         }
