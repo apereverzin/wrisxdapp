@@ -21,6 +21,8 @@ import static com.wrisx.wrisxdapp.domain.State.COMMITTED;
 import static com.wrisx.wrisxdapp.domain.State.CONFIRMED;
 import static com.wrisx.wrisxdapp.domain.State.CREATED;
 import static com.wrisx.wrisxdapp.util.WrisxUtil.getKeywordList;
+import static com.wrisx.wrisxdapp.util.WrisxUtil.validateStringArgument;
+import static com.wrisx.wrisxdapp.util.WrisxUtil.validateStringArguments;
 import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.toList;
 
@@ -43,6 +45,9 @@ public class ExpertService {
     public ExpertData createExpert(String expertAddress, String name,
                                    String emailAddress, String expertKeywords,
                                    String description, String secret) {
+        validateStringArgument(expertAddress, "Address cannot be empty");
+        validateStringArguments(name, emailAddress, expertKeywords, description, secret);
+
         Expert expert = expertDao.findByAddress(expertAddress);
 
         if (expert == null) {

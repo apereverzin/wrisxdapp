@@ -51,12 +51,18 @@ function registerExpert() {
                                 showMemberBalance()
                             }
                         )
+                        .fail(function(error) {
+                            handleError(error);
+                        });
                     } else {
                         $.put(contextPath + "/expert/" + address + "/confirm",
                             {
                                 'transactionHash': result
                             }
                         )
+                        .fail(function(error) {
+                            handleError(error);
+                        });
                         $("#expertName").val('');
                         $("#expertEmailAddress").val('');
                         $("#expertKeywords").val('');
@@ -67,6 +73,9 @@ function registerExpert() {
             )
         }
     )
+    .fail(function(error) {
+        handleError(error);
+    });
 }
 
 function expertRegistered(transactionHash) {
@@ -79,7 +88,10 @@ function expertRegistered(transactionHash) {
             showMemberBalance();
             showExpertRoleTab();
         }
-    );
+    )
+    .fail(function(error) {
+        handleError(error);
+    });
 }
 
 function depositResearch() {
@@ -128,13 +140,19 @@ function depositResearch() {
                                 showMemberData();
                                 showMemberBalance();
                             }
-                        );
+                        )
+                        .fail(function(error) {
+                            handleError(error);
+                        });
                     } else {
                         $.put(contextPath + "/research/" + researchFile.uuid + "/confirm",
                             {
                                'transactionHash': result
                             }
                         )
+                        .fail(function(error) {
+                            handleError(error);
+                        });
                         $("#expertResearchPrice").val('');
                         $("#expertResearchTitle").val('');
                         $("#expertResearchDescription").val('');
@@ -146,6 +164,9 @@ function depositResearch() {
             );
         }
     )
+    .fail(function(error) {
+        handleError(error);
+    });
 }
 
 function researchDeposited(uuid, transactionHash) {
@@ -157,6 +178,10 @@ function researchDeposited(uuid, transactionHash) {
             getExpertResearchItems();
         }
     )
+    .fail(function(error) {
+        handleError(error);
+    });
+
     showMemberBalance();
 }
 
@@ -206,13 +231,19 @@ function depositEnquiryBidResearch(clientAddress, enquiryId, bidId) {
                                 showMemberData();
                                 showMemberBalance();
                             }
-                        );
+                        )
+                        .fail(function(error) {
+                            handleError(error);
+                        });
                     } else {
                         $.put(contextPath + "/research/" + researchFile.uuid + "/confirm",
                             {
                                 'transactionHash': result
                             }
-                        );
+                        )
+                        .fail(function(error) {
+                            handleError(error);
+                        });
                         $("#expertBidPrice").val('');
                         $("#expertBidTitle").val('');
                         $("#expertBidDescription").val('');
@@ -224,6 +255,9 @@ function depositEnquiryBidResearch(clientAddress, enquiryId, bidId) {
             );
         }
     )
+    .fail(function(error) {
+        handleError(error);
+    });
 }
 
 function enquiryBidResearchDeposited(uuid, transactionHash) {
@@ -236,6 +270,10 @@ function enquiryBidResearchDeposited(uuid, transactionHash) {
             getExpertResearchItems();
         }
     )
+    .fail(function(error) {
+        handleError(error);
+    });
+
     showMemberBalance();
 }
 
@@ -374,7 +412,10 @@ function viewExpertResearchItem(uuid) {
             text = text.concat('</table>')
             $("#expertResearchItemPanel").html(text)
         }
-    );
+    )
+    .fail(function(error) {
+        handleError(error);
+    });
 }
 
 function showExpertEnquiries(data) {
@@ -436,6 +477,10 @@ function placeBid(enquiryId) {
             searchEnquiries()
         }
     )
+    .fail(function(error) {
+        handleError(error);
+    });
+
     $("#enquiryBid").val('')
     $("#enquiryBidComment").val('')
 }
@@ -447,6 +492,9 @@ function getExpertResearchItems() {
             showExpertResearchItems(data)
         }
     )
+    .fail(function(error) {
+        handleError(error);
+    });
 }
 
 function getExpertEnquiryBids() {
@@ -455,7 +503,10 @@ function getExpertEnquiryBids() {
         function(data) {
             showExpertEnquiryBids(data)
         }
-    );
+    )
+    .fail(function(error) {
+        handleError(error);
+    });
 }
 
 function getExpertPurchases() {
@@ -464,7 +515,10 @@ function getExpertPurchases() {
         function(data) {
             showExpertPurchases(data)
         }
-    );
+    )
+    .fail(function(error) {
+        handleError(error);
+    });
 }
 
 function getResearchPurchases(uuid) {
@@ -473,16 +527,25 @@ function getResearchPurchases(uuid) {
         function(data) {
             showExpertPurchases(data)
         }
-    );
+    )
+    .fail(function(error) {
+        handleError(error);
+    });
 }
 
 function searchEnquiries() {
     address = getAddress()
     keywords = $("#expertEnquiryKeywords").val()
 
-    $.get(contextPath + "/enquiry/expert/"  + address + "/keywords/" + keywords,
-        function(data) {
-            showExpertEnquiries(data)
-        }
-    )
+    if (address != undefined && address != "") {
+        $.get({
+            url: contextPath + "/enquiry/expert/"  + address + "/keywords/" + keywords,
+            success: function(data) {
+                showExpertEnquiries(data)
+            },
+            error: function(error) {
+                handleError(error);
+            }
+        });
+    }
 }

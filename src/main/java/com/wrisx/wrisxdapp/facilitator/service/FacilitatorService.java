@@ -14,6 +14,9 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.wrisx.wrisxdapp.util.WrisxUtil.validateStringArgument;
+import static com.wrisx.wrisxdapp.util.WrisxUtil.validateStringArguments;
+
 @Service
 public class FacilitatorService {
     private final Logger logger = LoggerFactory.getLogger(FacilitatorService.class);
@@ -28,24 +31,27 @@ public class FacilitatorService {
         this.userDao = userDao;
     }
 
-    public Facilitator createFacilitator(String address, String name,
+    public Facilitator createFacilitator(String facilitatorAddress, String name,
                                          String emailAddress, String description,
                                          String secret) {
-        Facilitator facilitator = facilitatorDao.findByAddress(address);
+        validateStringArgument(facilitatorAddress, "Address cannot be null or empty");
+        validateStringArguments(name, emailAddress, description, secret);
+
+        Facilitator facilitator = facilitatorDao.findByAddress(facilitatorAddress);
 
         if (facilitator == null) {
-            User user = userDao.findByAddress(address);
+            User user = userDao.findByAddress(facilitatorAddress);
             if (user == null) {
-                user = new User(address, name, emailAddress, secret);
+                user = new User(facilitatorAddress, name, emailAddress, secret);
                 user = userDao.save(user);
             }
 
-            facilitator = new Facilitator(address, description, user);
+            facilitator = new Facilitator(facilitatorAddress, description, user);
             facilitator = facilitatorDao.save(facilitator);
             return facilitator;
         }
 
-        String msg = MessageFormat.format("Facilitator already exists {0}", address);
+        String msg = MessageFormat.format("Facilitator already exists {0}", facilitatorAddress);
         logger.error(msg);
         throw new BadRequestException(msg);
     }

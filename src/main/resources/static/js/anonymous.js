@@ -20,6 +20,9 @@ function viewAnonymousResearchItem(uuid) {
             $("#anonymousResearchItemPanel").html(text)
         }
     )
+    .fail(function(error) {
+        handleError(error);
+    });
 }
 
 function showAnonymousResearchItems(data) {
@@ -57,6 +60,9 @@ function viewAnonymousExpert(address) {
             $("#anonymousExpertPanel").html(text)
         }
     )
+    .fail(function(error) {
+        handleError(error);
+    });
 }
 
 function showAnonymousExperts(data) {
@@ -90,6 +96,9 @@ function anonymousSearchResearchItems() {
             $("#anonymousResearchKeywords").val('')
         }
     )
+    .fail(function(error) {
+        handleError(error);
+    });
 }
 
 function anonymousSearchExperts() {
@@ -102,4 +111,7 @@ function anonymousSearchExperts() {
             $("#anonymousExpertKeywords").val('')
         }
     )
+    .fail(function(error) {
+        handleError(error);
+    });
 }

@@ -20,6 +20,8 @@ import java.util.List;
 import static com.wrisx.wrisxdapp.domain.State.COMMITTED;
 import static com.wrisx.wrisxdapp.domain.State.CONFIRMED;
 import static com.wrisx.wrisxdapp.domain.State.CREATED;
+import static com.wrisx.wrisxdapp.util.WrisxUtil.validateStringArgument;
+import static com.wrisx.wrisxdapp.util.WrisxUtil.validateStringArguments;
 import static java.util.stream.Collectors.toList;
 
 @Service
@@ -41,6 +43,9 @@ public class ClientService {
     public ClientData createClient(String clientAddress, String name,
                                    String emailAddress, String description,
                                    String secret) {
+        validateStringArgument(clientAddress, "Address cannot be empty");
+        validateStringArguments(name, emailAddress, description, secret);
+
         Client client = clientDao.findByAddress(clientAddress);
 
         if (client == null) {

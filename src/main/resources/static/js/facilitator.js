@@ -10,6 +10,9 @@ function registerFacilitator() {
             'comment': ''
         }
     )
+    .fail(function(error) {
+        handleError(error);
+    });
 
     contractInstance.registerFacilitator(name, {from: address},
         function(error, result) {

@@ -2,17 +2,23 @@ var enquiryBids
 var globalEnquiryId
 
 function clientResearchItemsTabClicked() {
-    address = getAddress()
+    address = getAddress();
 
-    $.get(contextPath + "/research/client/" + address + "/keywords",
-        function(data) {
-            showClientResearchItems(data)
-        }
-    )
+    if (address != undefined && address != "") {
+        $.get({
+            url: contextPath + "/research/client/" + address + "/keywords",
+            success: function(data) {
+                showClientResearchItems(data)
+            },
+            error: function(error) {
+                handleError(error);
+            }
+        });
+    }
 
-    showMemberData()
-    showMemberBalance()
-    $("#clientResearchItemPanel").html('')
+    showMemberData();
+    showMemberBalance();
+    $("#clientResearchItemPanel").html('');
 }
 
 function clientPurchasesTabClicked() {
@@ -22,7 +28,10 @@ function clientPurchasesTabClicked() {
         function(data) {
             showClientPurchases(data)
         }
-    );
+    )
+    .fail(function(error) {
+        handleError(error);
+    });
 
     showMemberData()
     showMemberBalance()
@@ -60,12 +69,18 @@ function registerClient() {
                                     showMemberBalance()
                                 }
                             )
+                            .fail(function(error) {
+                                handleError(error);
+                            });
                         } else {
                             $.put(contextPath + "/client/confirm",
                                 {
                                     'transactionHash': result
                                 }
                             )
+                            .fail(function(error) {
+                                handleError(error);
+                            });
                             $("#clientName").val('')
                             $("#clientEmailAddress").val('')
                             $("#clientDescription").val('')
@@ -78,6 +93,9 @@ function registerClient() {
             )
         }
     )
+    .fail(function(error) {
+        handleError(error);
+    });
 }
 
 function clientRegistered(transactionHash) {
@@ -90,6 +108,9 @@ function clientRegistered(transactionHash) {
             showMemberBalance();
         }
     )
+    .fail(function(error) {
+        handleError(error);
+    });
 }
 
 function viewClientResearchItem(uuid) {
@@ -106,6 +127,9 @@ function viewClientResearchItem(uuid) {
             $("#clientResearchItemPanel").html(text)
         }
     )
+    .fail(function(error) {
+        handleError(error);
+    });
 }
 
 function buyTokens() {
@@ -134,44 +158,50 @@ function payForResearch(uuid) {
         },
         function(data) {
             contractInstance.payForResearch(uuid, {from: address},
-                    function(error, result) {
-                        if(error) {
-                            console.log(error);
-                            $.delete(contextPath + "/purchase/" + data.id)
-                        } else {
-                            $.put(contextPath + "/purchase/" + data.id + "/confirm",
-                                {
-                                    'transactionHash': result
-                                }
-                            )
-                            showMemberBalance()
-                        }
+                function(error, result) {
+                    if(error) {
+                        console.log(error);
+                        $.delete(contextPath + "/purchase/" + data.id)
+                    } else {
+                        $.put(contextPath + "/purchase/" + data.id + "/confirm",
+                            {
+                                'transactionHash': result
+                            }
+                        )
+                        .fail(function(error) {
+                            handleError(error);
+                        });
+                        showMemberBalance()
                     }
+                }
             );
         }
     )
+    .fail(function(error) {
+        handleError(error);
+    })
 }
 
 function getResearchPassword(fileName) {
     address = getAddress();
 
     contractInstance.getResearch.call(fileName, {from: address},
-            function(error, result) {
-                if(error) {
-                    console.log(error);
-                } else {
-                    $('<div>Password: ' + result + '</div>').dialog({
-                        title: 'Password',
-                        open: function(){
-                            var closeBtn = $('.ui-dialog-titlebar-close');
-                            closeBtn.append(
-                                '<span class="ui-button-icon-primary ui-icon ui-icon-closethick"></span>' +
-                                '<span class="ui-button-text">close</span>'
-                            );
-                        }
-                    })
-                }
+        function(error, result) {
+            if(error) {
+                console.log(error);
+            } else {
+                $('<div>Password: ' + result + '</div>').dialog({
+                    title: 'Password',
+                    open: function(){
+                        var closeBtn = $('.ui-dialog-titlebar-close');
+                        closeBtn.append(
+                            '<span class="ui-button-icon-primary ui-icon ui-icon-closethick"></span>' +
+                            '<span class="ui-button-text">close</span>'
+                        );
+                    }
+                })
             }
+        }
     );
 }
 
@@ -339,6 +369,9 @@ function postEnquiry() {
             getClientEnquiries()
         }
     )
+    .fail(function(error) {
+        handleError(error);
+    });
 }
 
 function placeEnquiry() {
@@ -370,7 +403,11 @@ function placeEnquiry() {
                 expert2 = enquiryBid.expert
                 price2 = enquiryBid.price
             }
-            $.put(contextPath + "/enquiry/bid/" + enquiryBid.bidId + "/select")
+            $.put(contextPath + "/enquiry/bid/" + enquiryBid.bidId + "/select"
+            )
+            .fail(function(error) {
+                handleError(error);
+            })
         }
         if (ind == 2) {
             break
@@ -397,13 +434,25 @@ function placeEnquiry() {
                         if(error) {
                             console.log(error);
                             if (bidId0 > 0) {
-                                $.put(contextPath + "/enquiry/bid/" + bidId0 + "/unselect")
+                                $.put(contextPath + "/enquiry/bid/" + bidId0 + "/unselect"
+                                )
+                                .fail(function(error) {
+                                    handleError(error);
+                                });
                             }
                             if (bidId1 > 0) {
-                                $.put(contextPath + "/enquiry/bid/" + bidId1 + "/unselect")
+                                $.put(contextPath + "/enquiry/bid/" + bidId1 + "/unselect"
+                                )
+                                .fail(function(error) {
+                                    handleError(error);
+                                });
                             }
                             if (bidId2 > 0) {
-                                $.put(contextPath + "/enquiry/bid/" + bidId2 + "/unselect")
+                                $.put(contextPath + "/enquiry/bid/" + bidId2 + "/unselect"
+                                )
+                                .fail(function(error) {
+                                    handleError(error);
+                                });
                             }
                         } else {
                             getClientEnquiries()
@@ -413,6 +462,9 @@ function placeEnquiry() {
                                         'transactionHash': result
                                     }
                                 )
+                                .fail(function(error) {
+                                    handleError(error);
+                                });
                             }
                             if (bidId1 > 0) {
                                 $.put(contextPath + "/enquiry/bid/" + bidId1 + "/confirm",
@@ -420,6 +472,9 @@ function placeEnquiry() {
                                         'transactionHash': result
                                     }
                                 )
+                                .fail(function(error) {
+                                    handleError(error);
+                                });
                             }
                             if (bidId2 > 0) {
                                 $.put(contextPath + "/enquiry/bid/" + bidId2 + "/confirm",
@@ -427,12 +482,18 @@ function placeEnquiry() {
                                         'transactionHash': result
                                     }
                                 )
+                                .fail(function(error) {
+                                    handleError(error);
+                                });
                             }
                         }
                     }
                 )
             }
         )
+        .fail(function(error) {
+            handleError(error);
+        })
     }
 }
 
@@ -441,18 +502,27 @@ function getEnquiryBids(enquiryId, keywords, description) {
         function(data) {
             showEnquiryBids(enquiryId, keywords, description, data)
         }
-    );
+    )
+    .fail(function(error) {
+        handleError(error);
+    });
 }
 
 function searchResearchItems() {
     address = getAddress()
     keywords = $("#clientResearchKeywords").val()
 
-    $.get(contextPath + "/research/client/" + address + "/keywords/" + keywords,
-        function(data) {
-            showClientResearchItems(data)
-        }
-    )
+    if (address != undefined && address != "") {
+        $.get({
+            url: contextPath + "/research/client/" + address + "/keywords/" + keywords,
+            success: function(data) {
+                showClientResearchItems(data)
+            },
+            error: function(error) {
+                handleError(error);
+            }
+        });
+    }
 }
 
 function getClientEnquiries() {
@@ -462,5 +532,8 @@ function getClientEnquiries() {
         function(data) {
             showClientEnquiries(data)
         }
-    );
+    )
+    .fail(function(error) {
+        handleError(error);
+    });
 }
