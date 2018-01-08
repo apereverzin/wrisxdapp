@@ -1,17 +1,49 @@
-.memberInfTable {
+.memberInfPanel {
+    padding-left:.6em;
+    padding-right:.6em;
+    padding-top:.2em;
+    padding-bottom:.2em;
+    margin-top:10px;
+    margin-bottom:10px;
+    margin-left:10px;
+    margin-right:10px;
     display:table;
+    background-color:rgba(64, 64, 128, 0.5);
+    border-radius: 5px;
+    width:100%;
 }
-
-.memberInfValue {
-    display:table-cell;
-}
-
 .memberInfTitle {
     display:table-cell;
     width:150px;
 }
-
 .memberInfValue {
     display:table-cell;
     width:300px;
+}
+
+.registrationPanel {
+    padding-left:.6em;
+    padding-right:.6em;
+    padding-top:.6em;
+    padding-bottom:.6em;
+    display:table;
+    background-color:rgba(64, 64, 128, 0.5);
+    border-radius: 5px;
+    width:100%;
+}
+.registrationTitle {
+    display:table-cell;
+    width:150px;
+}
+.registrationValue {
+    display:table-cell;
+    width:80%;
+}
+.registrationText {
+    border: none;
+    margin-bottom: .2em;
+    padding-left: 5px;
+    width: 100%;
+    background-color: rgba(64, 64, 128, 0.3);
+    border-radius: 3px;
 }

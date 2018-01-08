@@ -15,6 +15,7 @@
     .ui-dialog-titlebar-close:hover {
     background: url("./images/ui-icons_222222_256x240.png") repeat scroll -93px -128px rgba(0, 0, 0, 0);
     }
+
     </style>
     <script type="text/javascript" src="./js/jquery-3.2.1.min.js"></script>
     <script type="text/javascript" src="./js/jquery-ui.js"></script>
@@ -40,6 +41,7 @@
             showMemberData()
             showMemberBalance()
         })
+
     </script>
 </head>
 <body>
@@ -51,22 +53,22 @@
         <li><a href="#anonymousSearchResearchesTab" onClick="showAnonymousSearchResearchTab()">Find Researches</a></li>
         <li><a href="#anonymousSearchExpertsTab" onClick="showAnonymousSearchExpertTab()">Find Experts</a></li>
     </ul>
-    <div class="memberInfTable">
+    <div class="memberInfPanel">
         <div class="memberInfCell">
             <div class="memberInfTitle">Address:</div>
-            <div class="memberInfValue" id="memberAddress"/>
+            <div class="memberInfValue" id="memberAddress"></div>
         </div>
         <div class="memberInfCell">
             <div class="memberInfTitle">Name:</div>
-            <div class="memberInfValue" id="memberName"/>
+            <div class="memberInfValue" id="memberName"></div>
         </div>
         <div class="memberInfCell">
             <div class="memberInfTitle">Balance (tokens):</div>
-            <div class="memberInfValue" id="tokenBalance"/>
+            <div class="memberInfValue" id="tokenBalance"></div>
         </div>
         <div class="memberInfCell">
             <div class="memberInfTitle">Balance (Ξ):</div>
-            <div class="memberInfValue" id="etherBalance"/>
+            <div class="memberInfValue" id="etherBalance"></div>
         </div>
     </div>
 
@@ -105,13 +107,28 @@
             </div>
         </div>
 
-        <div id="registerClientPanel">
-            <p>
-                Name: <input type="text" id="clientName"/><br/>
-                Email address: <input type="text" id="clientEmailAddress"/><br/>
-                Description: <input type="text" id="clientDescription"/><br/>
+        <div class="registrationPanel" id="registerClientPanel">
+            <div>
+                <div class="registrationTitle">Name:</div>
+                <div class="registrationValue">
+                    <input class="registrationText" type="text" id="clientName"/>
+                </div>
+            </div>
+            <div>
+                <div class="registrationTitle">Email address:</div>
+                <div class="registrationValue">
+                    <input class="registrationText" type="text" id="clientEmailAddress"/>
+                </div>
+            </div>
+            <div>
+                <div class="registrationTitle">Description:</div>
+                <div class="registrationValue">
+                    <input class="registrationText" type="text" id="clientDescription"/>
+                </div>
+            </div>
+            <div>
                 <a href="#" onclick="registerClient()" class="btn btn-primary">Register</a>
-            </p>
+            </div>
         </div>
     </div>
 
@@ -164,14 +181,34 @@
             </div>
         </div>
 
-        <div id="registerExpertPanel">
-            <p>
-                Name: <input type="text" id="expertName"/><br/>
-                Email address: <input type="text" id="expertEmailAddress"/><br/>
-                Key words: <input type="text" id="expertKeywords"/><br/>
-                Description: <input type="text" id="expertDescription"/><br/>
+        <div class="registrationPanel" id="registerExpertPanel">
+            <div>
+                <div class="registrationTitle">Name:</div>
+                <div class="registrationValue">
+                    <input class="registrationText" type="text" id="expertName"/>
+                </div>
+            </div>
+            <div>
+                <div class="registrationTitle">Email address:</div>
+                <div class="registrationValue">
+                    <input class="registrationText" type="text" id="expertEmailAddress"/>
+                </div>
+            </div>
+            <div>
+                <div class="registrationTitle">Key words:</div>
+                <div class="registrationValue">
+                    <input class="registrationText" type="text" id="expertKeywords"/>
+                </div>
+            </div>
+            <div>
+                <div class="registrationTitle">Description:</div>
+                <div class="registrationValue">
+                    <input class="registrationText" type="text" id="expertDescription"/>
+                </div>
+            </div>
+            <div>
                 <a href="#" onclick="registerExpert()" class="btn btn-primary">Register</a>
-            </p>
+            </div>
         </div>
     </div>
 
