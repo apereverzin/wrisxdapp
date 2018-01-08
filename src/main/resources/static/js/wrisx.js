@@ -46,7 +46,7 @@ function startApp(web3) {
 }
 
 function handleError(error) {
-    alert(error.responseJSON.message + " " +
+    bootbox.alert(error.responseJSON.message + " " +
     error.responseJSON.error + " " +
     error.responseJSON.status + " " +
     error.responseJSON.path);

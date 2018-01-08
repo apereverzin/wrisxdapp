@@ -541,10 +541,12 @@ function searchEnquiries() {
         $.get({
             url: contextPath + "/enquiry/expert/"  + address + "/keywords/" + keywords,
             success: function(data) {
-                showExpertEnquiries(data)
+                showExpertEnquiries(data);
             },
             error: function(error) {
-                handleError(error);
+                if (error.responseJSON.status != 404) {
+                    handleError(error);
+                }
             }
         });
     }

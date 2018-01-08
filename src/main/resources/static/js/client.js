@@ -11,7 +11,9 @@ function clientResearchItemsTabClicked() {
                 showClientResearchItems(data)
             },
             error: function(error) {
-                handleError(error);
+                if (error.responseJSON.status != 404) {
+                    handleError(error);
+                }
             }
         });
     }
@@ -73,7 +75,7 @@ function registerClient() {
                                 handleError(error);
                             });
                         } else {
-                            $.put(contextPath + "/client/confirm",
+                            $.put(contextPath + "/client/" + address + "/confirm",
                                 {
                                     'transactionHash': result
                                 }
@@ -519,7 +521,9 @@ function searchResearchItems() {
                 showClientResearchItems(data)
             },
             error: function(error) {
-                handleError(error);
+                if (error.responseJSON.status != 404) {
+                    handleError(error);
+                }
             }
         });
     }

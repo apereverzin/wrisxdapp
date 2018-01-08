@@ -6,6 +6,7 @@
     <title>Wrisx</title>
     <link rel="stylesheet" href="./css/jquery-ui.css">
     <link rel="stylesheet" href="./css/bootstrap.min.css">
+    <link rel="stylesheet" href="./css/main.css">
     <style>
     .ui-dialog-titlebar-close {
     background: url("./images/ui-icons_888888_256x240.png") repeat scroll -93px -128px rgba(0, 0, 0, 0);
@@ -18,6 +19,7 @@
     <script type="text/javascript" src="./js/jquery-3.2.1.min.js"></script>
     <script type="text/javascript" src="./js/jquery-ui.js"></script>
     <script type="text/javascript" src="./js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="./js/bootbox.min.js"></script>
     <script type="text/javascript" src="./js/web3.js"></script>
     <script type="text/javascript" src="./js/md5.min.js"></script>
     <script type="text/javascript" src="./js/wrisx.js"></script>
@@ -49,23 +51,23 @@
         <li><a href="#anonymousSearchResearchesTab" onClick="showAnonymousSearchResearchTab()">Find Researches</a></li>
         <li><a href="#anonymousSearchExpertsTab" onClick="showAnonymousSearchExpertTab()">Find Experts</a></li>
     </ul>
-    <div>
-        <p>
-            <span>Address:</span>
-            <span id="memberAddress"/>
-        </p>
-        <p>
-            <span>Name:</span>
-            <span id="memberName"/>
-        </p>
-        <p>
-            <span>Balance (tokens):</span>
-            <span id="tokenBalance"/>
-        </p>
-        <p>
-            <span>Balance (ether):</span>
-            <span id="etherBalance"/>
-        </p>
+    <div class="memberInfTable">
+        <div class="memberInfCell">
+            <div class="memberInfTitle">Address:</div>
+            <div class="memberInfValue" id="memberAddress"/>
+        </div>
+        <div class="memberInfCell">
+            <div class="memberInfTitle">Name:</div>
+            <div class="memberInfValue" id="memberName"/>
+        </div>
+        <div class="memberInfCell">
+            <div class="memberInfTitle">Balance (tokens):</div>
+            <div class="memberInfValue" id="tokenBalance"/>
+        </div>
+        <div class="memberInfCell">
+            <div class="memberInfTitle">Balance (Ξ):</div>
+            <div class="memberInfValue" id="etherBalance"/>
+        </div>
     </div>
 
     <div id="roleClientTab">
