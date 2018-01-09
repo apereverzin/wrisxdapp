@@ -1,8 +1,10 @@
 .panelBackground {
     background-color:rgba(64, 64, 128, 0.3);
 }
-.textBackground {
+.textDecoration {
     background-color:rgba(64, 64, 128, 0.1);
+    border: 1px solid rgba(128, 128, 128, 0.1);
+    border-radius: 3px;
 }
 
 .memberInfPanel {
@@ -45,17 +47,32 @@
     width:80%;
 }
 .registrationText {
-    border: none;
     margin-bottom: .2em;
     padding-left: 5px;
     width: 100%;
-    border-radius: 3px;
 }
 .registrationButtonPanel {
     float: right;
 }
 
-#anonymousSearchResearchesTab, #anonymousSearchExpertsTab {
+.inputTitle {
+    display:table-cell;
+    width:150px;
+}
+.inputValue {
+    display:table-cell;
+    width:80%;
+}
+.inputText {
+    margin-bottom: .2em;
+    padding-left: 5px;
+    width: 100%;
+}
+.inputButtonPanel {
+    float: right;
+}
+
+.searchPanel {
     padding-left:.6em;
     padding-right:.6em;
     padding-top:.6em;
@@ -74,12 +91,14 @@
     width:80%;
 }
 .searchText {
-    border: none;
     margin-bottom: .2em;
     padding-left: 5px;
     width: 100%;
-    border-radius: 3px;
 }
 .searchButtonPanel {
     float: right;
+}
+
+.resultTablePanel {
+    width:100%;
 }

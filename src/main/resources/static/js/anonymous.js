@@ -50,7 +50,7 @@ function showAnonymousResearchItems(data) {
 function viewAnonymousExpert(address) {
     $.get(contextPath + "/expert/" + address,
         function(data) {
-            var text = '<table style="width:100%">'
+            var text = '<table>'
             text = text.concat('<tr><td><b>Name</b></td><td>' + data.name + '</td></tr>')
             text = text.concat('<tr><td><b>Email</b></td><td>' + data.emailAddress + '</td></tr>')
             text = text.concat('<tr><td><b>Key words</b></td><td>' + data.keywords + '</td></tr>')

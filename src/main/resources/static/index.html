@@ -21,6 +21,12 @@
 
 
 
+
+
+
+
+
+
     </style>
     <script type="text/javascript" src="./js/jquery-3.2.1.min.js"></script>
     <script type="text/javascript" src="./js/jquery-ui.js"></script>
@@ -46,6 +52,12 @@
             showMemberData()
             showMemberBalance()
         })
+
+
+
+
+
+
 
 
 
@@ -91,12 +103,23 @@
                 <li><a href="#clientBuyTokensTab">Buy Tokens</a></li>
             </ul>
             <div id="clientResearchItemsTab">
-                <p>
-                    Key words: <input type="text" id="clientResearchKeywords"/>
-                    <a href="#" onclick="searchResearchItems()" class="btn btn-primary">Search</a>
-                </p>
-                <p id="clientResearchItemsPanel"/>
-                <p id="clientResearchItemPanel"/>
+                <div class="searchPanel">
+                    <div>
+                        <div class="searchTitle">Key words:</div>
+                        <div class="searchValue">
+                            <input class="searchText textDecoration" type="text" id="clientResearchKeywords"/>
+                        </div>
+                    </div>
+                    <div class="searchButtonPanel">
+                        <a href="#" onclick="searchResearchItems()" class="btn btn-primary">Search</a>
+                    </div>
+                </div>
+                <div id="clientResearchItemsPanel">
+
+                </div>
+                <div id="clientResearchItemPanel">
+
+                </div>
             </div>
             <div id="clientPurchasesTab">
                 <p id="clientPurchasesPanel"/>
@@ -121,19 +144,19 @@
             <div>
                 <div class="registrationTitle">Name:</div>
                 <div class="registrationValue">
-                    <input class="registrationText textBackground" type="text" id="clientName"/>
+                    <input class="registrationText textDecoration" type="text" id="clientName"/>
                 </div>
             </div>
             <div>
                 <div class="registrationTitle">Email address:</div>
                 <div class="registrationValue">
-                    <input class="registrationText textBackground" type="text" id="clientEmailAddress"/>
+                    <input class="registrationText textDecoration" type="text" id="clientEmailAddress"/>
                 </div>
             </div>
             <div>
                 <div class="registrationTitle">Description:</div>
                 <div class="registrationValue">
-                    <input class="registrationText textBackground" type="text" id="clientDescription"/>
+                    <input class="registrationText textDecoration" type="text" id="clientDescription"/>
                 </div>
             </div>
             <div class="registrationButtonPanel">
@@ -151,26 +174,62 @@
                 <li><a href="#expertBidsTab" onclick="expertBidsTabClicked()">Bids</a></li>
             </ul>
             <div id="expertEnquiriesTab">
-                <p>
-                    Key words: <input type="text" id="expertEnquiryKeywords"/>
-                    <a href="#" onclick="searchEnquiries()" class="btn btn-primary">Search</a>
-                </p>
-                <p id="expertEnquiriesPanel"/>
+                <div class="searchPanel">
+                    <div>
+                        <div class="searchTitle">Key words:</div>
+                        <div class="searchValue">
+                            <input class="searchText textDecoration" type="text" id="expertEnquiryKeywords"/>
+                        </div>
+                    </div>
+                    <div class="searchButtonPanel">
+                        <a href="#" onclick="searchEnquiries()" class="btn btn-primary">Search</a>
+                    </div>
+                </div>
+                <div id="expertEnquiriesPanel"></div>
             </div>
             <div id="expertResearchItemsTab">
-                <form id="research-upload-file-form">
-                    Price: <input type="text" id="expertResearchPrice"/>&nbsp;&nbsp;
-                    Title: <input type="text" id="expertResearchTitle"/><br>
-                    Description: <input type="text" id="expertResearchDescription"/><br>
-                    Key words: <input type="text" id="expertResearchKeywords"/><br>
-                    <label for="expertResearch-upload-file-input">Upload your file:</label>
-                    <input id="expertResearch-upload-file-input" type="file" name="uploadfile" accept="*"/>
-                    <br/>
-                    <span id="expertResearch-upload-file-message"></span>
-                </form>
-                <a href="#" onclick="depositResearch()" class="btn btn-primary">Deposit</a>
-                <p id="expertResearchItemsPanel"/>
-                <p id="expertResearchItemPanel"/>
+                <div class="searchPanel">
+                    <form id="research-upload-file-form">
+                        <div>
+                            <div class="inputTitle">Price:</div>
+                            <div class="inputValue">
+                                <input class="inputText textDecoration" type="text" id="expertResearchPrice"/>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="inputTitle">Title:</div>
+                            <div class="inputValue">
+                                <input class="inputText textDecoration" type="text" id="expertResearchTitle"/>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="inputTitle">Description:</div>
+                            <div class="inputValue">
+                                <input class="inputText textDecoration" type="text" id="expertResearchDescription"/>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="inputTitle">Key words:</div>
+                            <div class="inputValue">
+                                <input class="inputText textDecoration" type="text" id="expertResearchKeywords"/>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="inputTitle">
+                                <label for="expertResearch-upload-file-input">Upload your file:</label>
+                            </div>
+                            <div class="inputValue">
+                                <input id="expertResearch-upload-file-input" type="file" name="uploadfile" accept="*"/>
+                            </div>
+                        </div>
+                        <div class="inputTitle" id="expertResearch-upload-file-message"></div>
+                    </form>
+                    <div class="searchButtonPanel">
+                        <a href="#" onclick="depositResearch()" class="btn btn-primary">Deposit</a>
+                    </div>
+                </div>
+                <div id="expertResearchItemsPanel"></div>
+                <div id="expertResearchItemPanel"></div>
             </div>
             <div id="expertPurchasesTab">
                 <p id="expertPurchasesPanel"/>
@@ -195,25 +254,25 @@
             <div>
                 <div class="registrationTitle">Name:</div>
                 <div class="registrationValue">
-                    <input class="registrationText textBackground" type="text" id="expertName"/>
+                    <input class="registrationText textDecoration" type="text" id="expertName"/>
                 </div>
             </div>
             <div>
                 <div class="registrationTitle">Email address:</div>
                 <div class="registrationValue">
-                    <input class="registrationText textBackground" type="text" id="expertEmailAddress"/>
+                    <input class="registrationText textDecoration" type="text" id="expertEmailAddress"/>
                 </div>
             </div>
             <div>
                 <div class="registrationTitle">Key words:</div>
                 <div class="registrationValue">
-                    <input class="registrationText textBackground" type="text" id="expertKeywords"/>
+                    <input class="registrationText textDecoration" type="text" id="expertKeywords"/>
                 </div>
             </div>
             <div>
                 <div class="registrationTitle">Description:</div>
                 <div class="registrationValue">
-                    <input class="registrationText textBackground" type="text" id="expertDescription"/>
+                    <input class="registrationText textDecoration" type="text" id="expertDescription"/>
                 </div>
             </div>
             <div class="registrationButtonPanel">
@@ -223,31 +282,35 @@
     </div>
 
     <div id="anonymousSearchResearchesTab">
-        <div>
-            <div class="searchTitle">Key words:</div>
-            <div class="searchValue">
-                <input class="searchText textBackground" type="text" id="anonymousResearchKeywords"/>
+        <div class="searchPanel">
+            <div>
+                <div class="searchTitle">Key words:</div>
+                <div class="searchValue">
+                    <input class="searchText textDecoration" type="text" id="anonymousResearchKeywords"/>
+                </div>
+            </div>
+            <div class="searchButtonPanel">
+                <a href="#" onclick="anonymousSearchResearchItems()" class="btn btn-primary">Search</a>
             </div>
         </div>
-        <div class="searchButtonPanel">
-            <a href="#" onclick="anonymousSearchResearchItems()" class="btn btn-primary">Search</a>
-        </div>
-        <p id="anonymousResearchItemsPanel"/>
-        <p id="anonymousResearchItemPanel"/>
+        <div id="anonymousResearchItemsPanel"></div>
+        <div id="anonymousResearchItemPanel"></div>
     </div>
 
     <div id="anonymousSearchExpertsTab">
-        <div>
-            <div class="searchTitle">Key words:</div>
-            <div class="searchValue">
-                <input class="searchText textBackground" type="text" id="anonymousExpertKeywords"/>
+        <div class="searchPanel">
+            <div>
+                <div class="searchTitle">Key words:</div>
+                <div class="searchValue">
+                    <input class="searchText textDecoration" type="text" id="anonymousExpertKeywords"/>
+                </div>
+            </div>
+            <div class="searchButtonPanel">
+                <a href="#" onclick="anonymousSearchExperts()" class="btn btn-primary">Search</a>
             </div>
         </div>
-        <div class="searchButtonPanel">
-            <a href="#" onclick="anonymousSearchExperts()" class="btn btn-primary">Search</a>
-        </div>
-        <p id="anonymousExpertsPanel"/>
-        <p id="anonymousExpertPanel"/>
+        <div class="resultTablePanel" id="anonymousExpertsPanel"></div>
+        <div class="resultViewPanel" id="anonymousExpertPanel"></div>
     </div>
 </div>
 </body>
