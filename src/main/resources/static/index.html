@@ -16,6 +16,11 @@
     background: url("./images/ui-icons_222222_256x240.png") repeat scroll -93px -128px rgba(0, 0, 0, 0);
     }
 
+
+
+
+
+
     </style>
     <script type="text/javascript" src="./js/jquery-3.2.1.min.js"></script>
     <script type="text/javascript" src="./js/jquery-ui.js"></script>
@@ -42,10 +47,15 @@
             showMemberBalance()
         })
 
+
+
+
+
+
     </script>
 </head>
-<body>
 
+<body>
 <div id="roleTabs">
     <ul>
         <li><a href="#roleClientTab" onClick="showClientRoleTab()" id="roleClientTabTitle"></a></li>
@@ -53,7 +63,7 @@
         <li><a href="#anonymousSearchResearchesTab" onClick="showAnonymousSearchResearchTab()">Find Researches</a></li>
         <li><a href="#anonymousSearchExpertsTab" onClick="showAnonymousSearchExpertTab()">Find Experts</a></li>
     </ul>
-    <div class="memberInfPanel">
+    <div class="memberInfPanel panelBackground">
         <div class="memberInfCell">
             <div class="memberInfTitle">Address:</div>
             <div class="memberInfValue" id="memberAddress"></div>
@@ -63,7 +73,7 @@
             <div class="memberInfValue" id="memberName"></div>
         </div>
         <div class="memberInfCell">
-            <div class="memberInfTitle">Balance (tokens):</div>
+            <div class="memberInfTitle">Balance (WRX):</div>
             <div class="memberInfValue" id="tokenBalance"></div>
         </div>
         <div class="memberInfCell">
@@ -107,26 +117,26 @@
             </div>
         </div>
 
-        <div class="registrationPanel" id="registerClientPanel">
+        <div class="registrationPanel panelBackground" id="registerClientPanel">
             <div>
                 <div class="registrationTitle">Name:</div>
                 <div class="registrationValue">
-                    <input class="registrationText" type="text" id="clientName"/>
+                    <input class="registrationText textBackground" type="text" id="clientName"/>
                 </div>
             </div>
             <div>
                 <div class="registrationTitle">Email address:</div>
                 <div class="registrationValue">
-                    <input class="registrationText" type="text" id="clientEmailAddress"/>
+                    <input class="registrationText textBackground" type="text" id="clientEmailAddress"/>
                 </div>
             </div>
             <div>
                 <div class="registrationTitle">Description:</div>
                 <div class="registrationValue">
-                    <input class="registrationText" type="text" id="clientDescription"/>
+                    <input class="registrationText textBackground" type="text" id="clientDescription"/>
                 </div>
             </div>
-            <div>
+            <div class="registrationButtonPanel">
                 <a href="#" onclick="registerClient()" class="btn btn-primary">Register</a>
             </div>
         </div>
@@ -185,50 +195,60 @@
             <div>
                 <div class="registrationTitle">Name:</div>
                 <div class="registrationValue">
-                    <input class="registrationText" type="text" id="expertName"/>
+                    <input class="registrationText textBackground" type="text" id="expertName"/>
                 </div>
             </div>
             <div>
                 <div class="registrationTitle">Email address:</div>
                 <div class="registrationValue">
-                    <input class="registrationText" type="text" id="expertEmailAddress"/>
+                    <input class="registrationText textBackground" type="text" id="expertEmailAddress"/>
                 </div>
             </div>
             <div>
                 <div class="registrationTitle">Key words:</div>
                 <div class="registrationValue">
-                    <input class="registrationText" type="text" id="expertKeywords"/>
+                    <input class="registrationText textBackground" type="text" id="expertKeywords"/>
                 </div>
             </div>
             <div>
                 <div class="registrationTitle">Description:</div>
                 <div class="registrationValue">
-                    <input class="registrationText" type="text" id="expertDescription"/>
+                    <input class="registrationText textBackground" type="text" id="expertDescription"/>
                 </div>
             </div>
-            <div>
+            <div class="registrationButtonPanel">
                 <a href="#" onclick="registerExpert()" class="btn btn-primary">Register</a>
             </div>
         </div>
     </div>
 
     <div id="anonymousSearchResearchesTab">
-        <p>
-            Key words: <input type="text" id="anonymousResearchKeywords"/>
+        <div>
+            <div class="searchTitle">Key words:</div>
+            <div class="searchValue">
+                <input class="searchText textBackground" type="text" id="anonymousResearchKeywords"/>
+            </div>
+        </div>
+        <div class="searchButtonPanel">
             <a href="#" onclick="anonymousSearchResearchItems()" class="btn btn-primary">Search</a>
-        </p>
+        </div>
         <p id="anonymousResearchItemsPanel"/>
         <p id="anonymousResearchItemPanel"/>
     </div>
 
     <div id="anonymousSearchExpertsTab">
-        <p>
-            Key words: <input type="text" id="anonymousExpertKeywords"/>
+        <div>
+            <div class="searchTitle">Key words:</div>
+            <div class="searchValue">
+                <input class="searchText textBackground" type="text" id="anonymousExpertKeywords"/>
+            </div>
+        </div>
+        <div class="searchButtonPanel">
             <a href="#" onclick="anonymousSearchExperts()" class="btn btn-primary">Search</a>
-        </p>
+        </div>
         <p id="anonymousExpertsPanel"/>
         <p id="anonymousExpertPanel"/>
     </div>
-
+</div>
 </body>
 </html>
