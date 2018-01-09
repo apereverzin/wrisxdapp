@@ -43,6 +43,10 @@ function startApp(web3) {
 //            }
 //        }
 //    );
+    $("#anonymousResearchItemsPanel").hide();
+    $("#anonymousResearchItemPanel").hide();
+    $("#anonymousExpertsPanel").hide();
+    $("#anonymousExpertPanel").hide();
 }
 
 function handleError(error) {
@@ -163,9 +167,9 @@ function showExpertRoleTab() {
     $.get({
         url: contextPath + "/expert/" + address,
         success: function(data) {
-            $("#roleExpertTabTitle").text('Expert')
-            $("#roleExpertTabs").show()
-            $("#registerExpertPanel").hide()
+            $("#roleExpertTabTitle").text('Expert');
+            $("#roleExpertTabs").show();
+            $("#registerExpertPanel").hide();
         },
         error: function() {
             $("#roleExpertTabTitle").text('Become an Expert')
