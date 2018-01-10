@@ -44,7 +44,7 @@ public class ResearchEnquiryController {
         return new ResponseEntity<>(researchEnquiry, OK);
     }
 
-    @RequestMapping(value = "/enquiry/client", method = GET)
+    @RequestMapping(value = "/enquiry/client/{address}", method = GET)
     public ResponseEntity<List<ResearchEnquiryData>> getClientEnquiries(
             @PathVariable("address") String clientAddress,
             Pageable pageable) {

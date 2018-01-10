@@ -104,6 +104,21 @@
     float: right;
 }
 
+.listPanel {
+    display: table;
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 5px;
+}
+.listItemsTablePanel {
+    padding: .2em .6em;
+    margin-top:10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    width: 100%;
+    display: table-cell;
+}
+
 .resultsPanel {
     display:table;
     width: 100%;

@@ -117,15 +117,29 @@
                         <a href="#" onclick="searchResearchItems()" class="btn btn-primary">Search</a>
                     </div>
                 </div>
-                <div id="clientResearchItemsPanel">
-
-                </div>
-                <div id="clientResearchItemPanel">
-
+                <div class="resultsPanel">
+                    <div style="display: table-row;">
+                        <div class="resultItemsTablePanel panelBackground">
+                            <div id="clientResearchItemsPanel">
+                            </div>
+                        </div>
+                        <div class="resultItemViewPanel panelBackground">
+                            <div id="clientResearchItemPanel">
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div id="clientPurchasesTab">
-                <p id="clientPurchasesPanel"/>
+                <div class="listPanel">
+                    <div style="display: table-row;">
+                        <div class="listItemsTablePanel panelBackground"
+                             style="border-top: 5px solid transparent;border-right: 5px solid transparent;">
+                            <div id="clientPurchasesPanel">
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div id="clientEnquiriesTab">
                 <p>
@@ -133,6 +147,15 @@
                     Description: <input type="text" id="clientEnquiryDescription"/><br/>
                     <a href="#" onclick="postEnquiry()" class="btn btn-primary">Place enquiry</a>
                 </p>
+                <div class="listPanel">
+                    <div style="display: table-row;">
+                        <div class="listItemsTablePanel panelBackground"
+                             style="border-top: 5px solid transparent;border-right: 5px solid transparent;">
+                            <div id="clientPurchasesPanel">
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <p id="clientEnquiriesPanel"/>
             </div>
             <div id="clientBuyTokensTab">
@@ -188,7 +211,15 @@
                         <a href="#" onclick="searchEnquiries()" class="btn btn-primary">Search</a>
                     </div>
                 </div>
-                <div id="expertEnquiriesPanel"></div>
+                <div class="listPanel">
+                    <div style="display: table-row;">
+                        <div class="listItemsTablePanel panelBackground"
+                             style="border-top: 5px solid transparent;border-right: 5px solid transparent;">
+                            <div id="expertEnquiriesPanel">
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div id="expertResearchItemsTab">
                 <div class="searchPanel">
@@ -231,11 +262,31 @@
                         <a href="#" onclick="depositResearch()" class="btn btn-primary">Deposit</a>
                     </div>
                 </div>
-                <div id="expertResearchItemsPanel"></div>
-                <div id="expertResearchItemPanel"></div>
+                <div class="resultsPanel">
+                    <div style="display: table-row;">
+                        <div class="resultItemsTablePanel panelBackground"
+                             style="border-top: 5px solid transparent;border-right: 5px solid transparent;">
+                            <div id="expertResearchItemsPanel">
+                            </div>
+                        </div>
+                        <div class="resultItemViewPanel panelBackground"
+                             style="border-top: 5px solid transparent;">
+                            <div id="expertResearchItemPanel">
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div id="expertPurchasesTab">
-                <p id="expertPurchasesPanel"/>
+                <div class="listPanel">
+                    <div style="display: table-row;">
+                        <div class="listItemsTablePanel panelBackground"
+                             style="border-top: 5px solid transparent;border-right: 5px solid transparent;">
+                            <div id="expertPurchasesPanel">
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div id="expertBidsTab">
                 <form id="bid-upload-file-form">

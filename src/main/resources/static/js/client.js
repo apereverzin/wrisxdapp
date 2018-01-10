@@ -119,12 +119,12 @@ function viewClientResearchItem(uuid) {
     $.get(contextPath + "/research/" + uuid,
         function(data) {
             var text = '<table style="width:100%">'
-            text = text.concat('<tr><td>Title</td><td>' + data.title + '</td></tr>')
-            text = text.concat('<tr><td>Description</td><td>' + data.description + '</td></tr>')
-            text = text.concat('<tr><td>Key words</td><td>' + data.keywords + '</td></tr>')
-            text = text.concat('<tr><td>Price</th><td>' + data.price + '</td></tr>')
-            text = text.concat('<tr><td>MD5</td><td>' + data.checksum + '</td></tr>')
-            text = text.concat('<tr><td>Expert</td><td>' + data.expert.name + '</td></tr>')
+            text = text.concat('<tr><th>Title</th><td>' + data.title + '</td></tr>')
+            text = text.concat('<tr><th>Description</th><td>' + data.description + '</td></tr>')
+            text = text.concat('<tr><th>Key words</th><td>' + data.keywords + '</td></tr>')
+            text = text.concat('<tr><th>Price</th><td>' + data.price + '</td></tr>')
+            text = text.concat('<tr><th>MD5</th><td>' + data.checksum + '</td></tr>')
+            text = text.concat('<tr><th>Expert</th><td>' + data.expert.name + '</td></tr>')
             text = text.concat('</table>')
             $("#clientResearchItemPanel").html(text)
         }
