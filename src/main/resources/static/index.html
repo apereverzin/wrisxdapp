@@ -27,6 +27,17 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
     </style>
     <script type="text/javascript" src="./js/jquery-3.2.1.min.js"></script>
     <script type="text/javascript" src="./js/jquery-ui.js"></script>
@@ -52,14 +63,6 @@
             showMemberData()
             showMemberBalance()
         })
-
-
-
-
-
-
-
-
 
 
 
@@ -286,15 +289,27 @@
             <div>
                 <div class="searchTitle">Key words:</div>
                 <div class="searchValue">
-                    <input class="searchText textDecoration" type="text" id="anonymousResearchKeywords"/>
+                    <input class="searchText textDecoration" type="text"
+                           id="anonymousResearchKeywords"/>
                 </div>
             </div>
             <div class="searchButtonPanel">
-                <a href="#" onclick="anonymousSearchResearchItems()" class="btn btn-primary">Search</a>
+                <a href="#" onclick="anonymousSearchResearchItems()"
+                   class="btn btn-primary">Search</a>
             </div>
         </div>
-        <div class="resultTablePanel panelBackground" id="anonymousResearchItemsPanel"></div>
-        <div class="resultTablePanel panelBackground" id="anonymousResearchItemPanel"></div>
+        <div class="resultsPanel">
+            <div style="display: table-row;">
+                <div class="resultItemsTablePanel panelBackground">
+                    <div id="anonymousResearchItemsPanel">
+                    </div>
+                </div>
+                <div class="resultItemViewPanel panelBackground">
+                    <div id="anonymousResearchItemPanel">
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <div id="anonymousSearchExpertsTab">
@@ -302,15 +317,29 @@
             <div>
                 <div class="searchTitle">Key words:</div>
                 <div class="searchValue">
-                    <input class="searchText textDecoration" type="text" id="anonymousExpertKeywords"/>
+                    <input class="searchText textDecoration" type="text"
+                           id="anonymousExpertKeywords"/>
                 </div>
             </div>
             <div class="searchButtonPanel">
-                <a href="#" onclick="anonymousSearchExperts()" class="btn btn-primary">Search</a>
+                <a href="#" onclick="anonymousSearchExperts()"
+                   class="btn btn-primary">Search</a>
             </div>
         </div>
-        <div class="resultTablePanel panelBackground" id="anonymousExpertsPanel"></div>
-        <div class="resultViewPanel panelBackground" id="anonymousExpertPanel"></div>
+        <div class="resultsPanel">
+            <div style="display: table-row;">
+                <div class="resultItemsTablePanel panelBackground"
+                        style="border-top: 5px solid transparent;border-right: 5px solid transparent;">
+                    <div id="anonymousExpertsPanel">
+                    </div>
+                </div>
+                <div class="resultItemViewPanel panelBackground"
+                        style="border-top: 5px solid transparent;">
+                    <div id="anonymousExpertPanel">
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 </body>

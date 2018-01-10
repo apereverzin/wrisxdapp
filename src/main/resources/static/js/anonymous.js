@@ -1,21 +1,21 @@
 function showAnonymousSearchResearchTab() {
-    $("#anonymousResearchItemPanel").html('')
+    //$("#anonymousResearchItemPanel").html('')
 }
 
 function showAnonymousSearchExpertTab() {
-    $("#anonymousExpertPanel").html('')
+    //$("#anonymousExpertPanel").html('')
 }
 
 function viewAnonymousResearchItem(uuid) {
     $.get(contextPath + "/research/" + uuid,
         function(data) {
-            var text = '<table style="width:100%">'
-            text = text.concat('<tr><td>Title</td><td>' + data.title + '</td></tr>')
-            text = text.concat('<tr><td>Description</td><td>' + data.description + '</td></tr>')
-            text = text.concat('<tr><td>Key words</td><td>' + data.keywords + '</td></tr>')
-            text = text.concat('<tr><td>Price</th><td>' + data.price + '</td></tr>')
-            text = text.concat('<tr><td>MD5</td><td>' + data.checksum + '</td></tr>')
-            text = text.concat('<tr><td>Expert</td><td>' + data.expert.name + '</td></tr>')
+            var text = '<table class="viewItemTable">'
+            text = text.concat('<tr><th>Title</th><td>' + data.title + '</td></tr>')
+            text = text.concat('<tr><th>Description</th><td>' + data.description + '</td></tr>')
+            text = text.concat('<tr><th>Key words</th><td>' + data.keywords + '</td></tr>')
+            text = text.concat('<tr><th>Price</th><td>' + data.price + '</td></tr>')
+            text = text.concat('<tr><th>MD5</th><td>' + data.checksum + '</td></tr>')
+            text = text.concat('<tr><th>Expert</th><td>' + data.expert.name + '</td></tr>')
             text = text.concat('</table>');
             $("#anonymousResearchItemPanel").show();
             $("#anonymousResearchItemPanel").html(text);
@@ -27,7 +27,7 @@ function viewAnonymousResearchItem(uuid) {
 }
 
 function showAnonymousResearchItems(data) {
-    var items = '<table style="width:100%">' +
+    var items = '<table class="resultsTable">' +
     '<thead><tr>' +
     '<th>Title</th><th>Expert</th><th>Price</th>' +
     '<th></th>\n' +
@@ -53,11 +53,11 @@ function showAnonymousResearchItems(data) {
 function viewAnonymousExpert(address) {
     $.get(contextPath + "/expert/" + address,
         function(data) {
-            var text = '<table>'
-            text = text.concat('<tr><td><b>Name</b></td><td>' + data.name + '</td></tr>')
-            text = text.concat('<tr><td><b>Email</b></td><td>' + data.emailAddress + '</td></tr>')
-            text = text.concat('<tr><td><b>Key words</b></td><td>' + data.keywords + '</td></tr>')
-            text = text.concat('<tr><td><b>Description</b></td><td>' + data.description + '</td></tr>')
+            var text = '<table class="viewItemTable">'
+            text = text.concat('<tr><th>Name</th><td>' + data.name + '</td></tr>')
+            text = text.concat('<tr><th>Email</th><td>' + data.emailAddress + '</td></tr>')
+            text = text.concat('<tr><th>Key words</th><td>' + data.keywords + '</td></tr>')
+            text = text.concat('<tr><th>Description</th><td>' + data.description + '</td></tr>')
             text = text.concat('<tr><td></td><td>Researches</td></tr>')
             text = text.concat('</table>');
             $("#anonymousExpertPanel").show();
@@ -70,7 +70,7 @@ function viewAnonymousExpert(address) {
 }
 
 function showAnonymousExperts(data) {
-    var items = '<table style="width:100%">' +
+    var items = '<table class="resultsTable">' +
     '<thead><tr>' +
     '<th>Name</th><th>Email</th><th>Description</th>' +
     '<th></th>\n' +
