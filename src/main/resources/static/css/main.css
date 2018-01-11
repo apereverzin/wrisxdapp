@@ -31,52 +31,7 @@
     width: 300px;
 }
 
-.registrationPanel {
-    padding-left:.6em;
-    padding-right:.6em;
-    padding-top:.6em;
-    padding-bottom:.6em;
-    display:table;
-    border-radius: 5px;
-    width:100%;
-}
-.registrationTitle {
-    display:table-cell;
-    width:150px;
-    font-weight: bold;
-}
-.registrationValue {
-    display:table-cell;
-    width:80%;
-}
-.registrationText {
-    margin-bottom: .2em;
-    padding-left: 5px;
-    width: 100%;
-}
-.registrationButtonPanel {
-    float: right;
-}
-
-.inputTitle {
-    display: table-cell;
-    width: 150px;
-    font-weight: bold;
-}
-.inputValue {
-    display:table-cell;
-    width:80%;
-}
-.inputText {
-    margin-bottom: .2em;
-    padding-left: 5px;
-    width: 100%;
-}
-.inputButtonPanel {
-    float: right;
-}
-
-.searchPanel {
+.formPanel {
     padding-left:.6em;
     padding-right:.6em;
     padding-top:.6em;
@@ -86,21 +41,21 @@
     background-color:rgba(64, 64, 128, 0.3);
     width:100%;
 }
-.searchTitle {
-    display:table-cell;
-    width:150px;
+.inputTitle {
+    display: table-cell;
+    width: 150px;
     font-weight: bold;
 }
-.searchValue {
-    display:table-cell;
-    width:80%;
+.inputValue {
+    display: table-cell;
+    width: 80%;
 }
-.searchText {
+.inputText {
     margin-bottom: .2em;
     padding-left: 5px;
     width: 100%;
 }
-.searchButtonPanel {
+.formButtonPanel {
     float: right;
 }
 
@@ -119,13 +74,13 @@
     display: table-cell;
 }
 
-.resultsPanel {
+.listAndViewPanel {
     display:table;
     width: 100%;
     border-collapse: separate;
     border-spacing: 5px;
 }
-.resultItemsTablePanel {
+.listAndViewListPanel {
     padding: .2em .6em;
     margin-top:10px;
     margin-bottom:10px;
@@ -133,7 +88,7 @@
     width:50%;
     display: table-cell;
 }
-.resultItemViewPanel {
+.listAndViewViewPanel {
     padding: .2em .6em;
     margin-top:10px;
     margin-bottom:10px;
@@ -142,30 +97,46 @@
     display: table-cell;
     border-top: 5px solid transparent;
 }
-.resultsTable {
+
+.listAndListPanel {
+    display:table;
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 5px;
+}
+.listAndListListPanel {
+    padding: .2em .6em;
+    margin-top:10px;
+    margin-bottom:10px;
+    border-radius: 5px;
+    width:50%;
+    display: table-cell;
+}
+
+.listTable {
     width: 100%;
     font-family: Helvetica, Arial, sans-serif;
     border-collapse: collapse;
     border-spacing: 0;
 }
-.resultsTable td, .resultsTable th {
+.listTable td, .listTable th {
     border: 1px solid transparent; /* No more visible border */
     height: 30px;
     transition: all 0.3s;  /* Simple transition for hover effect */
 }
-.resultsTable th {
+.listTable th {
     text-align: center;
     background: rgba(64, 64, 128, 0.0);
     font-weight: bold;
 }
-.resultsTable td {
+.listTable td {
     background: rgba(64, 64, 128, 0.0);
     text-align: center;
 }
-.resultsTable tr:nth-child(even) td {
+.listTable tr:nth-child(even) td {
     background: rgba(64, 64, 128, 0.0);
 }
-.resultsTable tr:nth-child(odd) td {
+.listTable tr:nth-child(odd) td {
     background: rgba(64, 64, 128, 0.0);
 }
 /*tr td:hover {

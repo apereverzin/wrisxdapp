@@ -213,7 +213,7 @@ function showClientResearchItems(data) {
     '<th>Title</th><th>Expert</th><th>Price</th>' +
     '<th></th><th></th><th></th>\n' +
     '</tr></thead>' +
-    '<tbody>'
+    '<tbody>';
     $.each(data, function(val) {
         items = items.concat(
         '<tr>' +
@@ -221,21 +221,21 @@ function showClientResearchItems(data) {
         '<td>' + data[val].expert.name + '</td>' +
         '<td>' + data[val].price + '</td>' +
         '<td>' + '<a href="#" onclick="viewClientResearchItem(&#39;' + data[val].uuid + '&#39;)" class="btn btn-primary">View</a>' + '</td>'
-        )
+        );
         if (data[val].purchase == null) {
             items = items.concat(
             '<td>' + '<a href="#" onclick="payForResearch(&#39;' + data[val].uuid + '&#39;)" class="btn btn-primary">Pay</a>' + '</td>'
-            )
+            );
         } else {
             items = items.concat(
             '<td>' + '<a href="#" onclick="getResearchPassword(&#39;' + data[val].uuid + '&#39;)" class="btn btn-primary">Password</a>' + '</td>'
-            )
+            );
         }
         items = items.concat(
         '<td>' + '<a href="/downloadFile/' + data[val].uuid + '" class="btn btn-primary">Download</a>' + '</td>' +
         '</tr>\n'
-        )
-    })
+        );
+    });
     items.concat('</tbody></table>')
     $("#clientResearchItemsPanel").html(items)
     showMemberBalance()
@@ -259,12 +259,11 @@ function showClientEnquiries(data) {
         '</tr>\n'
         );
     });
-    items = items.concat('</tbody></table>')
-    items = items.concat('<p id="clientEnquiryBidsPanel"/>')
+    items = items.concat('</tbody></table>');
 
-    $("#clientEnquiriesPanel").html(items)
+    $("#clientEnquiriesPanel").html(items);
 
-    showMemberBalance()
+    showMemberBalance();
 }
 
 function showClientPurchases(data) {
@@ -291,26 +290,27 @@ function showClientPurchases(data) {
 }
 
 function showEnquiryBids(enquiryId, keywords, description, data) {
-    var items = '<b>Enquiry</b>&nbsp;Keywords: ' + keywords +
-    '&nbsp:Description: ' + description +
-    '<table style="width:100%">' +
-    '<thead><tr>' +
-    '<th>Bid</th><th>Comment</th><th>Expert</th>' +
-    '<th></th><th></th>\n' +
-    '</tr></thead>' +
-    '<tbody>'
-    var submitted = false
+//    var items = '<b>Enquiry</b>&nbsp;Keywords: ' + keywords +
+//    '&nbsp:Description: ' + description +
+//    '<table style="width:100%">' +
+//    '<thead><tr>' +
+//    '<th>Bid</th><th>Comment</th><th>Expert</th>' +
+//    '<th></th><th></th>\n' +
+//    '</tr></thead>' +
+//    '<tbody>';
+    var items = '';
+    var submitted = false;
     $.each(data, function(val) {
         if (data[val].selected) {
-            submitted = true
+            submitted = true;
         }
-    })
+    });
 
-    enquiryBids = new Array()
+    enquiryBids = new Array();
     $.each(data, function(val) {
-        var enquiryBidCheckboxId = 'bid' + data[val].id
+        var enquiryBidCheckboxId = 'bid' + data[val].id;
         if (enquiryBids.length > 0) {
-            enquiryBids = enquiryBids.concat(',')
+            enquiryBids = enquiryBids.concat(',');
         }
         var enquiryBid = {
             enquiryBidCheckboxId: enquiryBidCheckboxId,
@@ -318,7 +318,7 @@ function showEnquiryBids(enquiryId, keywords, description, data) {
             expert: data[val].expert.address,
             price: data[val].price
         };
-        enquiryBids.push(enquiryBid)
+        enquiryBids.push(enquiryBid);
         items = items.concat(
         '<tr>' +
         '<td>' + data[val].price + '</td>' +
@@ -331,26 +331,28 @@ function showEnquiryBids(enquiryId, keywords, description, data) {
             '<a href="#" onclick="getResearchPassword(&#39;' + data[val].research.uuid + '&#39;)" class="btn btn-primary">Password</a>' +
             '&nbsp;' +
             '<a href="/downloadFile/' + data[val].research.uuid + '" class="btn btn-primary">Download</a>' +
-            '</td>')
+            '</td>');
         } else {
-            items = items.concat('<td></td>')
+            items = items.concat('<td></td>');
         }
         items = items.concat(
         '<td></td>' +
         '</tr>\n'
         );
     });
-    items = items.concat('</tbody></table>')
+    items = items.concat('</tbody></table>');
     if (!submitted) {
-        items = items.concat('<a href="#" onclick="placeEnquiry()" class="btn btn-primary">Submit</a>')
+        items = items.concat('<div class="formButtonPanel">');
+        items = items.concat('<a href="#" onclick="placeEnquiry()" class="btn btn-primary">Submit</a>');
+        items = items.concat('</div>');
     }
 
-    $("#clientEnquiryBidsPanel").html(items)
+    $("#clientEnquiryBidsPanel").html(items);
 
-    globalEnquiryId = enquiryId
-    globalKeywords = keywords
+    globalEnquiryId = enquiryId;
+    globalKeywords = keywords;
 
-    showMemberBalance()
+    showMemberBalance();
 }
 
 function postEnquiry() {

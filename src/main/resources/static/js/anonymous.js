@@ -27,7 +27,7 @@ function viewAnonymousResearchItem(uuid) {
 }
 
 function showAnonymousResearchItems(data) {
-    var items = '<table class="resultsTable">' +
+    var items = '<table class="listTable">' +
     '<thead><tr>' +
     '<th>Title</th><th>Expert</th><th>Price</th>' +
     '<th></th>\n' +
@@ -70,7 +70,7 @@ function viewAnonymousExpert(address) {
 }
 
 function showAnonymousExperts(data) {
-    var items = '<table class="resultsTable">' +
+    var items = '<table class="listTable">' +
     '<thead><tr>' +
     '<th>Name</th><th>Email</th><th>Description</th>' +
     '<th></th>\n' +
