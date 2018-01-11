@@ -31,16 +31,22 @@ function registerExpert() {
     var description = $("#expertDescription").val();
     var secret = getSecret();
 
-    $.post(contextPath + "/expert",
-        {
-            'name': name,
-            'address': address,
-            'emailAddress': emailAddress,
-            'keyWords': keywords,
-            'description': description,
-            'secret': secret
+    var expertData = JSON.stringify({'name': name,
+                               'address': address,
+                               'emailAddress': emailAddress,
+                               'keyWords': keywords,
+                               'description': description,
+                               'secret': secret});
+
+    $.ajax({
+        url: contextPath + "/expert",
+        type: 'post',
+        data: expertData,
+        headers: {
+            'Content-Type': 'application/json'
         },
-        function(data) {
+        dataType: 'json',
+        success: function (data) {
             contractInstance.registerExpert(name, secret, {from: address},
                 function(error, result) {
                     if(error) {
@@ -71,10 +77,10 @@ function registerExpert() {
                     }
                 }
             )
+        },
+        error: function (error) {
+            handleError(error);
         }
-    )
-    .fail(function(error) {
-        handleError(error);
     });
 }
 

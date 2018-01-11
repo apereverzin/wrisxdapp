@@ -1,7 +1,7 @@
 package com.wrisx.wrisxdapp.client.controller;
 
 import com.wrisx.wrisxdapp.client.service.ClientService;
-import com.wrisx.wrisxdapp.data.ClientData;
+import com.wrisx.wrisxdapp.data.response.ClientData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

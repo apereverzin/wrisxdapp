@@ -1,6 +1,6 @@
 package com.wrisx.wrisxdapp.enquirybid.controller;
 
-import com.wrisx.wrisxdapp.data.EnquiryBidData;
+import com.wrisx.wrisxdapp.data.response.EnquiryBidData;
 import com.wrisx.wrisxdapp.enquirybid.service.EnquiryBidService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

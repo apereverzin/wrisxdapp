@@ -1,6 +1,6 @@
 package com.wrisx.wrisxdapp.research.controller;
 
-import com.wrisx.wrisxdapp.data.ResearchData;
+import com.wrisx.wrisxdapp.data.response.ResearchData;
 import com.wrisx.wrisxdapp.research.data.ResearchFile;
 import com.wrisx.wrisxdapp.research.service.ResearchService;
 import org.slf4j.Logger;

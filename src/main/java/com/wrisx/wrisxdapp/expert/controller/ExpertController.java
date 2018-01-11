@@ -1,6 +1,7 @@
 package com.wrisx.wrisxdapp.expert.controller;
 
-import com.wrisx.wrisxdapp.data.ExpertData;
+import com.wrisx.wrisxdapp.data.request.ExpertRequest;
+import com.wrisx.wrisxdapp.data.response.ExpertData;
 import com.wrisx.wrisxdapp.expert.service.ExpertService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -17,6 +19,7 @@ import java.util.List;
 
 import static java.util.stream.Collectors.toList;
 import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
@@ -33,17 +36,11 @@ public class ExpertController {
         this.expertService = expertService;
     }
 
-    @RequestMapping(value = "/expert", method = POST)
-    public ResponseEntity<?> createExpert(
-            @RequestParam("address") String address,
-            @RequestParam("name") String name,
-            @RequestParam("emailAddress") String emailAddress,
-            @RequestParam("keyWords") String keyWords,
-            @RequestParam("description") String description,
-            @RequestParam("secret") String secret) {
-        logger.debug(MessageFormat.format("Creating expert {0}", address));
+    @RequestMapping(value = "/expert", method = POST, consumes = APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> createExpert(@RequestBody ExpertRequest expertRequest) {
+        logger.debug(MessageFormat.format("Creating expert {0}", expertRequest.getAddress()));
 
-        expertService.createExpert(address, name, emailAddress, keyWords, description, secret);
+        expertService.createExpert(expertRequest);
 
         return new ResponseEntity<>(OK);
     }
@@ -53,9 +50,9 @@ public class ExpertController {
             @PathVariable String expertAddress) {
         logger.debug(MessageFormat.format("Getting expert {0}", expertAddress));
 
-        ExpertData expert = expertService.getExpert(expertAddress);
+        ExpertData expertData = expertService.getExpert(expertAddress);
 
-        return new ResponseEntity<>(expert, OK);
+        return new ResponseEntity<>(expertData, OK);
     }
 
     @RequestMapping(value = "/expert/{expertAddress}", method = DELETE)

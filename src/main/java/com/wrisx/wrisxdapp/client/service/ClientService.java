@@ -1,7 +1,7 @@
 package com.wrisx.wrisxdapp.client.service;
 
 import com.wrisx.wrisxdapp.common.EntityProvider;
-import com.wrisx.wrisxdapp.data.ClientData;
+import com.wrisx.wrisxdapp.data.response.ClientData;
 import com.wrisx.wrisxdapp.domain.Client;
 import com.wrisx.wrisxdapp.domain.ClientDao;
 import com.wrisx.wrisxdapp.domain.User;

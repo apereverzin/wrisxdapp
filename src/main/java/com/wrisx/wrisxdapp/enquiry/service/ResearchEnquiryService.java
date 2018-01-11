@@ -1,8 +1,8 @@
 package com.wrisx.wrisxdapp.enquiry.service;
 
 import com.wrisx.wrisxdapp.common.EntityProvider;
-import com.wrisx.wrisxdapp.data.EnquiryBidData;
-import com.wrisx.wrisxdapp.data.ResearchEnquiryData;
+import com.wrisx.wrisxdapp.data.response.EnquiryBidData;
+import com.wrisx.wrisxdapp.data.response.ResearchEnquiryData;
 import com.wrisx.wrisxdapp.domain.Client;
 import com.wrisx.wrisxdapp.domain.EnquiryBid;
 import com.wrisx.wrisxdapp.domain.EnquiryBidDao;

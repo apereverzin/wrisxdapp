@@ -1,6 +1,6 @@
 package com.wrisx.wrisxdapp.purchase.controler;
 
-import com.wrisx.wrisxdapp.data.PurchaseData;
+import com.wrisx.wrisxdapp.data.response.PurchaseData;
 import com.wrisx.wrisxdapp.purchase.service.PurchaseService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

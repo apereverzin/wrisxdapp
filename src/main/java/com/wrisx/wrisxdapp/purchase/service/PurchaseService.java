@@ -1,7 +1,7 @@
 package com.wrisx.wrisxdapp.purchase.service;
 
 import com.wrisx.wrisxdapp.common.EntityProvider;
-import com.wrisx.wrisxdapp.data.PurchaseData;
+import com.wrisx.wrisxdapp.data.response.PurchaseData;
 import com.wrisx.wrisxdapp.domain.Client;
 import com.wrisx.wrisxdapp.domain.Expert;
 import com.wrisx.wrisxdapp.domain.Purchase;

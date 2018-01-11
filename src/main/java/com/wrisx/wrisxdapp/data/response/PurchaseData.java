@@ -1,4 +1,4 @@
-package com.wrisx.wrisxdapp.data;
+package com.wrisx.wrisxdapp.data.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.wrisx.wrisxdapp.domain.Purchase;

@@ -39,7 +39,7 @@ public class EntityProvider {
         Expert expert = expertDao.findByAddress(expertAddress);
 
         if (expert == null) {
-            throwNotFoundException(MessageFormat.format("Expert not found {0}", expertAddress));
+            throwNotFoundException(MessageFormat.format("ExpertData not found {0}", expertAddress));
         }
 
         return expert;
@@ -53,7 +53,7 @@ public class EntityProvider {
 
         if (expert == null) {
             throwNotFoundException(MessageFormat.format(
-                    "Expert not found {0} {1}", expertAddress, transactionHash));
+                    "ExpertData not found {0} {1}", expertAddress, transactionHash));
         }
 
         return expert;

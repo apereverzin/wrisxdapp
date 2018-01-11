@@ -1,13 +1,14 @@
 package com.wrisx.wrisxdapp.expert.service;
 
 import com.wrisx.wrisxdapp.common.EntityProvider;
-import com.wrisx.wrisxdapp.data.ExpertData;
+import com.wrisx.wrisxdapp.data.response.ExpertData;
 import com.wrisx.wrisxdapp.domain.Expert;
 import com.wrisx.wrisxdapp.domain.ExpertDao;
 import com.wrisx.wrisxdapp.domain.User;
 import com.wrisx.wrisxdapp.domain.UserDao;
 import com.wrisx.wrisxdapp.errorhandling.BadRequestException;
 import com.wrisx.wrisxdapp.errorhandling.ResourceNotFoundException;
+import com.wrisx.wrisxdapp.data.request.ExpertRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,27 +43,28 @@ public class ExpertService {
         this.entityProvider = entityProvider;
     }
 
-    public ExpertData createExpert(String expertAddress, String name,
-                                   String emailAddress, String expertKeywords,
-                                   String description, String secret) {
-        validateStringArgument(expertAddress, "Address cannot be empty");
-        validateStringArguments(name, emailAddress, expertKeywords, description, secret);
+    public ExpertData createExpert(ExpertRequest expertRequest) {
+        validateStringArgument(expertRequest.getAddress(), "Address cannot be empty");
+        validateStringArguments(expertRequest.getName(), expertRequest.getEmailAddress(),
+                expertRequest.getEmailAddress(), expertRequest.getDescription(), expertRequest.getSecret());
 
-        Expert expert = expertDao.findByAddress(expertAddress);
+        Expert expert = expertDao.findByAddress(expertRequest.getAddress());
 
         if (expert == null) {
-            User user = userDao.findByAddress(expertAddress);
+            User user = userDao.findByAddress(expertRequest.getAddress());
             if (user == null) {
-                user = new User(expertAddress, name, emailAddress, secret);
+                user = new User(expertRequest.getAddress(), expertRequest.getName(),
+                        expertRequest.getEmailAddress(), expertRequest.getSecret());
                 user = userDao.save(user);
             }
 
-            expert = new Expert(expertAddress, expertKeywords, description, user);
+            expert = new Expert(expertRequest.getAddress(), expertRequest.getKeyWords(),
+                    expertRequest.getDescription(), user);
             expert = expertDao.save(expert);
             return new ExpertData(expert);
         }
 
-        String msg = MessageFormat.format("Expert already exists {0}", expertAddress);
+        String msg = MessageFormat.format("ExpertRequest already exists {0}", expertRequest.getAddress());
         logger.error(msg);
         throw new BadRequestException(msg);
     }

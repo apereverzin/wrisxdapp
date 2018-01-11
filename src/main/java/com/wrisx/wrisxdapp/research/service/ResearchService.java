@@ -3,7 +3,7 @@ package com.wrisx.wrisxdapp.research.service;
 import com.wrisx.wrisxdapp.common.DigestProvider;
 import com.wrisx.wrisxdapp.common.EntityProvider;
 import com.wrisx.wrisxdapp.common.RandomStringProvider;
-import com.wrisx.wrisxdapp.data.ResearchData;
+import com.wrisx.wrisxdapp.data.response.ResearchData;
 import com.wrisx.wrisxdapp.domain.*;
 import com.wrisx.wrisxdapp.errorhandling.BadRequestException;
 import com.wrisx.wrisxdapp.errorhandling.ResourceNotFoundException;

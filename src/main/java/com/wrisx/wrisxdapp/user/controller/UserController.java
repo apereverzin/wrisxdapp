@@ -1,6 +1,6 @@
 package com.wrisx.wrisxdapp.user.controller;
 
-import com.wrisx.wrisxdapp.data.UserData;
+import com.wrisx.wrisxdapp.data.response.UserData;
 import com.wrisx.wrisxdapp.domain.User;
 import com.wrisx.wrisxdapp.domain.UserDao;
 import com.wrisx.wrisxdapp.user.service.UserService;

@@ -1,6 +1,6 @@
 package com.wrisx.wrisxdapp.enquiry.controller;
 
-import com.wrisx.wrisxdapp.data.ResearchEnquiryData;
+import com.wrisx.wrisxdapp.data.response.ResearchEnquiryData;
 import com.wrisx.wrisxdapp.enquiry.service.ResearchEnquiryService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
