@@ -1,6 +1,7 @@
 package com.wrisx.wrisxdapp.expert.service;
 
 import com.wrisx.wrisxdapp.common.EntityProvider;
+import com.wrisx.wrisxdapp.data.request.ExpertRequest;
 import com.wrisx.wrisxdapp.data.response.ExpertData;
 import com.wrisx.wrisxdapp.domain.Expert;
 import com.wrisx.wrisxdapp.domain.ExpertDao;
@@ -8,7 +9,7 @@ import com.wrisx.wrisxdapp.domain.User;
 import com.wrisx.wrisxdapp.domain.UserDao;
 import com.wrisx.wrisxdapp.errorhandling.BadRequestException;
 import com.wrisx.wrisxdapp.errorhandling.ResourceNotFoundException;
-import com.wrisx.wrisxdapp.data.request.ExpertRequest;
+import com.wrisx.wrisxdapp.user.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,13 +33,15 @@ public class ExpertService {
     private final Logger logger = LoggerFactory.getLogger(ExpertService.class);
 
     private final ExpertDao expertDao;
+    private final UserService userService;
     private final UserDao userDao;
     private final EntityProvider entityProvider;
 
     @Autowired
-    public ExpertService(ExpertDao expertDao, UserDao userDao,
+    public ExpertService(ExpertDao expertDao, UserService userService, UserDao userDao,
                          EntityProvider entityProvider) {
         this.expertDao = expertDao;
+        this.userService = userService;
         this.userDao = userDao;
         this.entityProvider = entityProvider;
     }
@@ -46,7 +49,8 @@ public class ExpertService {
     public ExpertData createExpert(ExpertRequest expertRequest) {
         validateStringArgument(expertRequest.getAddress(), "Address cannot be empty");
         validateStringArguments(expertRequest.getName(), expertRequest.getEmailAddress(),
-                expertRequest.getEmailAddress(), expertRequest.getDescription(), expertRequest.getSecret());
+                expertRequest.getKeyWords(), expertRequest.getDescription(),
+                expertRequest.getSecret());
 
         Expert expert = expertDao.findByAddress(expertRequest.getAddress());
 
@@ -61,6 +65,7 @@ public class ExpertService {
             expert = new Expert(expertRequest.getAddress(), expertRequest.getKeyWords(),
                     expertRequest.getDescription(), user);
             expert = expertDao.save(expert);
+
             return new ExpertData(expert);
         }
 
@@ -79,6 +84,8 @@ public class ExpertService {
         Expert expert = entityProvider.getExpertByAddress(expertAddress);
 
         expertDao.delete(expert);
+
+        userService.deleteUserIfPossible(expertAddress);
     }
 
     public void confirmExpertCreation(String clientAddress, String transactionHash)

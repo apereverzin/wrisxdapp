@@ -1,6 +1,7 @@
 package com.wrisx.wrisxdapp.client.controller;
 
 import com.wrisx.wrisxdapp.client.service.ClientService;
+import com.wrisx.wrisxdapp.data.request.ClientRequest;
 import com.wrisx.wrisxdapp.data.response.ClientData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -35,15 +37,10 @@ public class ClientController {
     }
 
     @RequestMapping(value = "/client", method = POST)
-    public ResponseEntity<Void> createClient(
-            @RequestParam("address") String address,
-            @RequestParam("name") String name,
-            @RequestParam("emailAddress") String emailAddress,
-            @RequestParam("description") String description,
-            @RequestParam("secret") String secret) {
-        logger.debug(MessageFormat.format("Creating client {0}", address));
+    public ResponseEntity<Void> createClient(@RequestBody ClientRequest clientRequest) {
+        logger.debug(MessageFormat.format("Creating client {0}", clientRequest.getAddress()));
 
-        clientService.createClient(address, name, emailAddress, description, secret);
+        clientService.createClient(clientRequest);
 
         return new ResponseEntity<>(CREATED);
     }

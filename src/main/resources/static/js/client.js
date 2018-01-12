@@ -52,51 +52,56 @@ function registerClient() {
     var description = $("#clientDescription").val();
     var secret = getSecret();
 
-    $.post(contextPath + "/client",
-        {
-            'address': address,
-            'name': name,
-            'emailAddress': emailAddress,
-            'description': description,
-            'secret': secret
+    var clientData = JSON.stringify({'name': name,
+                               'address': address,
+                               'emailAddress': emailAddress,
+                               'description': description,
+                               'secret': secret});
+
+    $.ajax({
+        url: contextPath + '/client',
+        type: 'post',
+        data: clientData,
+        headers: {
+            'Content-Type': 'application/json'
         },
-        function(data) {
+        success: function (data) {
             contractInstance.registerClient(name, secret, {from: address},
-                    function(error, result) {
-                        if(error) {
-                            console.log(error)
-                            $.delete(contextPath + "/client/" + address,
-                                function(data) {
-                                    showMemberData()
-                                    showMemberBalance()
-                                }
-                            )
-                            .fail(function(error) {
-                                handleError(error);
-                            });
-                        } else {
-                            $.put(contextPath + "/client/" + address + "/confirm",
-                                {
-                                    'transactionHash': result
-                                }
-                            )
-                            .fail(function(error) {
-                                handleError(error);
-                            });
-                            $("#clientName").val('')
-                            $("#clientEmailAddress").val('')
-                            $("#clientDescription").val('')
-                            showMemberData()
-                            showMemberBalance()
-                            showClientRoleTab()
-                            waitForTransactionToBeMined(result, clientRegistered, result)
-                        }
+                function(error, result) {
+                    if(error) {
+                        console.log(error);
+                        $.delete(contextPath + "/client/" + address,
+                            function(data) {
+                                showMemberData();
+                                showMemberBalance();
+                            }
+                        )
+                        .fail(function(error) {
+                            handleError(error);
+                        });
+                    } else {
+                        $.put(contextPath + "/client/" + address + "/confirm",
+                            {
+                                'transactionHash': result
+                            }
+                        )
+                        .fail(function(error) {
+                            handleError(error);
+                        });
+                        $("#clientName").val('');
+                        $("#clientEmailAddress").val('');
+                        $("#clientDescription").val('');
+                        showMemberData();
+                        showMemberBalance();
+                        showClientRoleTab();
+                        waitForTransactionToBeMined(result, clientRegistered, result);
                     }
+                }
             )
+        },
+        error: function(error) {
+            handleError(error);
         }
-    )
-    .fail(function(error) {
-        handleError(error);
     });
 }
 

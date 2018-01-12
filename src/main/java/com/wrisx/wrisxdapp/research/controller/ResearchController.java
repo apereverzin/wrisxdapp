@@ -1,5 +1,6 @@
 package com.wrisx.wrisxdapp.research.controller;
 
+import com.wrisx.wrisxdapp.data.request.ResearchRequest;
 import com.wrisx.wrisxdapp.data.response.ResearchData;
 import com.wrisx.wrisxdapp.research.data.ResearchFile;
 import com.wrisx.wrisxdapp.research.service.ResearchService;
@@ -13,6 +14,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttribute;
@@ -30,6 +32,7 @@ import static com.wrisx.wrisxdapp.user.controller.UserController.USER_AUTHORISED
 import static com.wrisx.wrisxdapp.util.WrisxUtil.verifyUserAuthorisation;
 import static java.util.stream.Collectors.toList;
 import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
@@ -57,25 +60,12 @@ public class ResearchController {
         return new ResponseEntity<>(researchFile, OK);
     }
 
-    @RequestMapping(value = "/research", method = POST)
-    public ResponseEntity<?> setFileAttributes(
-            @RequestParam("address") String expertAddress,
-            @RequestParam("uuid") String uuid,
-            @RequestParam("price") int price,
-            @RequestParam("title") String title,
-            @RequestParam("description") String description,
-            @RequestParam("keywords") String keywords,
-            @RequestParam("checksum") String checksum,
-            @RequestParam("password") String password,
-            @RequestParam("clientAddress") String clientAddress,
-            @RequestParam("enquiryId") long enquiryId,
-            @RequestParam("bidId") long bidId) {
-        logger.debug(MessageFormat.format("Setting file attributes {0}", title));
+    @RequestMapping(value = "/research", method = POST, consumes = APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> setFileAttributes(@RequestBody ResearchRequest researchRequest) {
+        logger.debug(MessageFormat.format("Setting file attributes {0}", researchRequest.getTitle()));
 
-        ResearchData research =
-                researchService.saveResearch(expertAddress, uuid, price, title,
-                        description, keywords, checksum, password,
-                        clientAddress, enquiryId, bidId);
+        ResearchData research = researchService.saveResearch(researchRequest);
+
         return new ResponseEntity<>(research, OK);
     }
 

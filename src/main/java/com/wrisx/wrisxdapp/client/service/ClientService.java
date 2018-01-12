@@ -1,6 +1,7 @@
 package com.wrisx.wrisxdapp.client.service;
 
 import com.wrisx.wrisxdapp.common.EntityProvider;
+import com.wrisx.wrisxdapp.data.request.ClientRequest;
 import com.wrisx.wrisxdapp.data.response.ClientData;
 import com.wrisx.wrisxdapp.domain.Client;
 import com.wrisx.wrisxdapp.domain.ClientDao;
@@ -8,6 +9,7 @@ import com.wrisx.wrisxdapp.domain.User;
 import com.wrisx.wrisxdapp.domain.UserDao;
 import com.wrisx.wrisxdapp.errorhandling.BadRequestException;
 import com.wrisx.wrisxdapp.errorhandling.ResourceNotFoundException;
+import com.wrisx.wrisxdapp.user.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,38 +31,42 @@ public class ClientService {
     private final Logger logger = LoggerFactory.getLogger(ClientService.class);
 
     private final ClientDao clientDao;
+    private final UserService userService;
     private final UserDao userDao;
     private final EntityProvider entityProvider;
 
     @Autowired
-    public ClientService(ClientDao clientDao, UserDao userDao,
+    public ClientService(ClientDao clientDao, UserService userService, UserDao userDao,
                          EntityProvider entityProvider) {
         this.clientDao = clientDao;
+        this.userService = userService;
         this.userDao = userDao;
         this.entityProvider = entityProvider;
     }
 
-    public ClientData createClient(String clientAddress, String name,
-                                   String emailAddress, String description,
-                                   String secret) {
-        validateStringArgument(clientAddress, "Address cannot be empty");
-        validateStringArguments(name, emailAddress, description, secret);
+    public ClientData createClient(ClientRequest clientRequest) {
+        validateStringArgument(clientRequest.getAddress(), "Address cannot be empty");
+        validateStringArguments(clientRequest.getName(), clientRequest.getEmailAddress(),
+                clientRequest.getDescription(), clientRequest.getSecret());
 
-        Client client = clientDao.findByAddress(clientAddress);
+        Client client = clientDao.findByAddress(clientRequest.getAddress());
 
         if (client == null) {
-            User user = userDao.findByAddress(clientAddress);
+            User user = userDao.findByAddress(clientRequest.getAddress());
             if (user == null) {
-                user = new User(clientAddress, name, emailAddress, secret);
+                user = new User(clientRequest.getAddress(), clientRequest.getName(),
+                        clientRequest.getEmailAddress(), clientRequest.getSecret());
                 user = userDao.save(user);
             }
 
-            client = new Client(clientAddress, description, user);
+            client = new Client(clientRequest.getAddress(), clientRequest.getDescription(),
+                    user);
             client = clientDao.save(client);
+
             return new ClientData(client);
         }
 
-        String msg = MessageFormat.format("Client already exists {0}", clientAddress);
+        String msg = MessageFormat.format("Client already exists {0}", clientRequest.getAddress());
         logger.error(msg);
         throw new BadRequestException(msg);
     }
@@ -75,6 +81,8 @@ public class ClientService {
         Client client = entityProvider.getClientByAddress(clientAddress);
 
         clientDao.delete(client);
+
+        userService.deleteUserIfPossible(clientAddress);
     }
 
     public void confirmClientCreation(String clientAddress, String transactionHash)

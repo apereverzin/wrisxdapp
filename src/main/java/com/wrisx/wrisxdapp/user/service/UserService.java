@@ -5,6 +5,7 @@ import com.wrisx.wrisxdapp.common.EntityProvider;
 import com.wrisx.wrisxdapp.common.RandomStringProvider;
 import com.wrisx.wrisxdapp.data.response.UserData;
 import com.wrisx.wrisxdapp.domain.User;
+import com.wrisx.wrisxdapp.domain.UserDao;
 import com.wrisx.wrisxdapp.errorhandling.UnauthorizedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,14 +22,16 @@ public class UserService {
     private static final int NONCE_LENGTH = 10;
 
     private final EntityProvider entityProvider;
+    private final UserDao userDao;
     private final RandomStringProvider randomStringProvider;
     private final DigestProvider digestProvider;
 
     @Autowired
-    public UserService(EntityProvider entityProvider,
+    public UserService(EntityProvider entityProvider, UserDao userDao,
                        RandomStringProvider randomStringProvider,
                        DigestProvider digestProvider) {
         this.entityProvider = entityProvider;
+        this.userDao = userDao;
         this.randomStringProvider = randomStringProvider;
         this.digestProvider = digestProvider;
     }
@@ -37,6 +40,16 @@ public class UserService {
         User user = entityProvider.getUserByAddress(userAddress);
 
         return new UserData(user);
+    }
+
+    public void deleteUserIfPossible(String userAddress) {
+        User user = entityProvider.getUserByAddress(userAddress);
+
+        try {
+            userDao.delete(user);
+        } catch (Exception ex) {
+            //
+        }
     }
 
     public String getNonce() {

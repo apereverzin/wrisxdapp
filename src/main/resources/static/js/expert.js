@@ -31,7 +31,7 @@ function registerExpert() {
     var description = $("#expertDescription").val();
     var secret = getSecret();
 
-    var expertData = JSON.stringify({'name': name,
+    var expertRequest = JSON.stringify({'name': name,
                                'address': address,
                                'emailAddress': emailAddress,
                                'keyWords': keywords,
@@ -39,13 +39,12 @@ function registerExpert() {
                                'secret': secret});
 
     $.ajax({
-        url: contextPath + "/expert",
+        url: contextPath + '/expert',
         type: 'post',
-        data: expertData,
+        data: expertRequest,
         headers: {
             'Content-Type': 'application/json'
         },
-        dataType: 'json',
         success: function (data) {
             contractInstance.registerExpert(name, secret, {from: address},
                 function(error, result) {
@@ -78,7 +77,7 @@ function registerExpert() {
                 }
             )
         },
-        error: function (error) {
+        error: function(error) {
             handleError(error);
         }
     });
@@ -112,22 +111,28 @@ function depositResearch() {
 
     var researchFile = uploadResearchFile();
 
-    $.post(contextPath + "/research",
-        {
-            'address': address,
-            'uuid': researchFile.uuid,
-            'price': price,
-            'title': title,
-            'description': description,
-            'keywords': keywords,
-            'checksum': researchFile.zipFileChecksumMD5,
-            'password': researchFile.password,
+    var researchRequest = JSON.stringify({
+                                          'expertAddress': address,
+                                          'uuid': researchFile.uuid,
+                                          'price': price,
+                                          'title': title,
+                                          'description': description,
+                                          'keywords': keywords,
+                                          'checksum': researchFile.zipFileChecksumMD5,
+                                          'password': researchFile.password,
+                                          'clientAddress': 0,
+                                          'enquiryId': 0,
+                                          'bidId': 0
+                                         });
 
-            'clientAddress': 0,
-            'enquiryId': 0,
-            'bidId': 0,
+    $.ajax({
+        url: contextPath + '/research',
+        type: 'post',
+        data: researchRequest,
+        headers: {
+            'Content-Type': 'application/json'
         },
-        function(data) {
+        success: function (data) {
             contractInstance.depositResearch(price,
                                              researchFile.uuid,
                                              researchFile.password,
@@ -168,10 +173,10 @@ function depositResearch() {
                     }
                 }
             );
+        },
+        error: function(error) {
+            handleError(error);
         }
-    )
-    .fail(function(error) {
-        handleError(error);
     });
 }
 
@@ -203,22 +208,28 @@ function depositEnquiryBidResearch(clientAddress, enquiryId, bidId) {
 
     var researchFile = uploadBidFile();
 
-    $.post(contextPath + "/research",
-        {
-            'address': address,
-            'uuid': researchFile.uuid,
-            'price': price,
-            'title': title,
-            'description': description,
-            'keywords': keywords,
-            'checksum': researchFile.zipFileChecksumMD5,
-            'password': researchFile.password,
+    var researchRequest = JSON.stringify({
+                                          'expertAddress': address,
+                                          'uuid': researchFile.uuid,
+                                          'price': price,
+                                          'title': title,
+                                          'description': description,
+                                          'keywords': keywords,
+                                          'checksum': researchFile.zipFileChecksumMD5,
+                                          'password': researchFile.password,
+                                          'clientAddress': clientAddress,
+                                          'enquiryId': enquiryId,
+                                          'bidId': bidId
+                                         });
 
-            'clientAddress': clientAddress,
-            'enquiryId': enquiryId,
-            'bidId': bidId,
+    $.ajax({
+        url: contextPath + '/research',
+        type: 'post',
+        data: researchRequest,
+        headers: {
+            'Content-Type': 'application/json'
         },
-        function(data) {
+        success: function (data) {
             contractInstance.depositResearch(price,
                                              researchFile.uuid,
                                              researchFile.password,
@@ -259,10 +270,10 @@ function depositEnquiryBidResearch(clientAddress, enquiryId, bidId) {
                     }
                 }
             );
+        },
+        error: function(error) {
+            handleError(error);
         }
-    )
-    .fail(function(error) {
-        handleError(error);
     });
 }
 

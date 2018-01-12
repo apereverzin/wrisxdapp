@@ -3,6 +3,7 @@ package com.wrisx.wrisxdapp.research.service;
 import com.wrisx.wrisxdapp.common.DigestProvider;
 import com.wrisx.wrisxdapp.common.EntityProvider;
 import com.wrisx.wrisxdapp.common.RandomStringProvider;
+import com.wrisx.wrisxdapp.data.request.ResearchRequest;
 import com.wrisx.wrisxdapp.data.response.ResearchData;
 import com.wrisx.wrisxdapp.domain.*;
 import com.wrisx.wrisxdapp.errorhandling.BadRequestException;
@@ -95,32 +96,21 @@ public class ResearchService {
     }
 
     @Transactional
-    public ResearchData saveResearch(String expertAddress,
-                                     String uuid,
-                                     int price,
-                                     String title,
-                                     String description,
-                                     String keywords,
-                                     String checksum,
-                                     String password,
-                                     String clientAddress,
-                                     long enquiryId,
-                                     long bidId) throws ResourceNotFoundException {
-        Research research =
-                saveResearch(expertAddress, uuid, price, title,
-                        description, keywords, checksum, password);
+    public ResearchData saveResearch(ResearchRequest researchRequest)
+            throws ResourceNotFoundException {
+        Research research = createResearch(researchRequest);
 
-        if (bidId > 0) {
-            EnquiryBid enquiryBid = enquiryBidDao.findOne(bidId);
+        if (researchRequest.getBidId() > 0) {
+            EnquiryBid enquiryBid = enquiryBidDao.findOne(researchRequest.getBidId());
 
             if (enquiryBid == null) {
                 throw new ResourceNotFoundException(MessageFormat.format(
-                        "Bid not found {0}", bidId));
+                        "Bid not found {0}", researchRequest.getBidId()));
             }
 
-            updateEnquiryBid(enquiryId, enquiryBid, research);
+            updateEnquiryBid(researchRequest.getEnquiryId(), enquiryBid, research);
 
-            Client client = entityProvider.getClientByAddress(clientAddress);
+            Client client = entityProvider.getClientByAddress(researchRequest.getClientAddress());
 
             purchaseService.createPurchase(client, research, enquiryBid.getPrice());
         }
@@ -248,14 +238,12 @@ public class ResearchService {
         return new File(filepath);
     }
 
-    private Research saveResearch(String expertAddress, String uuid, int price,
-                                  String title, String description, String keywords,
-                                  String checksum, String password)
+    private Research createResearch(ResearchRequest researchRequest)
             throws ResourceNotFoundException {
-        Expert expert = entityProvider.getExpertByAddress(expertAddress);
+        Expert expert = entityProvider.getExpertByAddress(researchRequest.getExpertAddress());
 
-        Research research = new Research(uuid, price, title, description,
-                keywords, checksum, password, expert);
+        Research research = new Research(researchRequest.getUuid(), researchRequest.getPrice(), researchRequest.getTitle(), researchRequest.getDescription(),
+                researchRequest.getKeywords(), researchRequest.getChecksum(), researchRequest.getPassword(), expert);
         research = researchDao.save(research);
 
         return research;
