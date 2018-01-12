@@ -1,6 +1,7 @@
 package com.wrisx.wrisxdapp.enquiry.service;
 
 import com.wrisx.wrisxdapp.common.EntityProvider;
+import com.wrisx.wrisxdapp.data.request.ResearchEnquiryRequest;
 import com.wrisx.wrisxdapp.data.response.EnquiryBidData;
 import com.wrisx.wrisxdapp.data.response.ResearchEnquiryData;
 import com.wrisx.wrisxdapp.domain.Client;
@@ -39,13 +40,13 @@ public class ResearchEnquiryService {
         this.entityProvider = entityProvider;
     }
 
-    public ResearchEnquiryData saveEnquiry(String clientAddress, String keywords,
-                                           String description)
+    public ResearchEnquiryData saveEnquiry(ResearchEnquiryRequest researchEnquiryRequest)
             throws ResourceNotFoundException {
-        Client client = entityProvider.getClientByAddress(clientAddress);
+        Client client = entityProvider.getClientByAddress(researchEnquiryRequest.getAddress());
 
         ResearchEnquiry researchEnquiry =
-                new ResearchEnquiry(client, keywords, description);
+                new ResearchEnquiry(client, researchEnquiryRequest.getKeywords(),
+                        researchEnquiryRequest.getDescription());
 
         return new ResearchEnquiryData(researchEnquiryDao.save(researchEnquiry));
     }

@@ -52,11 +52,13 @@ function registerClient() {
     var description = $("#clientDescription").val();
     var secret = getSecret();
 
-    var clientData = JSON.stringify({'name': name,
-                               'address': address,
-                               'emailAddress': emailAddress,
-                               'description': description,
-                               'secret': secret});
+    var clientData = JSON.stringify({
+                                     'name': name,
+                                     'address': address,
+                                     'emailAddress': emailAddress,
+                                     'description': description,
+                                     'secret': secret
+                                     });
 
     $.ajax({
         url: contextPath + '/client',
@@ -366,20 +368,27 @@ function postEnquiry() {
 
     address = getAddress();
 
-    $.post(contextPath + "/enquiry",
-        {
-            'address': address,
-            'keywords': keywords,
-            'description': description
+    var enquiryData = JSON.stringify({
+                                      'address': address,
+                                      'keywords': keywords,
+                                      'description': description
+                                     });
+
+    $.ajax({
+        url: contextPath + '/enquiry',
+        type: 'post',
+        data: enquiryData,
+        headers: {
+            'Content-Type': 'application/json'
         },
-        function(data) {
-            $("#clientEnquiryKeywords").val('')
-            $("#clientEnquiryDescription").val('')
-            getClientEnquiries()
+        success: function (data) {
+            $("#clientEnquiryKeywords").val('');
+            $("#clientEnquiryDescription").val('');
+            getClientEnquiries();
+        },
+        error: function(error) {
+            handleError(error);
         }
-    )
-    .fail(function(error) {
-        handleError(error);
     });
 }
 

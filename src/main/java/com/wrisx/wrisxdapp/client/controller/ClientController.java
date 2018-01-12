@@ -20,6 +20,7 @@ import java.util.List;
 import static java.util.stream.Collectors.toList;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
@@ -36,7 +37,7 @@ public class ClientController {
         this.clientService = clientService;
     }
 
-    @RequestMapping(value = "/client", method = POST)
+    @RequestMapping(value = "/client", method = POST, consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> createClient(@RequestBody ClientRequest clientRequest) {
         logger.debug(MessageFormat.format("Creating client {0}", clientRequest.getAddress()));
 

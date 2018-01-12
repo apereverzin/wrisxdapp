@@ -1,5 +1,6 @@
 package com.wrisx.wrisxdapp.enquiry.controller;
 
+import com.wrisx.wrisxdapp.data.request.ResearchEnquiryRequest;
 import com.wrisx.wrisxdapp.data.response.ResearchEnquiryData;
 import com.wrisx.wrisxdapp.enquiry.service.ResearchEnquiryService;
 import org.slf4j.Logger;
@@ -9,14 +10,15 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.text.MessageFormat;
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
 import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
@@ -31,15 +33,14 @@ public class ResearchEnquiryController {
         this.researchEnquiryService = researchEnquiryService;
     }
 
-    @RequestMapping(value = "/enquiry", method = POST)
+    @RequestMapping(value = "/enquiry", method = POST, consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<ResearchEnquiryData> createEnquiry(
-            @RequestParam("address") String address,
-            @RequestParam("keywords") String keywords,
-            @RequestParam("description") String description) {
-        logger.debug(MessageFormat.format("Creating research enquiry {0}", keywords));
+            @RequestBody ResearchEnquiryRequest researchEnquiryRequest) {
+        logger.debug(MessageFormat.format("Creating research enquiry {0}",
+                researchEnquiryRequest.getKeywords()));
 
         ResearchEnquiryData researchEnquiry =
-                researchEnquiryService.saveEnquiry(address, keywords, description);
+                researchEnquiryService.saveEnquiry(researchEnquiryRequest);
 
         return new ResponseEntity<>(researchEnquiry, OK);
     }

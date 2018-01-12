@@ -49,7 +49,7 @@ public class ExpertService {
     public ExpertData createExpert(ExpertRequest expertRequest) {
         validateStringArgument(expertRequest.getAddress(), "Address cannot be empty");
         validateStringArguments(expertRequest.getName(), expertRequest.getEmailAddress(),
-                expertRequest.getKeyWords(), expertRequest.getDescription(),
+                expertRequest.getKeywords(), expertRequest.getDescription(),
                 expertRequest.getSecret());
 
         Expert expert = expertDao.findByAddress(expertRequest.getAddress());
@@ -62,7 +62,7 @@ public class ExpertService {
                 user = userDao.save(user);
             }
 
-            expert = new Expert(expertRequest.getAddress(), expertRequest.getKeyWords(),
+            expert = new Expert(expertRequest.getAddress(), expertRequest.getKeywords(),
                     expertRequest.getDescription(), user);
             expert = expertDao.save(expert);
 

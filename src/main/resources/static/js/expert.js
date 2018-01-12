@@ -31,17 +31,19 @@ function registerExpert() {
     var description = $("#expertDescription").val();
     var secret = getSecret();
 
-    var expertRequest = JSON.stringify({'name': name,
-                               'address': address,
-                               'emailAddress': emailAddress,
-                               'keyWords': keywords,
-                               'description': description,
-                               'secret': secret});
+    var expertRequestData = JSON.stringify({
+                                            'name': name,
+                                            'address': address,
+                                            'emailAddress': emailAddress,
+                                            'keywords': keywords,
+                                            'description': description,
+                                            'secret': secret
+                                            });
 
     $.ajax({
         url: contextPath + '/expert',
         type: 'post',
-        data: expertRequest,
+        data: expertRequestData,
         headers: {
             'Content-Type': 'application/json'
         },
@@ -111,24 +113,24 @@ function depositResearch() {
 
     var researchFile = uploadResearchFile();
 
-    var researchRequest = JSON.stringify({
-                                          'expertAddress': address,
-                                          'uuid': researchFile.uuid,
-                                          'price': price,
-                                          'title': title,
-                                          'description': description,
-                                          'keywords': keywords,
-                                          'checksum': researchFile.zipFileChecksumMD5,
-                                          'password': researchFile.password,
-                                          'clientAddress': 0,
-                                          'enquiryId': 0,
-                                          'bidId': 0
-                                         });
+    var researchRequestData = JSON.stringify({
+                                              'expertAddress': address,
+                                              'uuid': researchFile.uuid,
+                                              'price': price,
+                                              'title': title,
+                                              'description': description,
+                                              'keywords': keywords,
+                                              'checksum': researchFile.zipFileChecksumMD5,
+                                              'password': researchFile.password,
+                                              'clientAddress': 0,
+                                              'enquiryId': 0,
+                                              'bidId': 0
+                                             });
 
     $.ajax({
         url: contextPath + '/research',
         type: 'post',
-        data: researchRequest,
+        data: researchRequestData,
         headers: {
             'Content-Type': 'application/json'
         },
@@ -208,24 +210,24 @@ function depositEnquiryBidResearch(clientAddress, enquiryId, bidId) {
 
     var researchFile = uploadBidFile();
 
-    var researchRequest = JSON.stringify({
-                                          'expertAddress': address,
-                                          'uuid': researchFile.uuid,
-                                          'price': price,
-                                          'title': title,
-                                          'description': description,
-                                          'keywords': keywords,
-                                          'checksum': researchFile.zipFileChecksumMD5,
-                                          'password': researchFile.password,
-                                          'clientAddress': clientAddress,
-                                          'enquiryId': enquiryId,
-                                          'bidId': bidId
-                                         });
+    var researchRequestData = JSON.stringify({
+                                              'expertAddress': address,
+                                              'uuid': researchFile.uuid,
+                                              'price': price,
+                                              'title': title,
+                                              'description': description,
+                                              'keywords': keywords,
+                                              'checksum': researchFile.zipFileChecksumMD5,
+                                              'password': researchFile.password,
+                                              'clientAddress': clientAddress,
+                                              'enquiryId': enquiryId,
+                                              'bidId': bidId
+                                             });
 
     $.ajax({
         url: contextPath + '/research',
         type: 'post',
-        data: researchRequest,
+        data: researchRequestData,
         headers: {
             'Content-Type': 'application/json'
         },

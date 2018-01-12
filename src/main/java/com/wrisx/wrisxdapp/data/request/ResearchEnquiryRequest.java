@@ -7,11 +7,8 @@ import lombok.ToString;
 @NoArgsConstructor
 @Getter
 @ToString
-public class ExpertRequest {
+public class ResearchEnquiryRequest {
     private String address;
-    private String name;
-    private String emailAddress;
     private String keywords;
     private String description;
-    private String secret;
 }
