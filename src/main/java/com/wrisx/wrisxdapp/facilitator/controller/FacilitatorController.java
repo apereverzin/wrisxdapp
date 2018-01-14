@@ -7,19 +7,20 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.text.MessageFormat;
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
-import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
-@Controller
+@CrossOrigin
+@RestController
 public class FacilitatorController {
     private final Logger logger = LoggerFactory.getLogger(FacilitatorController.class);
 
@@ -41,7 +42,7 @@ public class FacilitatorController {
 
         facilitatorService.createFacilitator(address, name, emailAddress, description, secret);
 
-        return new ResponseEntity<>(OK);
+        return ResponseEntity.ok().build();
     }
 
     @RequestMapping(value = "/facilitator", method = GET)
@@ -54,6 +55,6 @@ public class FacilitatorController {
                         limit(pageable.getPageSize()).
                         collect(toList());
 
-        return new ResponseEntity<>(facilitators, OK);
+        return ResponseEntity.ok(facilitators);
     }
 }

@@ -9,20 +9,21 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.SessionAttribute;
 
 import javax.servlet.http.HttpServletRequest;
 import java.text.MessageFormat;
 
-import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
-@Controller
+@CrossOrigin
+@RestController
 public class UserController {
     private final Logger logger = LoggerFactory.getLogger(UserController.class);
 
@@ -79,6 +80,6 @@ public class UserController {
 
         UserData user = userService.getUser(userAddress);
 
-        return new ResponseEntity<>(user, OK);
+        return ResponseEntity.ok(user);
     }
 }

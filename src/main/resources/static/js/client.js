@@ -59,9 +59,9 @@ function registerClient() {
                                      'description': description,
                                      'secret': secret
                                      });
-
+    var path = contextPath + '/client';
     $.ajax({
-        url: contextPath + '/client',
+        url: path,
         type: 'post',
         data: clientData,
         headers: {
@@ -82,14 +82,8 @@ function registerClient() {
                             handleError(error);
                         });
                     } else {
-                        $.put(contextPath + "/client/" + address + "/confirm",
-                            {
-                                'transactionHash': result
-                            }
-                        )
-                        .fail(function(error) {
-                            handleError(error);
-                        });
+                        confirmTransaction(contextPath + '/client/' + address + '/confirm',
+                                           result);
                         $("#clientName").val('');
                         $("#clientEmailAddress").val('');
                         $("#clientDescription").val('');
@@ -102,23 +96,31 @@ function registerClient() {
             )
         },
         error: function(error) {
-            handleError(error);
+            handleErrorResponse(path, error);
         }
     });
 }
 
 function clientRegistered(transactionHash) {
-    $.put(contextPath + "/client/commit",
-        {
-            'transactionHash': transactionHash
+    var transactionHashData = JSON.stringify({
+                                              'transactionHash': transactionHash
+                                             });
+    var path = contextPath + '/client/' + address + '/commit';
+    $.ajax({
+        url: path,
+        type: 'put',
+        data: transactionHashData,
+        headers: {
+            'Content-Type': 'application/json'
         },
-        function(data) {
+        success: function(data) {
             showMemberData();
             showMemberBalance();
+            showExpertRoleTab();
+        },
+        error: function(error) {
+            handleErrorResponse(path, error);
         }
-    )
-    .fail(function(error) {
-        handleError(error);
     });
 }
 
@@ -160,35 +162,37 @@ function buyTokens() {
 function payForResearch(uuid) {
     address = getAddress();
 
-    $.post(contextPath + "/purchase",
-        {
-            'address': address,
-            "uuid": uuid
+    var purchaseData = JSON.stringify({
+                                       'address': address,
+                                       'uuid': uuid
+                                      });
+
+    var path = contextPath + '/purchase';
+    $.ajax({
+        url: path,
+        type: 'put',
+        data: purchaseData,
+        headers: {
+            'Content-Type': 'application/json'
         },
-        function(data) {
+        success: function(data) {
             contractInstance.payForResearch(uuid, {from: address},
                 function(error, result) {
                     if(error) {
                         console.log(error);
                         $.delete(contextPath + "/purchase/" + data.id)
                     } else {
-                        $.put(contextPath + "/purchase/" + data.id + "/confirm",
-                            {
-                                'transactionHash': result
-                            }
-                        )
-                        .fail(function(error) {
-                            handleError(error);
-                        });
+                        confirmTransaction(contextPath + '/purchase/' + data.id + '/confirm',
+                                           result);
                         showMemberBalance()
                     }
                 }
             );
+        },
+        error: function(error) {
+            handleErrorResponse(path, error);
         }
-    )
-    .fail(function(error) {
-        handleError(error);
-    })
+    });
 }
 
 function getResearchPassword(fileName) {
@@ -373,9 +377,9 @@ function postEnquiry() {
                                       'keywords': keywords,
                                       'description': description
                                      });
-
+    var path = contextPath + '/enquiry';
     $.ajax({
-        url: contextPath + '/enquiry',
+        url: path,
         type: 'post',
         data: enquiryData,
         headers: {
@@ -387,7 +391,7 @@ function postEnquiry() {
             getClientEnquiries();
         },
         error: function(error) {
-            handleError(error);
+            handleErrorResponse(path, error);
         }
     });
 }
@@ -421,16 +425,17 @@ function placeEnquiry() {
                 expert2 = enquiryBid.expert
                 price2 = enquiryBid.price
             }
-            $.put(contextPath + "/enquiry/bid/" + enquiryBid.bidId + "/select"
+            $.put(
+                contextPath + "/enquiry/bid/" + enquiryBid.bidId + "/select"
             )
             .fail(function(error) {
                 handleError(error);
-            })
+            });
         }
         if (ind == 2) {
-            break
+            break;
         }
-        ind++
+        ind++;
     }
 
     if (ind > 0) {
@@ -452,57 +457,42 @@ function placeEnquiry() {
                         if(error) {
                             console.log(error);
                             if (bidId0 > 0) {
-                                $.put(contextPath + "/enquiry/bid/" + bidId0 + "/unselect"
+                                $.put(
+                                    contextPath + "/enquiry/bid/" + bidId0 + "/unselect"
                                 )
                                 .fail(function(error) {
                                     handleError(error);
                                 });
                             }
                             if (bidId1 > 0) {
-                                $.put(contextPath + "/enquiry/bid/" + bidId1 + "/unselect"
+                                $.put(
+                                    contextPath + "/enquiry/bid/" + bidId1 + "/unselect"
                                 )
                                 .fail(function(error) {
                                     handleError(error);
                                 });
                             }
                             if (bidId2 > 0) {
-                                $.put(contextPath + "/enquiry/bid/" + bidId2 + "/unselect"
+                                $.put(
+                                    contextPath + "/enquiry/bid/" + bidId2 + "/unselect"
                                 )
                                 .fail(function(error) {
                                     handleError(error);
                                 });
                             }
                         } else {
-                            getClientEnquiries()
+                            getClientEnquiries();
                             if (bidId0 > 0) {
-                                $.put(contextPath + "/enquiry/bid/" + bidId0 + "/confirm",
-                                    {
-                                        'transactionHash': result
-                                    }
-                                )
-                                .fail(function(error) {
-                                    handleError(error);
-                                });
+                                confirmTransaction(contextPath + '/enquiry/bid/' + bidId0 + '/confirm',
+                                                   result);
                             }
                             if (bidId1 > 0) {
-                                $.put(contextPath + "/enquiry/bid/" + bidId1 + "/confirm",
-                                    {
-                                        'transactionHash': result
-                                    }
-                                )
-                                .fail(function(error) {
-                                    handleError(error);
-                                });
+                                confirmTransaction(contextPath + '/enquiry/bid/' + bidId1 + '/confirm',
+                                                   result);
                             }
                             if (bidId2 > 0) {
-                                $.put(contextPath + "/enquiry/bid/" + bidId2 + "/confirm",
-                                    {
-                                        'transactionHash': result
-                                    }
-                                )
-                                .fail(function(error) {
-                                    handleError(error);
-                                });
+                                confirmTransaction(contextPath + '/enquiry/bid/' + bidId2 + '/confirm',
+                                                   result);
                             }
                         }
                     }

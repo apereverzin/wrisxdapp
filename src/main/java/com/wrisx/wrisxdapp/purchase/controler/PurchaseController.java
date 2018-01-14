@@ -1,5 +1,7 @@
 package com.wrisx.wrisxdapp.purchase.controler;
 
+import com.wrisx.wrisxdapp.data.request.PurchaseRequest;
+import com.wrisx.wrisxdapp.data.request.TransactionHashRequest;
 import com.wrisx.wrisxdapp.data.response.PurchaseData;
 import com.wrisx.wrisxdapp.purchase.service.PurchaseService;
 import org.slf4j.Logger;
@@ -7,22 +9,24 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.text.MessageFormat;
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
-import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 import static org.springframework.web.bind.annotation.RequestMethod.PUT;
 
-@Controller
+@CrossOrigin
+@RestController
 public class PurchaseController {
     private final Logger logger = LoggerFactory.getLogger(PurchaseController.class);
 
@@ -33,17 +37,16 @@ public class PurchaseController {
         this.purchaseService = purchaseService;
     }
 
-    @RequestMapping(value = "/purchase", method = POST)
+    @RequestMapping(value = "/purchase", method = POST,
+            consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<PurchaseData> payForResearch(
-            @RequestParam("address") String clientAddress,
-            @RequestParam("uuid") String uuid) {
-        logger.debug(MessageFormat.format(
-                "Client {0} is paying for {1}", clientAddress, uuid));
+            @RequestBody PurchaseRequest purchaseRequest) {
+        logger.debug(MessageFormat.format("Client {0} is paying for {1}",
+                purchaseRequest.getAddress(), purchaseRequest.getUuid()));
 
-        PurchaseData purchaseData =
-                purchaseService.createPurchase(clientAddress, uuid);
+        PurchaseData purchase = purchaseService.createPurchase(purchaseRequest);
 
-        return new ResponseEntity<>(purchaseData, OK);
+        return ResponseEntity.ok(purchase);
     }
 
     @RequestMapping(value = "/purchase/{id}", method = DELETE)
@@ -53,30 +56,35 @@ public class PurchaseController {
 
         purchaseService.deletePurchase(purchaseId);
 
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().build();
     }
 
-    @RequestMapping(value = "/purchase/{id}/confirm", method = PUT)
+    @RequestMapping(value = "/purchase/{id}/confirm", method = PUT,
+            consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> confirmResearch(
             @PathVariable("id") long purchaseId,
-            @RequestParam("transactionHash") String transactionHash) {
+            @RequestBody TransactionHashRequest transactionHashRequest) {
         logger.debug(MessageFormat.format("Confirming purchase {0}", purchaseId));
 
-        purchaseService.confirmPurchaseCreation(purchaseId, transactionHash);
+        purchaseService.confirmPurchaseCreation(purchaseId,
+                transactionHashRequest.getTransactionHash());
 
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().build();
     }
 
-    @RequestMapping(value = "/purchase/{id}/commit", method = PUT)
+    @RequestMapping(value = "/purchase/{id}/commit", method = PUT,
+            consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> commitPurchase(
             @PathVariable("id") long purchaseId,
-            @RequestParam("transactionHash") String transactionHash) {
+            @RequestBody TransactionHashRequest transactionHashRequest) {
         logger.debug(MessageFormat.format(
-                "Committing purchase {0} {1}", purchaseId, transactionHash));
+                "Committing purchase {0} {1}",
+                purchaseId, transactionHashRequest.getTransactionHash()));
 
-        purchaseService.commitPurchaseCreation(purchaseId, transactionHash);
+        purchaseService.commitPurchaseCreation(purchaseId,
+                transactionHashRequest.getTransactionHash());
 
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().build();
     }
 
     @RequestMapping(value = "/purchase/client/{address}", method = GET)
@@ -92,8 +100,7 @@ public class PurchaseController {
                         limit(pageable.getPageSize()).
                         collect(toList());
 
-        return new ResponseEntity<>(purchases, OK);
-
+        return ResponseEntity.ok(purchases);
     }
 
     @RequestMapping(value = "/purchase/expert/{address}", method = GET)
@@ -109,7 +116,7 @@ public class PurchaseController {
                         limit(pageable.getPageSize()).
                         collect(toList());
 
-        return new ResponseEntity<>(purchases, OK);
+        return ResponseEntity.ok(purchases);
     }
 
     @RequestMapping(value = "/purchase/research/{uuid}", method = GET)
@@ -124,6 +131,6 @@ public class PurchaseController {
                         limit(pageable.getPageSize()).
                         collect(toList());
 
-        return new ResponseEntity<>(purchases, OK);
+        return ResponseEntity.ok(purchases);
     }
 }

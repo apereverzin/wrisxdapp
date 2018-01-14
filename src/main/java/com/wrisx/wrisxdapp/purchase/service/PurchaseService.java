@@ -1,6 +1,7 @@
 package com.wrisx.wrisxdapp.purchase.service;
 
 import com.wrisx.wrisxdapp.common.EntityProvider;
+import com.wrisx.wrisxdapp.data.request.PurchaseRequest;
 import com.wrisx.wrisxdapp.data.response.PurchaseData;
 import com.wrisx.wrisxdapp.domain.Client;
 import com.wrisx.wrisxdapp.domain.Expert;
@@ -36,10 +37,10 @@ public class PurchaseService {
         this.entityProvider = entityProvider;
     }
 
-    public PurchaseData createPurchase(String clientAddress, String uuid)
+    public PurchaseData createPurchase(PurchaseRequest purchaseRequest)
             throws ResourceNotFoundException {
-        Client client = entityProvider.getClientByAddress(clientAddress);
-        Research research = entityProvider.getResearchByUuid(uuid);
+        Client client = entityProvider.getClientByAddress(purchaseRequest.getAddress());
+        Research research = entityProvider.getResearchByUuid(purchaseRequest.getUuid());
 
         return createPurchase(client, research, research.getPrice());
     }

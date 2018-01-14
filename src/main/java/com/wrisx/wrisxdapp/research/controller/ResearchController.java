@@ -1,6 +1,7 @@
 package com.wrisx.wrisxdapp.research.controller;
 
 import com.wrisx.wrisxdapp.data.request.ResearchRequest;
+import com.wrisx.wrisxdapp.data.request.TransactionHashRequest;
 import com.wrisx.wrisxdapp.data.response.ResearchData;
 import com.wrisx.wrisxdapp.research.data.ResearchFile;
 import com.wrisx.wrisxdapp.research.service.ResearchService;
@@ -12,11 +13,12 @@ import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -31,14 +33,14 @@ import static com.wrisx.wrisxdapp.user.controller.UserController.USER_ADDRESS;
 import static com.wrisx.wrisxdapp.user.controller.UserController.USER_AUTHORISED;
 import static com.wrisx.wrisxdapp.util.WrisxUtil.verifyUserAuthorisation;
 import static java.util.stream.Collectors.toList;
-import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 import static org.springframework.web.bind.annotation.RequestMethod.PUT;
 
-@Controller
+@CrossOrigin
+@RestController
 public class ResearchController {
     private final Logger logger = LoggerFactory.getLogger(ResearchController.class);
 
@@ -57,7 +59,7 @@ public class ResearchController {
         ResearchFile researchFile =
                 researchService.saveUploadedFile(uploadfile);
 
-        return new ResponseEntity<>(researchFile, OK);
+        return ResponseEntity.ok(researchFile);
     }
 
     @RequestMapping(value = "/research", method = POST, consumes = APPLICATION_JSON_VALUE)
@@ -66,7 +68,7 @@ public class ResearchController {
 
         ResearchData research = researchService.saveResearch(researchRequest);
 
-        return new ResponseEntity<>(research, OK);
+        return ResponseEntity.ok(research);
     }
 
     @RequestMapping(value = "/research/{uuid}", method = DELETE)
@@ -80,30 +82,35 @@ public class ResearchController {
 
         researchService.deleteResearch(uuid);
 
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().build();
     }
 
-    @RequestMapping(value = "/research/{uuid}/confirm", method = PUT)
+    @RequestMapping(value = "/research/{uuid}/confirm", method = PUT,
+            consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> confirmResearchCreation(
             @PathVariable("uuid") String uuid,
-            @RequestParam("transactionHash") String transactionHash) {
+            @RequestBody TransactionHashRequest transactionHashRequest) {
         logger.debug(MessageFormat.format("Confirming research creation {0}", uuid));
 
-        researchService.confirmResearchCreation(uuid, transactionHash);
+        researchService.confirmResearchCreation(uuid,
+                transactionHashRequest.getTransactionHash());
 
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().build();
     }
 
-    @RequestMapping(value = "/research/{uuid}/commit", method = PUT)
+    @RequestMapping(value = "/research/{uuid}/commit", method = PUT,
+            consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> commitResearchCreation(
             @PathVariable("uuid") String uuid,
-            @RequestParam("transactionHash") String transactionHash) {
+            @RequestBody TransactionHashRequest transactionHashRequest) {
         logger.debug(MessageFormat.format(
-                "Committing research creation {0} {1}", uuid, transactionHash));
+                "Committing research creation {0} {1}",
+                uuid, transactionHashRequest.getTransactionHash()));
 
-        researchService.commitResearchCreation(uuid, transactionHash);
+        researchService.commitResearchCreation(uuid,
+                transactionHashRequest.getTransactionHash());
 
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().build();
     }
 
     @RequestMapping(value = "/research/expert/{address}", method = GET)
@@ -119,7 +126,7 @@ public class ResearchController {
                         limit(pageable.getPageSize()).
                         collect(toList());
 
-        return new ResponseEntity<>(researchItems, OK);
+        return ResponseEntity.ok(researchItems);
     }
 
     @RequestMapping(value = "/research/{uuid}", method = GET)
@@ -128,7 +135,7 @@ public class ResearchController {
 
         ResearchData research = researchService.getResearch(uuid);
 
-        return new ResponseEntity<>(research, OK);
+        return ResponseEntity.ok(research);
     }
 
     @RequestMapping(value = "/research/client/{address}/keywords/{keywords}", method = GET)
@@ -178,7 +185,7 @@ public class ResearchController {
                         limit(pageable.getPageSize()).
                         collect(toList());
 
-        return new ResponseEntity<>(researchItems, OK);
+        return ResponseEntity.ok(researchItems);
     }
 
     @RequestMapping(value = "/research/keywords", method = GET)
@@ -191,7 +198,7 @@ public class ResearchController {
                         limit(pageable.getPageSize()).
                         collect(toList());
 
-        return new ResponseEntity<>(researchItems, OK);
+        return ResponseEntity.ok(researchItems);
     }
 
     private ResponseEntity<List<ResearchData>> getResearchItemsByKeywords(
@@ -202,6 +209,6 @@ public class ResearchController {
                         limit(pageable.getPageSize()).
                         collect(toList());
 
-        return new ResponseEntity<>(researchItems, OK);
+        return ResponseEntity.ok(researchItems);
     }
 }

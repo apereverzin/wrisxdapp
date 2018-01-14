@@ -62,14 +62,8 @@ function registerExpert() {
                             handleError(error);
                         });
                     } else {
-                        $.put(contextPath + "/expert/" + address + "/confirm",
-                            {
-                                'transactionHash': result
-                            }
-                        )
-                        .fail(function(error) {
-                            handleError(error);
-                        });
+                        confirmTransaction(contextPath + '/expert/' + address + '/confirm',
+                                           result);
                         $("#expertName").val('');
                         $("#expertEmailAddress").val('');
                         $("#expertKeywords").val('');
@@ -86,18 +80,26 @@ function registerExpert() {
 }
 
 function expertRegistered(transactionHash) {
-    $.put(contextPath + "/expert/" + address + "/commit",
-        {
-            'transactionHash': transactionHash
+    var transactionHashData = JSON.stringify({
+                                              'transactionHash': transactionHash
+                                             });
+
+    var path = contextPath + '/expert/' + address + '/commit';
+    $.ajax({
+        url: path,
+        type: 'put',
+        data: transactionHashData,
+        headers: {
+            'Content-Type': 'application/json'
         },
-        function(data) {
+        success: function(data) {
             showMemberData();
             showMemberBalance();
             showExpertRoleTab();
+        },
+        error: function(error) {
+            handleErrorResponse(path, error);
         }
-    )
-    .fail(function(error) {
-        handleError(error);
     });
 }
 
@@ -127,8 +129,9 @@ function depositResearch() {
                                               'bidId': 0
                                              });
 
+    var path = contextPath + '/research';
     $.ajax({
-        url: contextPath + '/research',
+        url: path,
         type: 'post',
         data: researchRequestData,
         headers: {
@@ -158,14 +161,8 @@ function depositResearch() {
                             handleError(error);
                         });
                     } else {
-                        $.put(contextPath + "/research/" + researchFile.uuid + "/confirm",
-                            {
-                               'transactionHash': result
-                            }
-                        )
-                        .fail(function(error) {
-                            handleError(error);
-                        });
+                        confirmTransaction(contextPath + '/research/' + researchFile.uuid + '/confirm',
+                                           result);
                         $("#expertResearchPrice").val('');
                         $("#expertResearchTitle").val('');
                         $("#expertResearchDescription").val('');
@@ -177,7 +174,7 @@ function depositResearch() {
             );
         },
         error: function(error) {
-            handleError(error);
+            handleErrorResponse(path, error);
         }
     });
 }
@@ -224,8 +221,9 @@ function depositEnquiryBidResearch(clientAddress, enquiryId, bidId) {
                                               'bidId': bidId
                                              });
 
+    var path = contextPath + '/research';
     $.ajax({
-        url: contextPath + '/research',
+        url: path,
         type: 'post',
         data: researchRequestData,
         headers: {
@@ -255,14 +253,8 @@ function depositEnquiryBidResearch(clientAddress, enquiryId, bidId) {
                             handleError(error);
                         });
                     } else {
-                        $.put(contextPath + "/research/" + researchFile.uuid + "/confirm",
-                            {
-                                'transactionHash': result
-                            }
-                        )
-                        .fail(function(error) {
-                            handleError(error);
-                        });
+                        confirmTransaction(contextPath + '/research/' + researchFile.uuid + '/confirm',
+                                           result);
                         $("#expertBidPrice").val('');
                         $("#expertBidTitle").val('');
                         $("#expertBidDescription").val('');
@@ -274,7 +266,7 @@ function depositEnquiryBidResearch(clientAddress, enquiryId, bidId) {
             );
         },
         error: function(error) {
-            handleError(error);
+            handleErrorResponse(path, error);
         }
     });
 }
@@ -486,6 +478,7 @@ function placeBid(enquiryId) {
 
     var enquiryBid = $("#enquiryBid").val();
     var comment = $("#enquiryBidComment").val();
+
     $.post(contextPath + "/enquiry/" + enquiryId + "/bid",
         {
             'address': address,

@@ -1,6 +1,7 @@
 package com.wrisx.wrisxdapp.expert.controller;
 
 import com.wrisx.wrisxdapp.data.request.ExpertRequest;
+import com.wrisx.wrisxdapp.data.request.TransactionHashRequest;
 import com.wrisx.wrisxdapp.data.response.ExpertData;
 import com.wrisx.wrisxdapp.expert.service.ExpertService;
 import org.slf4j.Logger;
@@ -8,24 +9,25 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.text.MessageFormat;
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
-import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 import static org.springframework.web.bind.annotation.RequestMethod.PUT;
 
-@Controller
+@CrossOrigin
+@RestController
 public class ExpertController {
     private final Logger logger = LoggerFactory.getLogger(ExpertController.class);
 
@@ -38,11 +40,12 @@ public class ExpertController {
 
     @RequestMapping(value = "/expert", method = POST, consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<?> createExpert(@RequestBody ExpertRequest expertRequest) {
-        logger.debug(MessageFormat.format("Creating expert {0}", expertRequest.getAddress()));
+        logger.debug(MessageFormat.format("Creating expert {0}",
+                expertRequest.getAddress()));
 
         expertService.createExpert(expertRequest);
 
-        return new ResponseEntity<>(OK);
+        return new ResponseEntity<>(CREATED);
     }
 
     @RequestMapping(value = "/expert/{expertAddress}", method = GET)
@@ -50,9 +53,9 @@ public class ExpertController {
             @PathVariable String expertAddress) {
         logger.debug(MessageFormat.format("Getting expert {0}", expertAddress));
 
-        ExpertData expertData = expertService.getExpert(expertAddress);
+        ExpertData expert = expertService.getExpert(expertAddress);
 
-        return new ResponseEntity<>(expertData, OK);
+        return ResponseEntity.ok(expert);
     }
 
     @RequestMapping(value = "/expert/{expertAddress}", method = DELETE)
@@ -61,31 +64,35 @@ public class ExpertController {
 
         expertService.deleteExpert(expertAddress);
 
-        return new ResponseEntity<>(OK);
+        return ResponseEntity.ok().build();
     }
 
-    @RequestMapping(value = "/expert/{expertAddress}/confirm", method = PUT)
+    @RequestMapping(value = "/expert/{expertAddress}/confirm", method = PUT,
+            consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> confirmExpertCreation(
             @PathVariable String expertAddress,
-            @RequestParam("transactionHash") String transactionHash) {
+            @RequestBody TransactionHashRequest transactionHashRequest) {
         logger.debug(MessageFormat.format(
                 "Confirming expert creation {0}", expertAddress));
 
-        expertService.confirmExpertCreation(expertAddress, transactionHash);
+        expertService.confirmExpertCreation(expertAddress,
+                transactionHashRequest.getTransactionHash());
 
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().build();
     }
 
-    @RequestMapping(value = "/expert/{expertAddress}/commit", method = PUT)
+    @RequestMapping(value = "/expert/{expertAddress}/commit", method = PUT,
+            consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> commitExpertCreation(
             @PathVariable String expertAddress,
-            @RequestParam("transactionHash") String transactionHash) {
-        logger.debug(MessageFormat.format(
-                "Committing expert creation {0} {1}", expertAddress, transactionHash));
+            @RequestBody TransactionHashRequest transactionHashRequest) {
+        logger.debug(MessageFormat.format("Committing expert creation {0} {1}",
+                expertAddress, transactionHashRequest.getTransactionHash()));
 
-        expertService.commitExpertCreation(expertAddress, transactionHash);
+        expertService.commitExpertCreation(expertAddress,
+                transactionHashRequest.getTransactionHash());
 
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().build();
     }
 
     @RequestMapping(value = "/expert/keywords/{keywords}", method = GET)
@@ -105,14 +112,13 @@ public class ExpertController {
     }
 
     private ResponseEntity<List<ExpertData>> getExpertsByKeywords(
-            @PathVariable String keywords,
-            Pageable pageable) {
+            String keywords, Pageable pageable) {
         List<ExpertData> experts =
                 expertService.findExperts(keywords).stream().
                         skip(pageable.getPageNumber() * pageable.getPageSize()).
                         limit(pageable.getPageSize()).
                         collect(toList());
 
-        return new ResponseEntity<>(experts, OK);
+        return ResponseEntity.ok(experts);
     }
 }

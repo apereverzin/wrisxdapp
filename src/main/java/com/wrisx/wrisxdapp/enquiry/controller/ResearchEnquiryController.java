@@ -8,21 +8,22 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.text.MessageFormat;
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
-import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
-@Controller
+@CrossOrigin
+@RestController
 public class ResearchEnquiryController {
     private final Logger logger = LoggerFactory.getLogger(ResearchEnquiryController.class);
 
@@ -42,7 +43,7 @@ public class ResearchEnquiryController {
         ResearchEnquiryData researchEnquiry =
                 researchEnquiryService.saveEnquiry(researchEnquiryRequest);
 
-        return new ResponseEntity<>(researchEnquiry, OK);
+        return ResponseEntity.ok(researchEnquiry);
     }
 
     @RequestMapping(value = "/enquiry/client/{address}", method = GET)
@@ -58,17 +59,16 @@ public class ResearchEnquiryController {
                         limit(pageable.getPageSize()).
                         collect(toList());
 
-        return new ResponseEntity<>(researchEnquiries, OK);
+        return ResponseEntity.ok(researchEnquiries);
     }
 
     @RequestMapping(value = "/enquiry/{id}", method = GET)
-    public ResponseEntity<ResearchEnquiryData> getEnquiry(
-            @PathVariable long id) {
+    public ResponseEntity<ResearchEnquiryData> getEnquiry(@PathVariable long id) {
         logger.debug(MessageFormat.format("Getting research enquiry {0}", id));
 
         ResearchEnquiryData researchEnquiry = researchEnquiryService.getEnquiry(id);
 
-        return new ResponseEntity<>(researchEnquiry, OK);
+        return ResponseEntity.ok(researchEnquiry);
     }
 
     @RequestMapping(value = "/enquiry/expert/{address}/keywords/{keywords}", method = GET)
@@ -103,6 +103,6 @@ public class ResearchEnquiryController {
                         limit(pageable.getPageSize()).
                         collect(toList());
 
-        return new ResponseEntity<>(researchEnquiries, OK);
+        return ResponseEntity.ok(researchEnquiries);
     }
 }

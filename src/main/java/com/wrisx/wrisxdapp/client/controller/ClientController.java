@@ -2,31 +2,32 @@ package com.wrisx.wrisxdapp.client.controller;
 
 import com.wrisx.wrisxdapp.client.service.ClientService;
 import com.wrisx.wrisxdapp.data.request.ClientRequest;
+import com.wrisx.wrisxdapp.data.request.TransactionHashRequest;
 import com.wrisx.wrisxdapp.data.response.ClientData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.text.MessageFormat;
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
 import static org.springframework.http.HttpStatus.CREATED;
-import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 import static org.springframework.web.bind.annotation.RequestMethod.PUT;
 
-@Controller
+@CrossOrigin
+@RestController
 public class ClientController {
     private final Logger logger = LoggerFactory.getLogger(ClientController.class);
 
@@ -53,7 +54,7 @@ public class ClientController {
 
         ClientData client = clientService.getClient(clientAddress);
 
-        return new ResponseEntity<>(client, OK);
+        return ResponseEntity.ok(client);
     }
 
     @RequestMapping(value = "/client/{address}", method = DELETE)
@@ -63,31 +64,36 @@ public class ClientController {
 
         clientService.deleteClient(clientAddress);
 
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().build();
     }
 
-    @RequestMapping(value = "/client/{address}/confirm", method = PUT)
+    @RequestMapping(value = "/client/{address}/confirm", method = PUT,
+            consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> confirmClientCreation(
             @PathVariable("address") String clientAddress,
-            @RequestParam("transactionHash") String transactionHash) {
+            @RequestBody TransactionHashRequest transactionHashRequest) {
         logger.debug(MessageFormat.format(
                 "Confirming client creation {0}", clientAddress));
 
-        clientService.confirmClientCreation(clientAddress, transactionHash);
+        clientService.confirmClientCreation(clientAddress,
+                transactionHashRequest.getTransactionHash());
 
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().build();
     }
 
-    @RequestMapping(value = "/client/{address}/commit", method = PUT)
+    @RequestMapping(value = "/client/{address}/commit", method = PUT,
+            consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> commitClientCreation(
             @PathVariable("address") String clientAddress,
-            @RequestParam("transactionHash") String transactionHash) {
+            @RequestBody TransactionHashRequest transactionHashRequest) {
         logger.debug(MessageFormat.format(
-                "Committing client creation {0} {1}", clientAddress, transactionHash));
+                "Committing client creation {0} {1}",
+                clientAddress, transactionHashRequest.getTransactionHash()));
 
-        clientService.commitClientCreation(clientAddress, transactionHash);
+        clientService.commitClientCreation(clientAddress,
+                transactionHashRequest.getTransactionHash());
 
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().build();
     }
 
     @RequestMapping(value = "/clients", method = GET)
@@ -100,6 +106,6 @@ public class ClientController {
                         limit(pageable.getPageSize()).
                         collect(toList());
 
-        return new ResponseEntity<>(clients, OK);
+        return ResponseEntity.ok(clients);
     }
 }
