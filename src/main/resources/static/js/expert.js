@@ -80,27 +80,14 @@ function registerExpert() {
 }
 
 function expertRegistered(transactionHash) {
-    var transactionHashData = JSON.stringify({
-                                              'transactionHash': transactionHash
-                                             });
-
-    var path = contextPath + '/expert/' + address + '/commit';
-    $.ajax({
-        url: path,
-        type: 'put',
-        data: transactionHashData,
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        success: function(data) {
-            showMemberData();
-            showMemberBalance();
-            showExpertRoleTab();
-        },
-        error: function(error) {
-            handleErrorResponse(path, error);
-        }
-    });
+    commitTransaction(contextPath + '/expert/' + address + '/commit',
+                      transactionHash,
+                      function(data) {
+                          showMemberData();
+                          showMemberBalance();
+                          showExpertRoleTab();
+                      }
+    );
 }
 
 function depositResearch() {
@@ -180,18 +167,12 @@ function depositResearch() {
 }
 
 function researchDeposited(uuid, transactionHash) {
-    $.put(contextPath + "/research/" + uuid + "/commit",
-        {
-            'transactionHash': transactionHash
-        },
-        function(data) {
-            getExpertResearchItems();
-        }
-    )
-    .fail(function(error) {
-        handleError(error);
-    });
-
+    commitTransaction(contextPath + '/research/' + uuid + '/commit',
+                      transactionHash,
+                      function(data) {
+                          getExpertResearchItems();
+                      }
+    );
     showMemberBalance();
 }
 
@@ -272,19 +253,13 @@ function depositEnquiryBidResearch(clientAddress, enquiryId, bidId) {
 }
 
 function enquiryBidResearchDeposited(uuid, transactionHash) {
-    $.put(contextPath + "/research/" + uuid + "/commit",
-        {
-            'transactionHash': transactionHash
-        },
-        function(data) {
-            getExpertEnquiryBids();
-            getExpertResearchItems();
-        }
-    )
-    .fail(function(error) {
-        handleError(error);
-    });
-
+    commitTransaction(contextPath + '/research/' + uuid + '/commit',
+                      transactionHash,
+                      function(data) {
+                          getExpertEnquiryBids();
+                          getExpertResearchItems();
+                      }
+    );
     showMemberBalance();
 }
 

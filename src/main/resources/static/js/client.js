@@ -102,26 +102,14 @@ function registerClient() {
 }
 
 function clientRegistered(transactionHash) {
-    var transactionHashData = JSON.stringify({
-                                              'transactionHash': transactionHash
-                                             });
-    var path = contextPath + '/client/' + address + '/commit';
-    $.ajax({
-        url: path,
-        type: 'put',
-        data: transactionHashData,
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        success: function(data) {
-            showMemberData();
-            showMemberBalance();
-            showExpertRoleTab();
-        },
-        error: function(error) {
-            handleErrorResponse(path, error);
-        }
-    });
+    commitTransaction(contextPath + '/client/' + address + '/commit',
+                      transactionHash,
+                      function(data) {
+                          showMemberData();
+                          showMemberBalance();
+                          showExpertRoleTab();
+                      }
+    );
 }
 
 function viewClientResearchItem(uuid) {
@@ -166,11 +154,10 @@ function payForResearch(uuid) {
                                        'address': address,
                                        'uuid': uuid
                                       });
-
     var path = contextPath + '/purchase';
     $.ajax({
         url: path,
-        type: 'put',
+        type: 'post',
         data: purchaseData,
         headers: {
             'Content-Type': 'application/json'
@@ -180,11 +167,12 @@ function payForResearch(uuid) {
                 function(error, result) {
                     if(error) {
                         console.log(error);
-                        $.delete(contextPath + "/purchase/" + data.id)
+                        $.delete(contextPath + '/purchase/' + data.id)
                     } else {
                         confirmTransaction(contextPath + '/purchase/' + data.id + '/confirm',
                                            result);
                         showMemberBalance()
+                        waitForTransactionToBeMined(result, purchasePaid, data.id, result);
                     }
                 }
             );
@@ -195,6 +183,17 @@ function payForResearch(uuid) {
     });
 }
 
+function purchasePaid(purchaseId, transactionHash) {
+    commitTransaction(contextPath + '/purchase/' + purchaseId + '/commit',
+                      transactionHash,
+                      function(data) {
+                          showMemberData();
+                          showMemberBalance();
+                          showExpertRoleTab();
+                      }
+    );
+}
+
 function getResearchPassword(fileName) {
     address = getAddress();
 
@@ -203,16 +202,7 @@ function getResearchPassword(fileName) {
             if(error) {
                 console.log(error);
             } else {
-                $('<div>Password: ' + result + '</div>').dialog({
-                    title: 'Password',
-                    open: function(){
-                        var closeBtn = $('.ui-dialog-titlebar-close');
-                        closeBtn.append(
-                            '<span class="ui-button-icon-primary ui-icon ui-icon-closethick"></span>' +
-                            '<span class="ui-button-text">close</span>'
-                        );
-                    }
-                })
+                bootbox.alert('<b>Password:</b> ' + result);
             }
         }
     );
