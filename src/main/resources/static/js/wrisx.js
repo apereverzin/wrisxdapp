@@ -57,7 +57,9 @@ function handleError(error) {
 }
 
 function handleErrorResponse(path, error) {
-    bootbox.alert(error.statusText + " " + error.status + " " + path);
+    var msg = error.statusText + " " + error.status + " " + path;
+    console.log(msg);
+    bootbox.alert(msg);
 }
 
 function confirmTransaction(path, transactionHash) {
@@ -89,6 +91,17 @@ function commitTransaction(path, transactionHash, func) {
             'Content-Type': 'application/json'
         },
         success: func,
+        error: function(error) {
+            handleErrorResponse(path, error);
+        }
+    });
+}
+
+function rollbackTransaction(path, error, func) {
+    console.log(error);
+    $.ajax({
+        url: path,
+        type: 'delete',
         error: function(error) {
             handleErrorResponse(path, error);
         }

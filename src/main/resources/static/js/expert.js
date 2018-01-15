@@ -51,16 +51,13 @@ function registerExpert() {
             contractInstance.registerExpert(name, secret, {from: address},
                 function(error, result) {
                     if(error) {
-                        console.log(error)
-                        $.delete(contextPath + "/expert/" + address,
+                        rollbackTransaction(contextPath + "/expert/" + address,
+                            error,
                             function(data) {
-                                showMemberData()
-                                showMemberBalance()
+                                showMemberData();
+                                showMemberBalance();
                             }
-                        )
-                        .fail(function(error) {
-                            handleError(error);
-                        });
+                        );
                     } else {
                         confirmTransaction(contextPath + '/expert/' + address + '/confirm',
                                            result);
@@ -136,17 +133,14 @@ function depositResearch() {
                                              {from: address},
                 function(error, result) {
                     if(error) {
-                        console.log(error);
-                        $.delete(contextPath + "/research/" + researchFile.uuid,
+                        rollbackTransaction(contextPath + "/research/" + researchFile.uuid,
+                            error,
                             function(data) {
                                 getExpertResearchItems();
                                 showMemberData();
                                 showMemberBalance();
                             }
-                        )
-                        .fail(function(error) {
-                            handleError(error);
-                        });
+                        );
                     } else {
                         confirmTransaction(contextPath + '/research/' + researchFile.uuid + '/confirm',
                                            result);
@@ -222,17 +216,14 @@ function depositEnquiryBidResearch(clientAddress, enquiryId, bidId) {
                                              {from: address},
                 function(error, result) {
                     if(error) {
-                        console.log(error);
-                        $.delete(contextPath + "/research/" + researchFile.uuid,
+                        rollbackTransaction(contextPath + "/research/" + researchFile.uuid,
+                            error,
                             function(data) {
                                 getExpertEnquiryBids();
                                 showMemberData();
                                 showMemberBalance();
                             }
-                        )
-                        .fail(function(error) {
-                            handleError(error);
-                        });
+                        );
                     } else {
                         confirmTransaction(contextPath + '/research/' + researchFile.uuid + '/confirm',
                                            result);
@@ -315,7 +306,7 @@ function showExpertResearchItems(data) {
     '<th>Title</th><th>Price</th>' +
     '<th></th><th></th>\n' +
     '</tr></thead>' +
-    '<tbody>'
+    '<tbody>';
     $.each(data, function(val) {
         items = items.concat(
         '<tr>' +
@@ -326,40 +317,44 @@ function showExpertResearchItems(data) {
         '</tr>\n'
         );
     });
-    items.concat('</tbody></table>')
+    items.concat('</tbody></table>');
 
-    $("#expertResearchItemsPanel").html(items)
+    $("#expertResearchItemsPanel").html(items);
 
-    showMemberBalance()
+    showMemberBalance();
 }
 
 function showExpertEnquiryBids(data) {
-    var items = '<table style="width:100%">' +
-    '<thead><tr>' +
-    '<th>Key words</th><th>Comment</th><th>Price</th><th>Expert comment</th><th>Selected</th>' +
+    var items = '<table style="width:100%">\n' +
+    '<thead><tr>\n' +
+    '<th>Key words</th>\n' +
+    '<th>Comment</th>\n' +
+    '<th>Price</th>\n' +
+    '<th>Expert comment</th>\n' +
+    '<th>Selected</th>' +
     '<th></th>\n' +
-    '</tr></thead>' +
-    '<tbody>'
+    '</tr></thead>\n' +
+    '<tbody>\n';
     $.each(data, function(val) {
         items = items.concat(
         '<tr>' +
-        '<td>' + data[val].researchEnquiry.keywords + '</td>' +
-        '<td>' + data[val].researchEnquiry.description + '</td>' +
-        '<td>' + data[val].price + '</td>' +
+        '<td>' + data[val].researchEnquiry.keywords + '</td>\n' +
+        '<td>' + data[val].researchEnquiry.description + '</td>\n' +
+        '<td>' + data[val].price + '</td>\n' +
         '<td>' + data[val].comment + '</td>' +
-        '<td>' + data[val].selected + '</td>')
+        '<td>' + data[val].selected + '</td>\n');
         if (data[val].selected && data[val].research == null) {
-            items = items.concat('<td>' + '<a href="#" onclick="depositEnquiryBidResearch(&#39;' + data[val].researchEnquiry.client.address + '&#39;,&#39;' + data[val].researchEnquiry.id + '&#39;,&#39;' + data[val].id + '&#39;)" class="btn btn-primary">Deposit research</a>' + '</td>')
+            items = items.concat('<td>' + '<a href="#" onclick="depositEnquiryBidResearch(&#39;' + data[val].researchEnquiry.client.address + '&#39;,&#39;' + data[val].researchEnquiry.id + '&#39;,&#39;' + data[val].id + '&#39;)" class="btn btn-primary">Deposit research</a>' + '</td>');
         } else if (data[val].research != null) {
-            items = items.concat('<td>Deposited</td>')
+            items = items.concat('<td>Deposited</td>');
         } else {
-            items = items.concat('<td></td>')
+            items = items.concat('<td></td>');
         }
-        items = items.concat('</tr>\n')
+        items = items.concat('</tr>\n');
     });
-    items = items.concat('</tbody></table>')
-    $("#expertEnquiryBidsPanel").html(items)
-    showMemberBalance()
+    items = items.concat('</tbody></table>');
+    $("#expertEnquiryBidsPanel").html(items);
+    showMemberBalance();
 }
 
 function showExpertPurchases(data) {
@@ -367,7 +362,7 @@ function showExpertPurchases(data) {
     '<thead><tr>' +
     '<th>Title</th><th>Key words</th><th>Price</th><th>Client</th><th>Date</th>\n' +
     '</tr></thead>' +
-    '<tbody>'
+    '<tbody>';
     $.each(data, function(val) {
         items = items.concat(
         '<tr>' +
@@ -375,28 +370,28 @@ function showExpertPurchases(data) {
         '<td>' + data[val].research.keywords + '</td>' +
         '<td>' + data[val].price + '</td>' +
         '<td>' + data[val].client.name + '</td>' +
-        '<td>' + showDateTime(data[val].timestamp) + '</td>')
-        items = items.concat('</tr>\n')
+        '<td>' + showDateTime(data[val].timestamp) + '</td>');
+        items = items.concat('</tr>\n');
     });
-    items = items.concat('</tbody></table>')
+    items = items.concat('</tbody></table>');
 
-    $("#expertPurchasesPanel").html(items)
+    $("#expertPurchasesPanel").html(items);
 
-    showMemberBalance()
+    showMemberBalance();
 }
 
 function viewExpertResearchItem(uuid) {
     $.get(contextPath + "/research/" + uuid,
         function(data) {
-            var text = '<table style="width:100%">'
-            text = text.concat('<tr><td>Title</td><td>' + data.title + '</td></tr>')
-            text = text.concat('<tr><td>Description</td><td>' + data.description + '</td></tr>')
-            text = text.concat('<tr><td>Key words</td><td>' + data.keywords + '</td></tr>')
-            text = text.concat('<tr><td>Price</th><td>' + data.price + '</td></tr>')
-            text = text.concat('<tr><td>MD5</td><td>' + data.checksum + '</td></tr>')
-            text = text.concat('<tr><td>Expert</td><td>' + data.expert.name + '</td></tr>')
-            text = text.concat('</table>')
-            $("#expertResearchItemPanel").html(text)
+            var text = '<table class="itemView">';
+            text = text.concat('<tr><th>Title</th><td>' + data.title + '</td></tr>');
+            text = text.concat('<tr><th>Description</th><td>' + data.description + '</td></tr>');
+            text = text.concat('<tr><th>Key words</th><td>' + data.keywords + '</td></tr>');
+            text = text.concat('<tr><th>Price</th><td>' + data.price + '</td></tr>');
+            text = text.concat('<tr><th>MD5</th><td>' + data.checksum + '</td></tr>');
+            text = text.concat('<tr><th>Expert</th><td>' + data.expert.name + '</td></tr>');
+            text = text.concat('</table>');
+            $("#expertResearchItemPanel").html(text);
         }
     )
     .fail(function(error) {
@@ -405,14 +400,15 @@ function viewExpertResearchItem(uuid) {
 }
 
 function showExpertEnquiries(data) {
-    var enquiriesExist = false
+    var enquiriesExist = false;
 
     var items =
-    '<table style="width:100%">' +
-    '<thead><tr>' +
-    '<th>Key words</th><th>Description</th><th>Bid</th>\n' +
-    '</tr></thead>' +
-    '<tbody>'
+    '<table style="width:100%">\n' +
+    '<thead><tr>\n' +
+    '<th>Key words</th>\n' +
+    '<th>Description</th><th>Bid</th>\n' +
+    '</tr></thead>\n' +
+    '<tbody>\n';
 
     $.each(data, function(val) {
         enquiriesExist = true
@@ -423,12 +419,13 @@ function showExpertEnquiries(data) {
         );
         if (data[val].enquiryBid == null) {
             items = items.concat(
-                '<td>' + '<a href="#" onclick="placeBid(&#39;' + data[val].id + '&#39;)" class="btn btn-primary">Place bid</a>' + '</td>'
-            )
+//                '<td>' + '<a href="#" onclick="placeBid(&#39;' + data[val].id + '&#39;)" class="btn btn-primary">Place bid</a>' + '</td>'
+                '<td>' + '<a href="#" onclick="viewExpertEnquiry(&#39;' + data[val].id + '&#39;)" class="btn btn-primary">View</a>' + '</td>'
+            );
         } else {
             items = items.concat(
                 '<td>' + data[val].enquiryBid.price + '&nbsp;' + data[val].enquiryBid.comment + '</td>'
-            )
+            );
         }
         items = items.concat(
             '</tr>\n'
@@ -439,13 +436,28 @@ function showExpertEnquiries(data) {
 
     if (enquiriesExist == true) {
         items = items.concat(
-            'Bid: <input type="text" id="enquiryBid"/>&nbsp;' +
-            'Comment:<input type="text" id="enquiryBidComment"/>'
-        )
+            'Bid (WRX): <input class="inputText textDecoration" type="text" id="enquiryBid"/>&nbsp;' +
+            'Comment:<input class="inputText textDecoration" type="text" id="enquiryBidComment"/>'
+        );
     }
 
-    $("#expertEnquiriesPanel").html(items)
-    showMemberBalance()
+    $("#expertEnquiriesPanel").html(items);
+    showMemberBalance();
+}
+
+function viewExpertEnquiry(enquiryId) {
+    $.get(contextPath + "/enquiry/" + enquiryId,
+        function(data) {
+            var text = '<table class="itemView">\n';
+            text = text.concat('<tr><th>Key words</th><td>' + data.keywords + '</td></tr>\n');
+            text = text.concat('<tr><th>Description</th><td>' + data.description + '</td></tr>\n');
+            text = text.concat('</table>\n');
+            $("#expertEnquiryPanel").html(text);
+        }
+    )
+    .fail(function(error) {
+        handleError(error);
+    });
 }
 
 function placeBid(enquiryId) {

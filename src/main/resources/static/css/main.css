@@ -75,41 +75,45 @@
 }
 
 .listAndViewPanel {
-    display:table;
+    display: table;
     width: 100%;
     border-collapse: separate;
     border-spacing: 5px;
 }
+.listAndViewPanelRow {
+    display: table-row;
+    width: 100%;
+}
 .listAndViewListPanel {
     padding: .2em .6em;
-    margin-top:10px;
-    margin-bottom:10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
     border-radius: 5px;
-    width:50%;
+    width: 50%;
     display: table-cell;
 }
 .listAndViewViewPanel {
     padding: .2em .6em;
-    margin-top:10px;
-    margin-bottom:10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
     border-radius: 5px;
-    width:50%;
+    width: 50%;
     display: table-cell;
     border-top: 5px solid transparent;
 }
 
 .listAndListPanel {
-    display:table;
+    display: table;
     width: 100%;
     border-collapse: separate;
     border-spacing: 5px;
 }
 .listAndListListPanel {
     padding: .2em .6em;
-    margin-top:10px;
-    margin-bottom:10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
     border-radius: 5px;
-    width:50%;
+    width: 50%;
     display: table-cell;
 }
 
@@ -142,3 +146,11 @@
 /*tr td:hover {
     background: #666; color: #FFF;
 }*/
+
+.itemView {
+    width: 100%;
+}
+
+.itemView th {
+    font-weight: bold;
+}

@@ -16,6 +16,7 @@
     background: url("./images/ui-icons_222222_256x240.png") repeat scroll -93px -128px rgba(0, 0, 0, 0);
     }
 
+
     </style>
     <script type="text/javascript" src="./js/web3.js"></script>
     <script type="text/javascript" src="./js/jquery-3.2.1.min.js"></script>
@@ -40,6 +41,7 @@
             showMemberData();
             showMemberBalance();
         })
+
 
     </script>
 </head>
@@ -199,18 +201,22 @@
                     <div>
                         <div class="inputTitle">Key words:</div>
                         <div class="inputValue">
-                            <input class="inputText textDecoration" type="text" id="expertEnquiryKeywords"/>
+                            <input class="inputText textDecoration" type="text"
+                                   id="expertEnquiryKeywords"/>
                         </div>
                     </div>
                     <div class="formButtonPanel">
                         <a href="#" onclick="searchEnquiries()" class="btn btn-primary">Search</a>
                     </div>
                 </div>
-                <div class="listPanel">
+                <div class="listAndViewPanel">
                     <div style="display: table-row;">
-                        <div class="listItemsTablePanel panelBackground"
-                             style="border-top: 5px solid transparent;border-right: 5px solid transparent;">
+                        <div class="listAndViewListPanel panelBackground">
                             <div id="expertEnquiriesPanel">
+                            </div>
+                        </div>
+                        <div class="listAndViewViewPanel panelBackground">
+                            <div id="expertEnquiryPanel">
                             </div>
                         </div>
                     </div>
@@ -259,13 +265,11 @@
                 </div>
                 <div class="listAndViewPanel">
                     <div style="display: table-row;">
-                        <div class="listAndViewListPanel panelBackground"
-                             style="border-top: 5px solid transparent;border-right: 5px solid transparent;">
+                        <div class="listAndViewListPanel panelBackground">
                             <div id="expertResearchItemsPanel">
                             </div>
                         </div>
-                        <div class="listAndViewViewPanel panelBackground"
-                             style="border-top: 5px solid transparent;">
+                        <div class="listAndViewViewPanel panelBackground">
                             <div id="expertResearchItemPanel">
                             </div>
                         </div>
@@ -275,8 +279,7 @@
             <div id="expertPurchasesTab">
                 <div class="listPanel">
                     <div style="display: table-row;">
-                        <div class="listItemsTablePanel panelBackground"
-                             style="border-top: 5px solid transparent;border-right: 5px solid transparent;">
+                        <div class="listItemsTablePanel panelBackground">
                             <div id="expertPurchasesPanel">
                             </div>
                         </div>

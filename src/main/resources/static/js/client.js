@@ -71,16 +71,13 @@ function registerClient() {
             contractInstance.registerClient(name, secret, {from: address},
                 function(error, result) {
                     if(error) {
-                        console.log(error);
-                        $.delete(contextPath + "/client/" + address,
+                        rollbackTransaction(contextPath + "/client/" + address,
+                            error,
                             function(data) {
                                 showMemberData();
                                 showMemberBalance();
                             }
-                        )
-                        .fail(function(error) {
-                            handleError(error);
-                        });
+                        );
                     } else {
                         confirmTransaction(contextPath + '/client/' + address + '/confirm',
                                            result);
@@ -166,8 +163,10 @@ function payForResearch(uuid) {
             contractInstance.payForResearch(uuid, {from: address},
                 function(error, result) {
                     if(error) {
-                        console.log(error);
-                        $.delete(contextPath + '/purchase/' + data.id)
+                        rollbackTransaction(contextPath + '/purchase/' + data.id,
+                            error,
+                            function(data) {}
+                        );
                     } else {
                         confirmTransaction(contextPath + '/purchase/' + data.id + '/confirm',
                                            result);
