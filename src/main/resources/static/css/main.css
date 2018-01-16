@@ -74,6 +74,10 @@
     display: table-cell;
 }
 
+.listPanel > div {
+    display: table-row;
+}
+
 .listAndViewPanel {
     display: table;
     width: 100%;
@@ -102,6 +106,10 @@
     border-top: 5px solid transparent;
 }
 
+.listAndViewPanel > div {
+    display: table-row;
+}
+
 .listAndListPanel {
     display: table;
     width: 100%;
@@ -115,6 +123,10 @@
     border-radius: 5px;
     width: 50%;
     display: table-cell;
+}
+
+.listAndListPanel > div {
+    display: table-row;
 }
 
 .listTable {

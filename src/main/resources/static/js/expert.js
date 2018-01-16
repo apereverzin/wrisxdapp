@@ -406,7 +406,9 @@ function showExpertEnquiries(data) {
     '<table style="width:100%">\n' +
     '<thead><tr>\n' +
     '<th>Key words</th>\n' +
-    '<th>Description</th><th>Bid</th>\n' +
+    '<th>Description</th>\n' +
+    '<th>Bid</th>\n' +
+    '<th></th>\n' +
     '</tr></thead>\n' +
     '<tbody>\n';
 
@@ -418,28 +420,19 @@ function showExpertEnquiries(data) {
             '<td>' + data[val].description + '</td>'
         );
         if (data[val].enquiryBid == null) {
-            items = items.concat(
-//                '<td>' + '<a href="#" onclick="placeBid(&#39;' + data[val].id + '&#39;)" class="btn btn-primary">Place bid</a>' + '</td>'
-                '<td>' + '<a href="#" onclick="viewExpertEnquiry(&#39;' + data[val].id + '&#39;)" class="btn btn-primary">View</a>' + '</td>'
-            );
+            items = items.concat('<td>-</td>');
         } else {
             items = items.concat(
                 '<td>' + data[val].enquiryBid.price + '&nbsp;' + data[val].enquiryBid.comment + '</td>'
             );
         }
         items = items.concat(
-            '</tr>\n'
+            '<td>' + '<a href="#" onclick="viewExpertEnquiry(&#39;' + data[val].id + '&#39;)" class="btn btn-primary">View</a>' + '</td>'
         );
+        items = items.concat('</tr>\n');
     })
 
     items = items.concat('</tbody></table>')
-
-    if (enquiriesExist == true) {
-        items = items.concat(
-            'Bid (WRX): <input class="inputText textDecoration" type="text" id="enquiryBid"/>&nbsp;' +
-            'Comment:<input class="inputText textDecoration" type="text" id="enquiryBidComment"/>'
-        );
-    }
 
     $("#expertEnquiriesPanel").html(items);
     showMemberBalance();
@@ -452,6 +445,13 @@ function viewExpertEnquiry(enquiryId) {
             text = text.concat('<tr><th>Key words</th><td>' + data.keywords + '</td></tr>\n');
             text = text.concat('<tr><th>Description</th><td>' + data.description + '</td></tr>\n');
             text = text.concat('</table>\n');
+            if (data.enquiryBid == null) {
+                text = text.concat('<table class="itemView">\n');
+                text = text.concat('<tr><th>Bid (WRX)</th><td><input class="inputText textDecoration" type="text" id="enquiryBid"/></td></tr>\n');
+                text = text.concat('<tr><th>Comment</th><td><input class="inputText textDecoration" type="text" id="enquiryBidComment"/></td></tr>\n');
+                text = text.concat('<tr><td><a href="#" onclick="placeBid(&#39;' + data.id + '&#39;)" class="btn btn-primary">Place bid</a></td></tr>\n');
+                text = text.concat('</table>\n');
+            }
             $("#expertEnquiryPanel").html(text);
         }
     )
