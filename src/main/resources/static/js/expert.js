@@ -439,7 +439,8 @@ function showExpertEnquiries(data) {
 }
 
 function viewExpertEnquiry(enquiryId) {
-    $.get(contextPath + "/enquiry/" + enquiryId,
+    address = getAddress();
+    $.get(contextPath + "/enquiry/expert/" + address + "/" + enquiryId,
         function(data) {
             var text = '<table class="itemView">\n';
             text = text.concat('<tr><th>Key words</th><td>' + data.keywords + '</td></tr>\n');
@@ -462,7 +463,6 @@ function viewExpertEnquiry(enquiryId) {
 
 function placeBid(enquiryId) {
     address = getAddress();
-
     var enquiryBid = $("#enquiryBid").val();
     var comment = $("#enquiryBidComment").val();
 
@@ -473,7 +473,8 @@ function placeBid(enquiryId) {
             'comment': comment
         },
         function() {
-            searchEnquiries()
+            searchEnquiries();
+            viewExpertEnquiry(enquiryId);
         }
     )
     .fail(function(error) {

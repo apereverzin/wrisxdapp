@@ -62,11 +62,14 @@ public class ResearchEnquiryController {
         return ResponseEntity.ok(researchEnquiries);
     }
 
-    @RequestMapping(value = "/enquiry/{id}", method = GET)
-    public ResponseEntity<ResearchEnquiryData> getEnquiry(@PathVariable long id) {
+    @RequestMapping(value = "/enquiry/expert/{address}/{id}", method = GET)
+    public ResponseEntity<ResearchEnquiryData> getEnquiry(
+            @PathVariable("address") String expertAddress,
+            @PathVariable long id) {
         logger.debug(MessageFormat.format("Getting research enquiry {0}", id));
 
-        ResearchEnquiryData researchEnquiry = researchEnquiryService.getEnquiry(id);
+        ResearchEnquiryData researchEnquiry =
+                researchEnquiryService.getExpertEnquiry(expertAddress, id);
 
         return ResponseEntity.ok(researchEnquiry);
     }

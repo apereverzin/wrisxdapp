@@ -61,10 +61,12 @@ public class ResearchEnquiryService {
                 collect(toList());
     }
 
-    public ResearchEnquiryData getEnquiry(long id) throws ResourceNotFoundException {
+    public ResearchEnquiryData getExpertEnquiry(String expertAddress,
+                                                long id)
+            throws ResourceNotFoundException {
         ResearchEnquiry researchEnquiry = entityProvider.getResearchEnquiryById(id);
 
-        return new ResearchEnquiryData(researchEnquiry);
+        return getExpertResearchEnquiryData(expertAddress, researchEnquiry);
     }
 
     public List<ResearchEnquiryData> findExpertEnquiries(String expertAddress,
@@ -82,15 +84,18 @@ public class ResearchEnquiryService {
                     return itemKeywordList.containsAll(keywordList);
                 })).
                 sorted(comparing(ResearchEnquiry::getTimestamp).reversed()).
-                map(enquiry -> {
-                    Optional<EnquiryBid> enquiryBidOpt =
-                            enquiryBidDao.findByResearchEnquiry(enquiry).stream().
-                                    filter(bid -> bid.getExpert().getAddress().
-                                            equals(expertAddress)).findFirst();
-                    return new ResearchEnquiryData(enquiry,
-                            enquiryBidOpt.map(enquiryBid -> new EnquiryBidData(enquiryBid)).
-                                    orElse(null));
-                }).
+                map(enquiry -> getExpertResearchEnquiryData(expertAddress, enquiry)).
                 collect(toList());
+    }
+
+    private ResearchEnquiryData getExpertResearchEnquiryData(String expertAddress,
+                                                             ResearchEnquiry enquiry) {
+        Optional<EnquiryBid> enquiryBidOpt =
+                enquiryBidDao.findByResearchEnquiry(enquiry).stream().
+                        filter(bid -> bid.getExpert().getAddress().
+                                equals(expertAddress)).findFirst();
+        return new ResearchEnquiryData(enquiry,
+                enquiryBidOpt.map(enquiryBid -> new EnquiryBidData(enquiryBid)).
+                        orElse(null));
     }
 }
