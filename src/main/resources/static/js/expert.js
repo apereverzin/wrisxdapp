@@ -302,22 +302,23 @@ function uploadResearchFile() {
 
 function showExpertResearchItems(data) {
     var items = '<table style="width:100%">' +
-    '<thead><tr>' +
-    '<th>Title</th><th>Price</th>' +
+    '<thead><tr>\n' +
+    '<th>Title</th>\n' +
+    '<th>Price</th>\n' +
     '<th></th><th></th>\n' +
-    '</tr></thead>' +
+    '</tr></thead>\n' +
     '<tbody>';
     $.each(data, function(val) {
         items = items.concat(
-        '<tr>' +
-        '<td>' + data[val].title + '</td>' +
-        '<td>' + data[val].price + '</td>' +
-        '<td>' + '<a href="#" onclick="viewExpertResearchItem(&#39;' + data[val].uuid + '&#39;)" class="btn btn-primary">View</a>' + '</td>' +
-        '<td>' + '<a href="#" onclick="getResearchPurchases(&#39;' + data[val].uuid + '&#39;)" class="btn btn-primary">Purchases</a>' + '</td>' +
+        '<tr>\n' +
+        '<td>' + data[val].title + '</td>\n' +
+        '<td>' + data[val].price + '</td>\n' +
+        '<td>' + '<a href="#" onclick="viewExpertResearchItem(&#39;' + data[val].uuid + '&#39;)" class="btn btn-primary">View</a>' + '</td>\n' +
+        '<td>' + '<a href="#" onclick="getResearchPurchases(&#39;' + data[val].uuid + '&#39;)" class="btn btn-primary">Purchases</a>' + '</td>\n' +
         '</tr>\n'
         );
     });
-    items.concat('</tbody></table>');
+    items.concat('</tbody></table>\n');
 
     $("#expertResearchItemsPanel").html(items);
 
@@ -331,7 +332,7 @@ function showExpertEnquiryBids(data) {
     '<th>Comment</th>\n' +
     '<th>Price</th>\n' +
     '<th>Expert comment</th>\n' +
-    '<th>Selected</th>' +
+    '<th>Selected</th>\n' +
     '<th></th>\n' +
     '</tr></thead>\n' +
     '<tbody>\n';
@@ -443,13 +444,17 @@ function viewExpertEnquiry(enquiryId) {
     $.get(contextPath + "/enquiry/expert/" + address + "/" + enquiryId,
         function(data) {
             var text = '<table class="itemView">\n';
-            text = text.concat('<tr><th>Key words</th><td>' + data.keywords + '</td></tr>\n');
-            text = text.concat('<tr><th>Description</th><td>' + data.description + '</td></tr>\n');
+            text = text.concat('<tr><th class="inputTitle">Key words</th>\n');
+            text = text.concat('<td class="inputText">' + data.keywords + '</td></tr>\n');
+            text = text.concat('<tr><th class="inputTitle">Description</th>\n')
+            text = text.concat('<td class="inputText">' + data.description + '</td></tr>\n');
             text = text.concat('</table>\n');
             if (data.enquiryBid == null) {
                 text = text.concat('<table class="itemView">\n');
-                text = text.concat('<tr><th>Bid (WRX)</th><td><input class="inputText textDecoration" type="text" id="enquiryBid"/></td></tr>\n');
-                text = text.concat('<tr><th>Comment</th><td><input class="inputText textDecoration" type="text" id="enquiryBidComment"/></td></tr>\n');
+                text = text.concat('<tr><th class="inputTitle">Bid (WRX)</th>\n');
+                text = text.concat('<td><input class="inputText textDecoration" type="text" id="enquiryBid"/></td></tr>\n');
+                text = text.concat('<tr><th class="inputTitle">Comment</th>\n');
+                text = text.concat('<td><input class="inputText textDecoration" type="text" id="enquiryBidComment"/></td></tr>\n');
                 text = text.concat('<tr><td><a href="#" onclick="placeBid(&#39;' + data.id + '&#39;)" class="btn btn-primary">Place bid</a></td></tr>\n');
                 text = text.concat('</table>\n');
             }

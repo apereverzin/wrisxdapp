@@ -208,23 +208,23 @@ function getResearchPassword(fileName) {
 }
 
 function showClientResearchItems(data) {
-    var items = '<table style="width:100%">' +
-    '<thead><tr>' +
-    '<th>Title</th><th>Expert</th><th>Price</th>' +
+    var items = '<table style="width:100%">\n' +
+    '<thead><tr>\n' +
+    '<th>Title</th><th>Expert</th><th>Price</th>\n' +
     '<th></th><th></th><th></th>\n' +
-    '</tr></thead>' +
-    '<tbody>';
+    '</tr></thead>\n' +
+    '<tbody>\n';
     $.each(data, function(val) {
         items = items.concat(
-        '<tr>' +
-        '<td>' + data[val].title + '</td>' +
-        '<td>' + data[val].expert.name + '</td>' +
-        '<td>' + data[val].price + '</td>' +
-        '<td>' + '<a href="#" onclick="viewClientResearchItem(&#39;' + data[val].uuid + '&#39;)" class="btn btn-primary">View</a>' + '</td>'
+        '<tr>\n' +
+        '<td>' + data[val].title + '</td>\n' +
+        '<td>' + data[val].expert.name + '</td>\n' +
+        '<td>' + data[val].price + '</td>\n' +
+        '<td>' + '<a href="#" onclick="viewClientResearchItem(&#39;' + data[val].uuid + '&#39;)" class="btn btn-primary">View</a>' + '</td>\n'
         );
         if (data[val].purchase == null) {
             items = items.concat(
-            '<td>' + '<a href="#" onclick="payForResearch(&#39;' + data[val].uuid + '&#39;)" class="btn btn-primary">Pay</a>' + '</td>'
+            '<td>' + '<a href="#" onclick="payForResearch(&#39;' + data[val].uuid + '&#39;)" class="btn btn-primary">Pay</a>' + '</td>\n'
             );
         } else {
             items = items.concat(
@@ -242,24 +242,24 @@ function showClientResearchItems(data) {
 }
 
 function showClientEnquiries(data) {
-    var items = '<table style="width:100%">' +
-    '<thead><tr>' +
-    '<th>Key words</th><th>Description</th>' +
+    var items = '<table style="width:100%">\n' +
+    '<thead><tr>\n' +
+    '<th>Key words</th><th>Description</th>\n' +
     '<th></th>\n' +
     '</tr></thead>' +
     '<tbody>'
     $.each(data, function(val) {
         items = items.concat(
-        '<tr>' +
-        '<td>' + data[val].keywords + '</td>' +
-        '<td>' + data[val].description + '</td>' +
+        '<tr>\n' +
+        '<td>' + data[val].keywords + '</td>\n' +
+        '<td>' + data[val].description + '</td>\n' +
         '<td>' + '<a href="#" onclick="getEnquiryBids(' + data[val].id + ',&#39;' +
                     data[val].keywords + '&#39;,&#39;' + data[val].description +
-                    '&#39;)" class="btn btn-primary">Bids</a>' + '</td>' +
+                    '&#39;)" class="btn btn-primary">Bids</a>' + '</td>\n' +
         '</tr>\n'
         );
     });
-    items = items.concat('</tbody></table>');
+    items = items.concat('</tbody></table>\n');
 
     $("#clientEnquiriesPanel").html(items);
 
