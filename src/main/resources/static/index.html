@@ -17,6 +17,16 @@
     }
 
 
+
+
+
+
+
+
+
+
+
+
     </style>
     <script type="text/javascript" src="./js/web3.js"></script>
     <script type="text/javascript" src="./js/jquery-3.2.1.min.js"></script>
@@ -41,6 +51,16 @@
             showMemberData();
             showMemberBalance();
         })
+
+
+
+
+
+
+
+
+
+
 
 
     </script>
@@ -89,8 +109,12 @@
                             <input class="inputText textDecoration" type="text" id="clientResearchKeywords"/>
                         </div>
                     </div>
-                    <div class="formButtonPanel">
-                        <a href="#" onclick="searchResearchItems()" class="btn btn-primary">Search</a>
+                    <div>
+                        <div class="formEmptyPanel">
+                        </div>
+                        <div class="formButtonPanel">
+                            <a href="#" onclick="searchResearchItems()" class="btn btn-primary">Search</a>
+                        </div>
                     </div>
                 </div>
                 <div class="listAndViewPanel">
@@ -131,8 +155,12 @@
                             <input class="inputText textDecoration" type="text" id="clientEnquiryDescription"/>
                         </div>
                     </div>
-                    <div class="formButtonPanel">
-                        <a href="#" onclick="postEnquiry()" class="btn btn-primary">Place enquiry</a>
+                    <div>
+                        <div class="formEmptyPanel">
+                        </div>
+                        <div class="formButtonPanel">
+                            <a href="#" onclick="postEnquiry()" class="btn btn-primary">Place enquiry</a>
+                        </div>
                     </div>
                 </div>
                 <div class="listAndListPanel">
@@ -156,8 +184,12 @@
                             <input class="inputText textDecoration" type="text" id="clientBuyTokensAmount"/>
                         </div>
                     </div>
-                    <div class="formButtonPanel">
-                        <a href="#" onclick="buyTokens()" class="btn btn-primary">Buy</a>
+                    <div>
+                        <div class="formEmptyPanel">
+                        </div>
+                        <div class="formButtonPanel">
+                            <a href="#" onclick="buyTokens()" class="btn btn-primary">Buy</a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -182,8 +214,12 @@
                     <input class="inputText textDecoration" type="text" id="clientDescription"/>
                 </div>
             </div>
-            <div class="formButtonPanel">
-                <a href="#" onclick="registerClient()" class="btn btn-primary">Register</a>
+            <div>
+                <div class="formEmptyPanel">
+                </div>
+                <div class="formButtonPanel">
+                    <a href="#" onclick="registerClient()" class="btn btn-primary">Register</a>
+                </div>
             </div>
         </div>
     </div>
@@ -205,8 +241,12 @@
                                    id="expertEnquiryKeywords"/>
                         </div>
                     </div>
-                    <div class="formButtonPanel">
-                        <a href="#" onclick="searchEnquiries()" class="btn btn-primary">Search</a>
+                    <div>
+                        <div class="formEmptyPanel">
+                        </div>
+                        <div class="formButtonPanel">
+                            <a href="#" onclick="searchEnquiries()" class="btn btn-primary">Search</a>
+                        </div>
                     </div>
                 </div>
                 <div class="listAndViewPanel">
@@ -257,11 +297,17 @@
                                 <input id="expertResearch-upload-file-input" type="file" name="uploadfile" accept="*"/>
                             </div>
                         </div>
-                        <div class="inputTitle" id="expertResearch-upload-file-message"></div>
+                        <div>
+                            <div class="inputTitle" id="expertResearch-upload-file-message"></div>
+                        </div>
+                        <div>
+                            <div class="formEmptyPanel">
+                            </div>
+                            <div class="formButtonPanel">
+                                <a href="#" onclick="depositResearch()" class="btn btn-primary">Deposit</a>
+                            </div>
+                        </div>
                     </form>
-                    <div class="formButtonPanel">
-                        <a href="#" onclick="depositResearch()" class="btn btn-primary">Deposit</a>
-                    </div>
                 </div>
                 <div class="listAndViewPanel">
                     <div>
@@ -327,8 +373,12 @@
                     <input class="inputText textDecoration" type="text" id="expertDescription"/>
                 </div>
             </div>
-            <div class="formButtonPanel">
-                <a href="#" onclick="registerExpert()" class="btn btn-primary">Register</a>
+            <div>
+                <div class="formEmptyPanel">
+                </div>
+                <div class="formButtonPanel">
+                    <a href="#" onclick="registerExpert()" class="btn btn-primary">Register</a>
+                </div>
             </div>
         </div>
     </div>
@@ -342,9 +392,13 @@
                            id="anonymousResearchKeywords"/>
                 </div>
             </div>
-            <div class="formButtonPanel">
-                <a href="#" onclick="anonymousSearchResearchItems()"
-                   class="btn btn-primary">Search</a>
+            <div>
+                <div class="formEmptyPanel">
+                </div>
+                <div class="formButtonPanel">
+                    <a href="#" onclick="anonymousSearchResearchItems()"
+                       class="btn btn-primary">Search</a>
+                </div>
             </div>
         </div>
         <div class="listAndViewPanel">
@@ -370,9 +424,13 @@
                            id="anonymousExpertKeywords"/>
                 </div>
             </div>
-            <div class="formButtonPanel">
-                <a href="#" onclick="anonymousSearchExperts()"
-                   class="btn btn-primary">Search</a>
+            <div>
+                <div class="formEmptyPanel">
+                </div>
+                <div class="formButtonPanel">
+                    <a href="#" onclick="anonymousSearchExperts()"
+                       class="btn btn-primary">Search</a>
+                </div>
             </div>
         </div>
         <div class="listAndViewPanel">

@@ -290,15 +290,12 @@ function showClientPurchases(data) {
 }
 
 function showEnquiryBids(enquiryId, keywords, description, data) {
-//    var items = '<b>Enquiry</b>&nbsp;Keywords: ' + keywords +
-//    '&nbsp:Description: ' + description +
-//    '<table style="width:100%">' +
-//    '<thead><tr>' +
-//    '<th>Bid</th><th>Comment</th><th>Expert</th>' +
-//    '<th></th><th></th>\n' +
-//    '</tr></thead>' +
-//    '<tbody>';
-    var items = '';
+    var items = '<table style="width:100%">\n' +
+    '<thead><tr>\n' +
+    '<th>Bid</th><th>Comment</th><th>Expert</th>\n' +
+    '<th></th><th></th>\n' +
+    '</tr></thead>\n' +
+    '<tbody>';
     var submitted = false;
     $.each(data, function(val) {
         if (data[val].selected) {

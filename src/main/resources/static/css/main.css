@@ -56,7 +56,11 @@
     width: 100%;
 }
 .formButtonPanel {
+    display: table-cell;
     float: right;
+}
+.formEmptyPanel {
+    display: table-cell;
 }
 
 .formPanel > div, .formPanel > form > div {
