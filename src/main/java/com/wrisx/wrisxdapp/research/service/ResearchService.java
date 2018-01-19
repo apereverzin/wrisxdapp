@@ -42,7 +42,6 @@ public class ResearchService {
     @Autowired
     private Environment env;
 
-    private final FileUploadProvider fileUploadProvider;
     private final RandomStringProvider randomStringProvider;
     private final ZipFileProvider zipFileProvider;
     private final DigestProvider digestProvider;
@@ -54,8 +53,7 @@ public class ResearchService {
     private final PurchaseDao purchaseDao;
 
     @Autowired
-    public ResearchService(FileUploadProvider fileUploadProvider,
-                           RandomStringProvider randomStringProvider,
+    public ResearchService(RandomStringProvider randomStringProvider,
                            ZipFileProvider zipFileProvider,
                            DigestProvider digestProvider,
                            ResearchDao researchDao,
@@ -64,7 +62,6 @@ public class ResearchService {
                            EnquiryBidDao enquiryBidDao,
                            PurchaseService purchaseService,
                            PurchaseDao purchaseDao) {
-        this.fileUploadProvider = fileUploadProvider;
         this.randomStringProvider = randomStringProvider;
         this.zipFileProvider = zipFileProvider;
         this.digestProvider = digestProvider;
@@ -78,16 +75,13 @@ public class ResearchService {
 
     public ResearchFile saveUploadedFile(MultipartFile file) {
         String directory = env.getProperty("wrisx.paths.uploadedFiles");
-        File researchFile = fileUploadProvider.uploadFile(file, directory);
 
         String password = randomStringProvider.getRandomString(PASSWORD_LENGTH);
         ZipFile zipFile =
-                zipFileProvider.zipAndProtectFile(researchFile, directory, password);
+                zipFileProvider.zipAndProtectUploadedFile(file, directory, password);
 
         String zipFileChecksumMD5 =
                 digestProvider.getFileDigest(zipFile.getFile(), MD5_ALGORITHM);
-
-        researchFile.delete();
 
         String zipFileName = zipFile.getFile().getName();
         return new ResearchFile(

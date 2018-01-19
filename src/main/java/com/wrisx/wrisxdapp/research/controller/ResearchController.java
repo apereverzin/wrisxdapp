@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
@@ -29,9 +28,6 @@ import java.io.FileNotFoundException;
 import java.text.MessageFormat;
 import java.util.List;
 
-import static com.wrisx.wrisxdapp.user.controller.UserController.USER_ADDRESS;
-import static com.wrisx.wrisxdapp.user.controller.UserController.USER_AUTHORISED;
-import static com.wrisx.wrisxdapp.util.WrisxUtil.verifyUserAuthorisation;
 import static java.util.stream.Collectors.toList;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
@@ -72,13 +68,8 @@ public class ResearchController {
     }
 
     @RequestMapping(value = "/research/{uuid}", method = DELETE)
-    public ResponseEntity<Void> deleteResearch(
-            @SessionAttribute(USER_ADDRESS) String expertAddress,
-            @SessionAttribute(name = USER_AUTHORISED, required = false) String userAuthorised,
-            @PathVariable("uuid") String uuid) {
+    public ResponseEntity<Void> deleteResearch(@PathVariable("uuid") String uuid) {
         logger.debug(MessageFormat.format("Deleting research {0}", uuid));
-
-        verifyUserAuthorisation(expertAddress, userAuthorised);
 
         researchService.deleteResearch(uuid);
 

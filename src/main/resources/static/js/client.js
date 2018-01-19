@@ -232,7 +232,7 @@ function showClientResearchItems(data) {
             );
         }
         items = items.concat(
-        '<td>' + '<a href="/downloadFile/' + data[val].uuid + '" class="btn btn-primary">Download</a>' + '</td>' +
+        '<td>' + '<a href="' + contextPath + '/downloadFile/' + data[val].uuid + '" class="btn btn-primary">Download</a>' + '</td>' +
         '</tr>\n'
         );
     });
@@ -327,7 +327,7 @@ function showEnquiryBids(enquiryId, keywords, description, data) {
             items = items.concat('<td>' +
             '<a href="#" onclick="getResearchPassword(&#39;' + data[val].research.uuid + '&#39;)" class="btn btn-primary">Password</a>' +
             '&nbsp;' +
-            '<a href="/downloadFile/' + data[val].research.uuid + '" class="btn btn-primary">Download</a>' +
+            '<a href="' + contextPath + '/downloadFile/' + data[val].research.uuid + '" class="btn btn-primary">Download</a>' +
             '</td>');
         } else {
             items = items.concat('<td></td>');
