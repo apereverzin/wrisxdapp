@@ -42,7 +42,7 @@ function registerExpert() {
 
     $.ajax({
         url: contextPath + '/expert',
-        type: 'post',
+        type: 'POST',
         data: expertRequestData,
         headers: {
             'Content-Type': 'application/json'
@@ -116,7 +116,7 @@ function depositResearch() {
     var path = contextPath + '/research';
     $.ajax({
         url: path,
-        type: 'post',
+        type: 'POST',
         data: researchRequestData,
         headers: {
             'Content-Type': 'application/json'
@@ -199,7 +199,7 @@ function depositEnquiryBidResearch(clientAddress, enquiryId, bidId) {
     var path = contextPath + '/research';
     $.ajax({
         url: path,
-        type: 'post',
+        type: 'POST',
         data: researchRequestData,
         headers: {
             'Content-Type': 'application/json'
@@ -258,8 +258,8 @@ function uploadBidFile() {
     var res;
     var formData = new FormData($("#bid-upload-file-form")[0]);
     $.ajax({
-        url: contextPath + "/uploadFile",
-        type: "POST",
+        url: contextPath + '/uploadFile',
+        type: 'POST',
         data: formData,
         enctype: 'multipart/form-data',
         processData: false,
@@ -281,8 +281,8 @@ function uploadResearchFile() {
     var res;
     var formData = new FormData($("#research-upload-file-form")[0]);
     $.ajax({
-        url: contextPath + "/uploadFile",
-        type: "POST",
+        url: contextPath + '/uploadFile',
+        type: 'POST',
         data: formData,
         enctype: 'multipart/form-data',
         processData: false,

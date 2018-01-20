@@ -2,10 +2,12 @@ package com.wrisx.wrisxdapp.data.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.wrisx.wrisxdapp.domain.EnquiryBid;
+import lombok.ToString;
 
 import java.io.Serializable;
 import java.util.Date;
 
+@ToString
 public class EnquiryBidData implements Serializable {
     @JsonProperty
     private long id;

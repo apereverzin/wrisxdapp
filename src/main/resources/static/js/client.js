@@ -411,11 +411,13 @@ function placeEnquiry() {
                 expert2 = enquiryBid.expert
                 price2 = enquiryBid.price
             }
-            $.put(
-                contextPath + "/enquiry/bid/" + enquiryBid.bidId + "/select"
-            )
-            .fail(function(error) {
-                handleError(error);
+            var path = contextPath + '/enquiry/bid/' + enquiryBid.bidId + '/select';
+            $.ajax({
+                url: path,
+                type: 'PUT',
+                error: function(error) {
+                    handleErrorResponse(path, error);
+                }
             });
         }
         if (ind == 2) {
@@ -425,7 +427,7 @@ function placeEnquiry() {
     }
 
     if (ind > 0) {
-        $.get(contextPath + "/enquiry/" + globalEnquiryId,
+        $.get(contextPath + '/enquiry/expert/' + address + '/' + globalEnquiryId,
             function(data) {
                 contractInstance.placeEnquiry(globalEnquiryId,
                                               data.keywords,
@@ -444,7 +446,7 @@ function placeEnquiry() {
                             console.log(error);
                             if (bidId0 > 0) {
                                 $.put(
-                                    contextPath + "/enquiry/bid/" + bidId0 + "/unselect"
+                                    contextPath + '/enquiry/bid/' + bidId0 + '/unselect'
                                 )
                                 .fail(function(error) {
                                     handleError(error);
@@ -452,7 +454,7 @@ function placeEnquiry() {
                             }
                             if (bidId1 > 0) {
                                 $.put(
-                                    contextPath + "/enquiry/bid/" + bidId1 + "/unselect"
+                                    contextPath + '/enquiry/bid/' + bidId1 + '/unselect'
                                 )
                                 .fail(function(error) {
                                     handleError(error);
@@ -460,7 +462,7 @@ function placeEnquiry() {
                             }
                             if (bidId2 > 0) {
                                 $.put(
-                                    contextPath + "/enquiry/bid/" + bidId2 + "/unselect"
+                                    contextPath + '/enquiry/bid/' + bidId2 + '/unselect'
                                 )
                                 .fail(function(error) {
                                     handleError(error);
@@ -492,7 +494,7 @@ function placeEnquiry() {
 }
 
 function getEnquiryBids(enquiryId, keywords, description) {
-    $.get(contextPath + "/enquiry/" + enquiryId + "/bid",
+    $.get(contextPath + '/enquiry/' + enquiryId + '/bid',
         function(data) {
             showEnquiryBids(enquiryId, keywords, description, data)
         }
@@ -508,7 +510,7 @@ function searchResearchItems() {
 
     if (address != undefined && address != "") {
         $.get({
-            url: contextPath + "/research/client/" + address + "/keywords/" + keywords,
+            url: contextPath + '/research/client/' + address + '/keywords/' + keywords,
             success: function(data) {
                 showClientResearchItems(data)
             },
@@ -524,7 +526,7 @@ function searchResearchItems() {
 function getClientEnquiries() {
     address = getAddress();
 
-    $.get(contextPath + "/enquiry/client/" + address,
+    $.get(contextPath + '/enquiry/client/' + address,
         function(data) {
             showClientEnquiries(data)
         }
