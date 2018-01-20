@@ -408,7 +408,7 @@ function showExpertEnquiries(data) {
     '<thead><tr>\n' +
     '<th>Key words</th>\n' +
     '<th>Description</th>\n' +
-    '<th>Bid</th>\n' +
+    '<th>Your bid</th>\n' +
     '<th></th>\n' +
     '</tr></thead>\n' +
     '<tbody>\n';
@@ -424,7 +424,7 @@ function showExpertEnquiries(data) {
             items = items.concat('<td>-</td>');
         } else {
             items = items.concat(
-                '<td>' + data[val].enquiryBid.price + '&nbsp;' + data[val].enquiryBid.comment + '</td>'
+                '<td>' + data[val].enquiryBid.price + ' WRX,&nbsp;' + data[val].enquiryBid.comment + '</td>'
             );
         }
         items = items.concat(

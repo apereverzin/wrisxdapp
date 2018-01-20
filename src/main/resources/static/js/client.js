@@ -253,9 +253,8 @@ function showClientEnquiries(data) {
         '<tr>\n' +
         '<td>' + data[val].keywords + '</td>\n' +
         '<td>' + data[val].description + '</td>\n' +
-        '<td>' + '<a href="#" onclick="getEnquiryBids(' + data[val].id + ',&#39;' +
-                    data[val].keywords + '&#39;,&#39;' + data[val].description +
-                    '&#39;)" class="btn btn-primary">Bids</a>' + '</td>\n' +
+        '<td>' + '<a href="#" onclick="getEnquiryBids(' + data[val].id +
+                    ')" class="btn btn-primary">Bids</a>' + '</td>\n' +
         '</tr>\n'
         );
     });
@@ -289,7 +288,7 @@ function showClientPurchases(data) {
     showMemberBalance()
 }
 
-function showEnquiryBids(enquiryId, keywords, description, data) {
+function showEnquiryBids(enquiryId, data) {
     var items = '<table style="width:100%">\n' +
     '<thead><tr>\n' +
     '<th>Bid</th><th>Comment</th><th>Expert</th>\n' +
@@ -347,7 +346,6 @@ function showEnquiryBids(enquiryId, keywords, description, data) {
     $("#clientEnquiryBidsPanel").html(items);
 
     globalEnquiryId = enquiryId;
-    globalKeywords = keywords;
 
     showMemberBalance();
 }
@@ -473,14 +471,17 @@ function placeEnquiry() {
                             if (bidId0 > 0) {
                                 confirmTransaction(contextPath + '/enquiry/bid/' + bidId0 + '/confirm',
                                                    result);
+                                waitForTransactionToBeMined(result, enquiryBidSelected, bidId0, result);
                             }
                             if (bidId1 > 0) {
                                 confirmTransaction(contextPath + '/enquiry/bid/' + bidId1 + '/confirm',
                                                    result);
+                                waitForTransactionToBeMined(result, enquiryBidSelected, bidId1, result);
                             }
                             if (bidId2 > 0) {
                                 confirmTransaction(contextPath + '/enquiry/bid/' + bidId2 + '/confirm',
                                                    result);
+                                waitForTransactionToBeMined(result, enquiryBidSelected, bidId2, result);
                             }
                         }
                     }
@@ -493,10 +494,20 @@ function placeEnquiry() {
     }
 }
 
-function getEnquiryBids(enquiryId, keywords, description) {
+function enquiryBidSelected(enquiryBidId, transactionHash) {
+    commitTransaction(contextPath + '/enquiry/bid/' + enquiryBidId + '/commit',
+                      transactionHash,
+                      function(data) {
+                          getEnquiryBids(globalEnquiryId);
+                          showMemberBalance();
+                      }
+    );
+}
+
+function getEnquiryBids(enquiryId) {
     $.get(contextPath + '/enquiry/' + enquiryId + '/bid',
         function(data) {
-            showEnquiryBids(enquiryId, keywords, description, data)
+            showEnquiryBids(enquiryId, data);
         }
     )
     .fail(function(error) {

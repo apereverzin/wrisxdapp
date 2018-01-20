@@ -27,6 +27,10 @@
 
 
 
+
+
+
+
     </style>
     <script type="text/javascript" src="./js/web3.js"></script>
     <script type="text/javascript" src="./js/jquery-3.2.1.min.js"></script>
@@ -51,6 +55,10 @@
             showMemberData();
             showMemberBalance();
         })
+
+
+
+
 
 
 
@@ -333,18 +341,65 @@
                 </div>
             </div>
             <div id="expertBidsTab">
-                <form id="bid-upload-file-form">
-                    Price (WRX): <input type="text" id="expertBidPrice"/>&nbsp;&nbsp;
-                    Title: <input type="text" id="expertBidTitle"/><br>
-                    Description: <input type="text" id="expertBidDescription"/><br>
-                    Key words: <input type="text" id="expertBidKeywords"/><br>
-                    <label for="bid-upload-file-input">Upload your file</label>
-                    <input id="bid-upload-file-input" type="file" name="uploadfile" accept="*"/>
-                    <br/>
-                    <span id="bid-upload-file-message"></span>
-                </form>
+                <!--<form id="bid-upload-file-form">-->
+                <!--Price (WRX): <input type="text" id="expertBidPrice"/>&nbsp;&nbsp;-->
+                <!--Title: <input type="text" id="expertBidTitle"/><br>-->
+                <!--Description: <input type="text" id="expertBidDescription"/><br>-->
+                <!--Key words: <input type="text" id="expertBidKeywords"/><br>-->
+                <!--<label for="bid-upload-file-input">Upload your file</label>-->
+                <!--<input id="bid-upload-file-input" type="file" name="uploadfile" accept="*"/>-->
+                <!--<br/>-->
+                <!--<span id="bid-upload-file-message"></span>-->
+                <!--</form>-->
+                <div class="formPanel">
+                    <form id="bid-upload-file-form">
+                        <div>
+                            <div class="inputTitle">Price (WRX)</div>
+                            <div class="inputValue">
+                                <input class="inputText textDecoration" type="text" id="expertBidPrice"/>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="inputTitle">Title</div>
+                            <div class="inputValue">
+                                <input class="inputText textDecoration" type="text" id="expertBidTitle"/>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="inputTitle">Description</div>
+                            <div class="inputValue">
+                                <input class="inputText textDecoration" type="text" id="expertBidDescription"/>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="inputTitle">Key words</div>
+                            <div class="inputValue">
+                                <input class="inputText textDecoration" type="text" id="expertBidKeywords"/>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="inputTitle">
+                                <label for="bid-upload-file-input">Upload your file</label>
+                            </div>
+                            <div class="inputValue">
+                                <input id="bid-upload-file-input" type="file" name="uploadfile" accept="*"/>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="inputTitle" id="bid-upload-file-message"></div>
+                        </div>
+                    </form>
+                </div>
 
-                <p id="expertEnquiryBidsPanel"/>
+                <div class="listPanel">
+                    <div>
+                        <div class="listItemsTablePanel panelBackground">
+                            <div id="expertEnquiryBidsPanel">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--<p id="expertEnquiryBidsPanel"/>-->
             </div>
         </div>
 
