@@ -69,7 +69,7 @@ public class ExpertService {
             return new ExpertData(expert);
         }
 
-        String msg = MessageFormat.format("ExpertRequest already exists {0}", expertRequest.getAddress());
+        String msg = MessageFormat.format("Expert already exists {0}", expertRequest.getAddress());
         logger.error(msg);
         throw new BadRequestException(msg);
     }
