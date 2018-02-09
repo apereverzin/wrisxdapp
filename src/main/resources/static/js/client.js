@@ -196,15 +196,21 @@ function purchasePaid(purchaseId, transactionHash) {
 function getResearchPassword(fileName) {
     address = getAddress();
 
-    contractInstance.getResearch.call(fileName, {from: address},
-        function(error, result) {
-            if(error) {
-                console.log(error);
-            } else {
-                bootbox.alert('<b>Password:</b> ' + result);
-            }
+    $.get(contextPath + '/research/client/' + address + '/password/' + fileName,
+        function(data) {
+            bootbox.alert('<b>Password:</b> ' + data);
         }
     );
+
+//    contractInstance.getResearch.call(fileName, {from: address},
+//        function(error, result) {
+//            if(error) {
+//                console.log(error);
+//            } else {
+//                bootbox.alert('<b>Password:</b> ' + result);
+//            }
+//        }
+//    );
 }
 
 function showClientResearchItems(data) {

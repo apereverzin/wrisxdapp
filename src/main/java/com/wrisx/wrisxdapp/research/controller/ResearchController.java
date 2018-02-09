@@ -120,6 +120,17 @@ public class ResearchController {
         return ResponseEntity.ok(researchItems);
     }
 
+    @RequestMapping(value = "/research/client/{address}/password/{uuid}", method = GET)
+    public ResponseEntity<String> getResearchPassword(
+            @PathVariable("address") String clientAddress,
+            @PathVariable String uuid) {
+        logger.debug(MessageFormat.format("Getting research {0}", uuid));
+
+        String researchPassword = researchService.getResearchPassword(clientAddress, uuid);
+
+        return ResponseEntity.ok(researchPassword);
+    }
+
     @RequestMapping(value = "/research/{uuid}", method = GET)
     public ResponseEntity<ResearchData> getResearch(@PathVariable String uuid) {
         logger.debug(MessageFormat.format("Getting research {0}", uuid));

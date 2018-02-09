@@ -136,7 +136,6 @@ public class ResearchService {
                     purchase.setState(CONFIRMED);
                     purchaseDao.save(purchase);
                 });
-        research.setPassword(null);
         research.setState(CONFIRMED);
         research.setTransactionHash(transactionHash);
 
@@ -182,6 +181,21 @@ public class ResearchService {
         Research research = entityProvider.getResearchByUuid(uuid);
 
         return new ResearchData(research);
+    }
+
+    public String getResearchPassword(String clientAddress,
+                                      String uuid) throws ResourceNotFoundException {
+        Client client = entityProvider.getClientByAddress(clientAddress);
+        Research research = entityProvider.getResearchByUuid(uuid);
+        List<Purchase> purchases =
+                purchaseDao.findByClientAndResearch(client, research);
+        if (purchases.isEmpty()) {
+            throw new BadRequestException(
+                    String.format("No purchase found for %s by client %s",
+                            uuid, clientAddress));
+        }
+
+        return research.getPassword();
     }
 
     public List<ResearchData> findResearchItems(String clientAddress, String keywords)
@@ -236,8 +250,14 @@ public class ResearchService {
             throws ResourceNotFoundException {
         Expert expert = entityProvider.getExpertByAddress(researchRequest.getExpertAddress());
 
-        Research research = new Research(researchRequest.getUuid(), researchRequest.getPrice(), researchRequest.getTitle(), researchRequest.getDescription(),
-                researchRequest.getKeywords(), researchRequest.getChecksum(), researchRequest.getPassword(), expert);
+        Research research = new Research(researchRequest.getUuid(),
+                researchRequest.getPrice(),
+                researchRequest.getTitle(),
+                researchRequest.getDescription(),
+                researchRequest.getKeywords(),
+                researchRequest.getChecksum(),
+                researchRequest.getPassword(),
+                expert);
         research = researchDao.save(research);
 
         return research;

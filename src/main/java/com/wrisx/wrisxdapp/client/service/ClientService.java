@@ -87,6 +87,7 @@ public class ClientService {
 
     public void confirmClientCreation(String clientAddress, String transactionHash)
             throws ResourceNotFoundException {
+        System.out.println("-------confirmClientCreation22");
         Client client = entityProvider.getClientByAddress(clientAddress);
 
         client.setState(CONFIRMED);

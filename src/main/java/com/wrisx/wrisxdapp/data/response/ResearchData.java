@@ -32,7 +32,6 @@ public class ResearchData implements Serializable {
     @JsonProperty
     private String checksum;
 
-    @JsonProperty
     private String password;
 
     @JsonProperty

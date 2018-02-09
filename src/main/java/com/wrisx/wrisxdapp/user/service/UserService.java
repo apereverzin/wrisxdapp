@@ -48,7 +48,7 @@ public class UserService {
         try {
             userDao.delete(user);
         } catch (Exception ex) {
-            //
+            logger.debug(ex.getMessage());
         }
     }
 
