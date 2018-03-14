@@ -14,7 +14,7 @@ function registerFacilitator() {
         handleError(error);
     });
 
-    contractInstance.registerFacilitator(name, {from: address},
+    contractInstance.registerFacilitator({from: address},
         function(error, result) {
             if(!error) {
 

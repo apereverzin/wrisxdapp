@@ -74,7 +74,6 @@ public class ClientController {
             @RequestBody TransactionHashRequest transactionHashRequest) {
         logger.debug(MessageFormat.format(
                 "Confirming client creation {0}", clientAddress));
-        System.out.println("-------confirmClientCreation11");
 
         clientService.confirmClientCreation(clientAddress,
                 transactionHashRequest.getTransactionHash());

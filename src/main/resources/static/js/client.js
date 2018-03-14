@@ -68,7 +68,7 @@ function registerClient() {
             'Content-Type': 'application/json'
         },
         success: function (data) {
-            contractInstance.registerClient(name, secret, {from: address},
+            contractInstance.registerClient(secret, {from: address},
                 function(error, result) {
                     if(error) {
                         rollbackTransaction(contextPath + "/client/" + address,
