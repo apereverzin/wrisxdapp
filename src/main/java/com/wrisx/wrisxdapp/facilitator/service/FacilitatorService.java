@@ -1,5 +1,6 @@
 package com.wrisx.wrisxdapp.facilitator.service;
 
+import com.wrisx.wrisxdapp.data.request.FacilitatorRequest;
 import com.wrisx.wrisxdapp.domain.Facilitator;
 import com.wrisx.wrisxdapp.domain.FacilitatorDao;
 import com.wrisx.wrisxdapp.domain.User;
@@ -31,27 +32,40 @@ public class FacilitatorService {
         this.userDao = userDao;
     }
 
-    public Facilitator createFacilitator(String facilitatorAddress, String name,
-                                         String emailAddress, String description,
-                                         String secret) {
-        validateStringArgument(facilitatorAddress, "Address cannot be null or empty");
-        validateStringArguments(name, emailAddress, description, secret);
+    public Facilitator createFacilitator(FacilitatorRequest facilitatorRequest) {
+        validateStringArgument(facilitatorRequest.getAddress(),
+                "Address cannot be null or empty");
+        validateStringArguments(facilitatorRequest.getName(),
+                facilitatorRequest.getEmailAddress(),
+                facilitatorRequest.getKeywords(),
+                facilitatorRequest.getDescription(),
+                facilitatorRequest.getPassword());
 
-        Facilitator facilitator = facilitatorDao.findByAddress(facilitatorAddress);
+        Facilitator facilitator =
+                facilitatorDao.findByAddress(facilitatorRequest.getAddress());
 
         if (facilitator == null) {
-            User user = userDao.findByAddress(facilitatorAddress);
+            User user = userDao.findByAddress(facilitatorRequest.getAddress());
             if (user == null) {
-                user = new User(facilitatorAddress, name, emailAddress, secret);
+                user = new User(facilitatorRequest.getAddress(),
+                        facilitatorRequest.getName(),
+                        facilitatorRequest.getEmailAddress(),
+                        facilitatorRequest.getProfileLink(),
+                        facilitatorRequest.getWebsiteLink(),
+                        facilitatorRequest.getPassword());
                 user = userDao.save(user);
             }
 
-            facilitator = new Facilitator(facilitatorAddress, description, user);
+            facilitator = new Facilitator(facilitatorRequest.getAddress(),
+                    facilitatorRequest.getKeywords(),
+                    facilitatorRequest.getDescription(),
+                    user);
             facilitator = facilitatorDao.save(facilitator);
             return facilitator;
         }
 
-        String msg = MessageFormat.format("Facilitator already exists {0}", facilitatorAddress);
+        String msg = MessageFormat.format(
+                "Facilitator already exists {0}", facilitatorRequest.getAddress());
         logger.error(msg);
         throw new BadRequestException(msg);
     }

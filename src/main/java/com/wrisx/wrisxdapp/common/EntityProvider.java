@@ -108,8 +108,8 @@ public class EntityProvider {
         return user;
     }
 
-    public Research getResearchByUuid(String uuid) throws ResourceNotFoundException {
-        Research research = researchDao.findByUuid(uuid);
+    public Research getResearchByPdfUuid(String uuid) throws ResourceNotFoundException {
+        Research research = researchDao.findByPdfUuid(uuid);
 
         if (research == null) {
             throwNotFoundException(MessageFormat.format("Research not found {0}", uuid));
@@ -118,10 +118,10 @@ public class EntityProvider {
         return research;
     }
 
-    public Research getResearchByUuidAndTransactionHash(String uuid,
-                                                        String transactionHash)
+    public Research getResearchByPdfUuidAndTransactionHash(String uuid,
+                                                           String transactionHash)
             throws ResourceNotFoundException {
-        Research research = researchDao.findByUuidAndTransactionHash(uuid, transactionHash);
+        Research research = researchDao.findByPdfUuidAndTransactionHash(uuid, transactionHash);
 
         if (research == null) {
             throwNotFoundException(MessageFormat.format(

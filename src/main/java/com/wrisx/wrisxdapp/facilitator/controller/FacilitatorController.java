@@ -1,5 +1,6 @@
 package com.wrisx.wrisxdapp.facilitator.controller;
 
+import com.wrisx.wrisxdapp.data.request.FacilitatorRequest;
 import com.wrisx.wrisxdapp.domain.Facilitator;
 import com.wrisx.wrisxdapp.facilitator.service.FacilitatorService;
 import org.slf4j.Logger;
@@ -8,8 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.text.MessageFormat;
@@ -33,14 +34,11 @@ public class FacilitatorController {
 
     @RequestMapping(value = "/facilitator", method = POST)
     public ResponseEntity<?> createFacilitator(
-            @RequestParam("address") String address,
-            @RequestParam("name") String name,
-            @RequestParam("emailAddress") String emailAddress,
-            @RequestParam("description") String description,
-            @RequestParam("secret") String secret) {
-        logger.debug(MessageFormat.format("Creating facilitator {0}", address));
+            @RequestBody FacilitatorRequest facilitatorRequest) {
+        logger.debug(MessageFormat.format("Creating facilitator {0}",
+                facilitatorRequest.getAddress()));
 
-        facilitatorService.createFacilitator(address, name, emailAddress, description, secret);
+        facilitatorService.createFacilitator(facilitatorRequest);
 
         return ResponseEntity.ok().build();
     }

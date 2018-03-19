@@ -31,8 +31,12 @@ public class User {
     @NotNull
     private String emailAddress;
 
+    private String profileLink;
+
+    private String websiteLink;
+
     @NotNull
-    private String secret;
+    private String password;
 
     @NotNull
     @Enumerated(EnumType.STRING)
@@ -46,11 +50,18 @@ public class User {
         //
     }
 
-    public User(String address, String name, String emailAddress, String secret) {
+    public User(String address,
+                String name,
+                String emailAddress,
+                String profileLink,
+                String websiteLink,
+                String password) {
         this.address = address;
         this.name = name;
         this.emailAddress = emailAddress;
-        this.secret = secret;
+        this.profileLink = profileLink;
+        this.websiteLink = websiteLink;
+        this.password = password;
         this.state = CREATED;
     }
 }

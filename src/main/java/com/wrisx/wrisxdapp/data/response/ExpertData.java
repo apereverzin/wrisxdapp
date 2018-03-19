@@ -19,6 +19,12 @@ public class ExpertData implements Serializable {
     private String emailAddress;
 
     @JsonProperty
+    private String profileLink;
+
+    @JsonProperty
+    private String websiteLink;
+
+    @JsonProperty
     private String keywords;
 
     @JsonProperty
@@ -29,6 +35,8 @@ public class ExpertData implements Serializable {
         this.address = expert.getAddress();
         this.name = expert.getUser().getName();
         this.emailAddress = expert.getUser().getEmailAddress();
+        this.profileLink = expert.getUser().getProfileLink();
+        this.websiteLink = expert.getUser().getWebsiteLink();
         this.keywords = expert.getKeywords();
         this.description = expert.getDescription();
     }

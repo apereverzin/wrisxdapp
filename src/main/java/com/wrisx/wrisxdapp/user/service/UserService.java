@@ -6,13 +6,10 @@ import com.wrisx.wrisxdapp.common.RandomStringProvider;
 import com.wrisx.wrisxdapp.data.response.UserData;
 import com.wrisx.wrisxdapp.domain.User;
 import com.wrisx.wrisxdapp.domain.UserDao;
-import com.wrisx.wrisxdapp.errorhandling.UnauthorizedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.text.MessageFormat;
 
 @Service
 public class UserService {
@@ -49,21 +46,6 @@ public class UserService {
             userDao.delete(user);
         } catch (Exception ex) {
             logger.debug(ex.getMessage());
-        }
-    }
-
-    public String getNonce() {
-        return randomStringProvider.getRandomString(NONCE_LENGTH);
-    }
-
-    public void verifyHash(String userAddress, String nonce, String hash) {
-        User user = entityProvider.getUserByAddress(userAddress);
-
-        String str = user.getSecret() + nonce;
-        String res = digestProvider.getStringDigest(str, MD5_ALGORITHM);
-        if (!res.equals(hash)) {
-            throw new UnauthorizedException(MessageFormat.format(
-                    "Cannot authorize {0}", userAddress));
         }
     }
 }

@@ -114,7 +114,7 @@ public class ResearchService {
 
     @Transactional
     public void deleteResearch(String uuid) throws ResourceNotFoundException {
-        Research research = entityProvider.getResearchByUuid(uuid);
+        Research research = entityProvider.getResearchByPdfUuid(uuid);
 
         purchaseDao.findByResearch(research).forEach(
                 purchase -> purchaseDao.delete(purchase));
@@ -129,7 +129,7 @@ public class ResearchService {
     @Transactional
     public void confirmResearchCreation(String uuid, String transactionHash)
             throws ResourceNotFoundException {
-        Research research = entityProvider.getResearchByUuid(uuid);
+        Research research = entityProvider.getResearchByPdfUuid(uuid);
 
         purchaseDao.findByResearch(research).forEach(
                 purchase -> {
@@ -146,7 +146,7 @@ public class ResearchService {
     public void commitResearchCreation(String uuid, String transactionHash)
             throws ResourceNotFoundException {
         Research research =
-                entityProvider.getResearchByUuidAndTransactionHash(uuid, transactionHash);
+                entityProvider.getResearchByPdfUuidAndTransactionHash(uuid, transactionHash);
 
         if (research.getState() != CONFIRMED) {
             throw new BadRequestException(MessageFormat.format(
@@ -178,7 +178,7 @@ public class ResearchService {
     }
 
     public ResearchData getResearch(String uuid) throws ResourceNotFoundException {
-        Research research = entityProvider.getResearchByUuid(uuid);
+        Research research = entityProvider.getResearchByPdfUuid(uuid);
 
         return new ResearchData(research);
     }
@@ -186,7 +186,7 @@ public class ResearchService {
     public String getResearchPassword(String clientAddress,
                                       String uuid) throws ResourceNotFoundException {
         Client client = entityProvider.getClientByAddress(clientAddress);
-        Research research = entityProvider.getResearchByUuid(uuid);
+        Research research = entityProvider.getResearchByPdfUuid(uuid);
         List<Purchase> purchases =
                 purchaseDao.findByClientAndResearch(client, research);
         if (purchases.isEmpty()) {
@@ -250,8 +250,8 @@ public class ResearchService {
             throws ResourceNotFoundException {
         Expert expert = entityProvider.getExpertByAddress(researchRequest.getExpertAddress());
 
-        Research research = new Research(researchRequest.getUuid(),
-                researchRequest.getPrice(),
+        Research research = new Research(researchRequest.getPdfUuid(),
+                researchRequest.getVideoUuid(),
                 researchRequest.getTitle(),
                 researchRequest.getDescription(),
                 researchRequest.getKeywords(),

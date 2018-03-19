@@ -26,10 +26,10 @@ public class Research {
     private long id;
 
     @NotNull
-    private String uuid;
+    private String pdfUuid;
 
     @NotNull
-    private int price;
+    private String videoUuid;
 
     @NotNull
     private String title;
@@ -66,11 +66,11 @@ public class Research {
         //
     }
 
-    public Research(String uuid, int price, String title, String description,
-                    String keywords, String checksum, String password,
-                    Expert expert) {
-        this.uuid = uuid;
-        this.price = price;
+    public Research(String pdfUuid, String videoUuid, String title,
+                    String description, String keywords, String checksum,
+                    String password, Expert expert) {
+        this.pdfUuid = pdfUuid;
+        this.videoUuid = videoUuid;
         this.title = title;
         this.description = description;
         this.keywords = keywords;

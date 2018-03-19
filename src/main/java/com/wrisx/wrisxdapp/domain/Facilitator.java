@@ -28,6 +28,9 @@ public class Facilitator {
     private String address;
 
     @NotNull
+    private String keywords;
+
+    @NotNull
     private String description;
 
     @NotNull
@@ -47,8 +50,12 @@ public class Facilitator {
         //
     }
 
-    public Facilitator(String address, String description, User user) {
+    public Facilitator(String address,
+                       String keywords,
+                       String description,
+                       User user) {
         this.address = address;
+        this.keywords = keywords;
         this.description = description;
         this.user = user;
         this.state = CREATED;

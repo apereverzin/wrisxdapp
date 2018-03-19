@@ -19,6 +19,12 @@ public class ClientData implements Serializable {
     private String emailAddress;
 
     @JsonProperty
+    private String profileLink;
+
+    @JsonProperty
+    private String websiteLink;
+
+    @JsonProperty
     private String description;
 
     public ClientData(Client client) {
@@ -26,6 +32,8 @@ public class ClientData implements Serializable {
         this.address = client.getAddress();
         this.name = client.getUser().getName();
         this.emailAddress = client.getUser().getEmailAddress();
+        this.profileLink = client.getUser().getProfileLink();
+        this.websiteLink = client.getUser().getWebsiteLink();
         this.description = client.getDescription();
     }
 }

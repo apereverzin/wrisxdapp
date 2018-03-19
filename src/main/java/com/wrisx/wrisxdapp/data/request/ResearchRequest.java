@@ -9,8 +9,8 @@ import lombok.ToString;
 @ToString
 public class ResearchRequest {
     String expertAddress;
-    String uuid;
-    int price;
+    String pdfUuid;
+    String videoUuid;
     String title;
     String description;
     String keywords;

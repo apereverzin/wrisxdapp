@@ -40,9 +40,9 @@ public class PurchaseService {
     public PurchaseData createPurchase(PurchaseRequest purchaseRequest)
             throws ResourceNotFoundException {
         Client client = entityProvider.getClientByAddress(purchaseRequest.getAddress());
-        Research research = entityProvider.getResearchByUuid(purchaseRequest.getUuid());
+        Research research = entityProvider.getResearchByPdfUuid(purchaseRequest.getUuid());
 
-        return createPurchase(client, research, research.getPrice());
+        return createPurchase(client, research, 0);
     }
 
     public PurchaseData createPurchase(Client client, Research research, int price) {
@@ -108,7 +108,7 @@ public class PurchaseService {
     }
 
     public List<PurchaseData> getResearchPurchases(String uuid) throws ResourceNotFoundException {
-        Research research = entityProvider.getResearchByUuid(uuid);
+        Research research = entityProvider.getResearchByPdfUuid(uuid);
 
         return purchaseDao.findByResearch(research).stream().
                 sorted(comparing(Purchase::getTimestamp).reversed()).

@@ -7,7 +7,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @Getter
 @ToString
-public class ExpertRequest {
+public class FacilitatorRequest {
     private String address;
     private String name;
     private String emailAddress;

@@ -46,16 +46,22 @@ public class ClientService {
 
     public ClientData createClient(ClientRequest clientRequest) {
         validateStringArgument(clientRequest.getAddress(), "Address cannot be empty");
-        validateStringArguments(clientRequest.getName(), clientRequest.getEmailAddress(),
-                clientRequest.getDescription(), clientRequest.getSecret());
+        validateStringArguments(clientRequest.getName(),
+                clientRequest.getEmailAddress(),
+                clientRequest.getDescription(),
+                clientRequest.getPassword());
 
         Client client = clientDao.findByAddress(clientRequest.getAddress());
 
         if (client == null) {
             User user = userDao.findByAddress(clientRequest.getAddress());
             if (user == null) {
-                user = new User(clientRequest.getAddress(), clientRequest.getName(),
-                        clientRequest.getEmailAddress(), clientRequest.getSecret());
+                user = new User(clientRequest.getAddress(),
+                        clientRequest.getName(),
+                        clientRequest.getEmailAddress(),
+                        clientRequest.getProfileLink(),
+                        clientRequest.getWebsiteLink(),
+                        clientRequest.getPassword());
                 user = userDao.save(user);
             }
 
@@ -87,7 +93,6 @@ public class ClientService {
 
     public void confirmClientCreation(String clientAddress, String transactionHash)
             throws ResourceNotFoundException {
-        System.out.println("-------confirmClientCreation22");
         Client client = entityProvider.getClientByAddress(clientAddress);
 
         client.setState(CONFIRMED);

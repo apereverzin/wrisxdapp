@@ -14,10 +14,10 @@ public class ResearchData implements Serializable {
     private long id;
 
     @JsonProperty
-    private String uuid;
+    private String pdfUuid;
 
     @JsonProperty
-    private int price;
+    private String videoUuid;
 
     @JsonProperty
     private String title;
@@ -50,8 +50,8 @@ public class ResearchData implements Serializable {
 
     public ResearchData(Research research, Purchase purchase) {
         this.id = research.getId();
-        this.uuid = research.getUuid();
-        this.price = research.getPrice();
+        this.pdfUuid = research.getPdfUuid();
+        this.videoUuid = research.getVideoUuid();
         this.title = research.getTitle();
         this.description = research.getDescription();
         this.keywords = research.getKeywords();
