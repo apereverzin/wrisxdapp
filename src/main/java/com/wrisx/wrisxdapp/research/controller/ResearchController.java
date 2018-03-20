@@ -59,7 +59,8 @@ public class ResearchController {
     }
 
     @RequestMapping(value = "/research", method = POST, consumes = APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> setFileAttributes(@RequestBody ResearchRequest researchRequest) {
+    public ResponseEntity<?> setFileAttributes(
+            @RequestBody ResearchRequest researchRequest) {
         logger.debug(MessageFormat.format("Setting file attributes {0}", researchRequest.getTitle()));
 
         ResearchData research = researchService.saveResearch(researchRequest);

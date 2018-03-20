@@ -4,6 +4,7 @@ import com.wrisx.wrisxdapp.client.service.ClientService;
 import com.wrisx.wrisxdapp.data.request.ClientRequest;
 import com.wrisx.wrisxdapp.data.request.TransactionHashRequest;
 import com.wrisx.wrisxdapp.data.response.ClientData;
+import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +50,8 @@ public class ClientController {
 
     @RequestMapping(value = "/client/{address}", method = GET)
     public ResponseEntity<ClientData> getClient(
-            @PathVariable("address") String clientAddress) {
+            @PathVariable("address") String clientAddress,
+            HttpServletRequest request) {
         logger.debug(MessageFormat.format("Getting client {0}", clientAddress));
 
         ClientData client = clientService.getClient(clientAddress);
