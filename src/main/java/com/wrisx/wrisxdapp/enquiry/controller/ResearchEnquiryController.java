@@ -3,6 +3,7 @@ package com.wrisx.wrisxdapp.enquiry.controller;
 import com.wrisx.wrisxdapp.data.request.ResearchEnquiryRequest;
 import com.wrisx.wrisxdapp.data.response.ResearchEnquiryData;
 import com.wrisx.wrisxdapp.enquiry.service.ResearchEnquiryService;
+import com.wrisx.wrisxdapp.security.service.AuthenticationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import java.text.MessageFormat;
 import java.util.List;
 
@@ -28,15 +30,21 @@ public class ResearchEnquiryController {
     private final Logger logger = LoggerFactory.getLogger(ResearchEnquiryController.class);
 
     private final ResearchEnquiryService researchEnquiryService;
+    private final AuthenticationService authenticationService;
 
     @Autowired
-    public ResearchEnquiryController(ResearchEnquiryService researchEnquiryService) {
+    public ResearchEnquiryController(ResearchEnquiryService researchEnquiryService,
+                                     AuthenticationService authenticationService) {
         this.researchEnquiryService = researchEnquiryService;
+        this.authenticationService = authenticationService;
     }
 
     @RequestMapping(value = "/enquiry", method = POST, consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<ResearchEnquiryData> createEnquiry(
-            @RequestBody ResearchEnquiryRequest researchEnquiryRequest) {
+            @RequestBody ResearchEnquiryRequest researchEnquiryRequest,
+            HttpServletRequest request) {
+        String emailAddress = authenticationService.authenticateRequest(request);
+
         logger.debug(MessageFormat.format("Creating research enquiry {0}",
                 researchEnquiryRequest.getKeywords()));
 
@@ -49,7 +57,10 @@ public class ResearchEnquiryController {
     @RequestMapping(value = "/enquiry/client/{address}", method = GET)
     public ResponseEntity<List<ResearchEnquiryData>> getClientEnquiries(
             @PathVariable("address") String clientAddress,
-            Pageable pageable) {
+            Pageable pageable,
+            HttpServletRequest request) {
+        authenticationService.authenticateRequest(request, clientAddress);
+
         logger.debug(MessageFormat.format(
                 "Getting research enquiries of client {0}", clientAddress));
 
@@ -65,7 +76,10 @@ public class ResearchEnquiryController {
     @RequestMapping(value = "/enquiry/expert/{address}/{id}", method = GET)
     public ResponseEntity<ResearchEnquiryData> getEnquiry(
             @PathVariable("address") String expertAddress,
-            @PathVariable long id) {
+            @PathVariable long id,
+            HttpServletRequest request) {
+        authenticationService.authenticateRequest(request, expertAddress);
+
         logger.debug(MessageFormat.format("Getting research enquiry {0}", id));
 
         ResearchEnquiryData researchEnquiry =
@@ -78,7 +92,10 @@ public class ResearchEnquiryController {
     public ResponseEntity<List<ResearchEnquiryData>> findExpertEnquiries(
             @PathVariable("address") String expertAddress,
             @PathVariable String keywords,
-            Pageable pageable) {
+            Pageable pageable,
+            HttpServletRequest request) {
+        authenticationService.authenticateRequest(request, expertAddress);
+
         logger.debug(MessageFormat.format(
                 "Searching research enquiries for expert {0} {1}",
                 expertAddress, keywords));
@@ -89,7 +106,10 @@ public class ResearchEnquiryController {
     @RequestMapping(value = "/enquiry/expert/{address}/keywords", method = GET)
     public ResponseEntity<List<ResearchEnquiryData>> findAllExpertEnquiries(
             @PathVariable("address") String expertAddress,
-            Pageable pageable) {
+            Pageable pageable,
+            HttpServletRequest request) {
+        authenticationService.authenticateRequest(request, expertAddress);
+
         logger.debug(MessageFormat.format(
                 "Searching research enquiries for expert {0}",
                 expertAddress));

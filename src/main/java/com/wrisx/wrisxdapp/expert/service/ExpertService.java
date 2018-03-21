@@ -46,7 +46,7 @@ public class ExpertService {
         this.entityProvider = entityProvider;
     }
 
-    public ExpertData createExpert(ExpertRequest expertRequest) {
+    public Expert createExpert(ExpertRequest expertRequest) {
         validateStringArgument(expertRequest.getAddress(), "Address cannot be empty");
         validateStringArguments(expertRequest.getName(),
                 expertRequest.getEmailAddress(),
@@ -72,7 +72,7 @@ public class ExpertService {
                     expertRequest.getDescription(), user);
             expert = expertDao.save(expert);
 
-            return new ExpertData(expert);
+            return expert;
         }
 
         String msg = MessageFormat.format("Expert already exists {0}", expertRequest.getAddress());

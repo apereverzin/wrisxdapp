@@ -5,6 +5,7 @@ import com.wrisx.wrisxdapp.data.request.TransactionHashRequest;
 import com.wrisx.wrisxdapp.data.response.ResearchData;
 import com.wrisx.wrisxdapp.research.data.ResearchFile;
 import com.wrisx.wrisxdapp.research.service.ResearchService;
+import com.wrisx.wrisxdapp.security.service.AuthenticationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,15 +42,21 @@ public class ResearchController {
     private final Logger logger = LoggerFactory.getLogger(ResearchController.class);
 
     private final ResearchService researchService;
+    private final AuthenticationService authenticationService;
 
     @Autowired
-    public ResearchController(ResearchService researchService) {
+    public ResearchController(ResearchService researchService,
+                              AuthenticationService authenticationService) {
         this.researchService = researchService;
+        this.authenticationService = authenticationService;
     }
 
     @RequestMapping(value = "/uploadFile", method = POST)
     public ResponseEntity<ResearchFile> uploadFile(
-            @RequestParam("uploadfile") MultipartFile uploadfile) {
+            @RequestParam("uploadfile") MultipartFile uploadfile,
+            HttpServletRequest request) {
+        String emailAddress = authenticationService.authenticateRequest(request);
+
         logger.debug(MessageFormat.format("Uploading file {0}", uploadfile.getName()));
 
         ResearchFile researchFile =
@@ -60,7 +67,10 @@ public class ResearchController {
 
     @RequestMapping(value = "/research", method = POST, consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<?> setFileAttributes(
-            @RequestBody ResearchRequest researchRequest) {
+            @RequestBody ResearchRequest researchRequest,
+            HttpServletRequest request) {
+        String emailAddress = authenticationService.authenticateRequest(request);
+
         logger.debug(MessageFormat.format("Setting file attributes {0}", researchRequest.getTitle()));
 
         ResearchData research = researchService.saveResearch(researchRequest);
@@ -69,7 +79,11 @@ public class ResearchController {
     }
 
     @RequestMapping(value = "/research/{uuid}", method = DELETE)
-    public ResponseEntity<Void> deleteResearch(@PathVariable("uuid") String uuid) {
+    public ResponseEntity<Void> deleteResearch(
+            @PathVariable("uuid") String uuid,
+            HttpServletRequest request) {
+        String emailAddress = authenticationService.authenticateRequest(request);
+
         logger.debug(MessageFormat.format("Deleting research {0}", uuid));
 
         researchService.deleteResearch(uuid);
@@ -81,7 +95,10 @@ public class ResearchController {
             consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> confirmResearchCreation(
             @PathVariable("uuid") String uuid,
-            @RequestBody TransactionHashRequest transactionHashRequest) {
+            @RequestBody TransactionHashRequest transactionHashRequest,
+            HttpServletRequest request) {
+        String emailAddress = authenticationService.authenticateRequest(request);
+
         logger.debug(MessageFormat.format("Confirming research creation {0}", uuid));
 
         researchService.confirmResearchCreation(uuid,
@@ -94,7 +111,10 @@ public class ResearchController {
             consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> commitResearchCreation(
             @PathVariable("uuid") String uuid,
-            @RequestBody TransactionHashRequest transactionHashRequest) {
+            @RequestBody TransactionHashRequest transactionHashRequest,
+            HttpServletRequest request) {
+        String emailAddress = authenticationService.authenticateRequest(request);
+
         logger.debug(MessageFormat.format(
                 "Committing research creation {0} {1}",
                 uuid, transactionHashRequest.getTransactionHash()));
@@ -108,7 +128,10 @@ public class ResearchController {
     @RequestMapping(value = "/research/expert/{address}", method = GET)
     public ResponseEntity<List<ResearchData>> getExpertResearchItems(
             @PathVariable("address") String expertAddress,
-            Pageable pageable, HttpServletRequest request) {
+            Pageable pageable,
+            HttpServletRequest request) {
+        authenticationService.authenticateRequest(request, expertAddress);
+
         logger.debug(MessageFormat.format(
                 "Getting expert research items {0}", expertAddress));
 
@@ -124,7 +147,10 @@ public class ResearchController {
     @RequestMapping(value = "/research/client/{address}/password/{uuid}", method = GET)
     public ResponseEntity<String> getResearchPassword(
             @PathVariable("address") String clientAddress,
-            @PathVariable String uuid) {
+            @PathVariable String uuid,
+            HttpServletRequest request) {
+        authenticationService.authenticateRequest(request, clientAddress);
+
         logger.debug(MessageFormat.format("Getting research {0}", uuid));
 
         String researchPassword = researchService.getResearchPassword(clientAddress, uuid);
@@ -133,7 +159,11 @@ public class ResearchController {
     }
 
     @RequestMapping(value = "/research/{uuid}", method = GET)
-    public ResponseEntity<ResearchData> getResearch(@PathVariable String uuid) {
+    public ResponseEntity<ResearchData> getResearch(
+            @PathVariable String uuid,
+            HttpServletRequest request) {
+        String emailAddress = authenticationService.authenticateRequest(request);
+
         logger.debug(MessageFormat.format("Getting research {0}", uuid));
 
         ResearchData research = researchService.getResearch(uuid);
@@ -145,7 +175,10 @@ public class ResearchController {
     public ResponseEntity<List<ResearchData>> findClientResearchItems(
             @PathVariable String keywords,
             @PathVariable("address") String clientAddress,
-            Pageable pageable) {
+            Pageable pageable,
+            HttpServletRequest request) {
+        authenticationService.authenticateRequest(request, clientAddress);
+
         logger.debug(MessageFormat.format(
                 "Searching research items for client {0} {1}",
                 clientAddress, keywords));
@@ -156,7 +189,10 @@ public class ResearchController {
     @RequestMapping(value = "/research/client/{address}/keywords", method = GET)
     public ResponseEntity<List<ResearchData>> findAllClientResearchItems(
             @PathVariable("address") String clientAddress,
-            Pageable pageable) {
+            Pageable pageable,
+            HttpServletRequest request) {
+        authenticationService.authenticateRequest(request, clientAddress);
+
         logger.debug(MessageFormat.format(
                 "Searching research items for client {0}",
                 clientAddress));
@@ -179,7 +215,8 @@ public class ResearchController {
 
     @RequestMapping(value = "/research/keywords/{keywords}", method = GET)
     public ResponseEntity<List<ResearchData>> findResearchItems(
-            @PathVariable String keywords, Pageable pageable) {
+            @PathVariable String keywords,
+            Pageable pageable) {
         logger.debug(MessageFormat.format("Searching research {0}", keywords));
 
         List<ResearchData> researchItems =
@@ -192,7 +229,8 @@ public class ResearchController {
     }
 
     @RequestMapping(value = "/research/keywords", method = GET)
-    public ResponseEntity<List<ResearchData>> findAllResearchItems(Pageable pageable) {
+    public ResponseEntity<List<ResearchData>> findAllResearchItems(
+            Pageable pageable) {
         logger.debug("Searching research");
 
         List<ResearchData> researchItems =

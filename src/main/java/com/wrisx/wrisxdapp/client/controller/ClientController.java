@@ -4,6 +4,8 @@ import com.wrisx.wrisxdapp.client.service.ClientService;
 import com.wrisx.wrisxdapp.data.request.ClientRequest;
 import com.wrisx.wrisxdapp.data.request.TransactionHashRequest;
 import com.wrisx.wrisxdapp.data.response.ClientData;
+import com.wrisx.wrisxdapp.domain.Client;
+import com.wrisx.wrisxdapp.security.service.AuthenticationService;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,17 +35,23 @@ public class ClientController {
     private final Logger logger = LoggerFactory.getLogger(ClientController.class);
 
     private final ClientService clientService;
+    private final AuthenticationService authenticationService;
 
     @Autowired
-    public ClientController(ClientService clientService) {
+    public ClientController(ClientService clientService,
+                            AuthenticationService authenticationService) {
         this.clientService = clientService;
+        this.authenticationService = authenticationService;
     }
 
     @RequestMapping(value = "/client", method = POST, consumes = APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> createClient(@RequestBody ClientRequest clientRequest) {
+    public ResponseEntity<Void> createClient(
+            @RequestBody ClientRequest clientRequest,
+            HttpServletRequest request) {
         logger.debug(MessageFormat.format("Creating client {0}", clientRequest.getAddress()));
 
-        clientService.createClient(clientRequest);
+        Client client  = clientService.createClient(clientRequest);
+        authenticationService.storeUserInSession(request, client.getUser().getEmailAddress());
 
         return new ResponseEntity<>(CREATED);
     }
@@ -52,6 +60,8 @@ public class ClientController {
     public ResponseEntity<ClientData> getClient(
             @PathVariable("address") String clientAddress,
             HttpServletRequest request) {
+        authenticationService.authenticateRequest(request, clientAddress);
+
         logger.debug(MessageFormat.format("Getting client {0}", clientAddress));
 
         ClientData client = clientService.getClient(clientAddress);
@@ -61,7 +71,10 @@ public class ClientController {
 
     @RequestMapping(value = "/client/{address}", method = DELETE)
     public ResponseEntity<Void> deleteClient(
-            @PathVariable("address") String clientAddress) {
+            @PathVariable("address") String clientAddress,
+            HttpServletRequest request) {
+        authenticationService.authenticateRequest(request, clientAddress);
+
         logger.debug(MessageFormat.format("Deleting client {0}", clientAddress));
 
         clientService.deleteClient(clientAddress);
@@ -73,7 +86,10 @@ public class ClientController {
             consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> confirmClientCreation(
             @PathVariable("address") String clientAddress,
-            @RequestBody TransactionHashRequest transactionHashRequest) {
+            @RequestBody TransactionHashRequest transactionHashRequest,
+            HttpServletRequest request) {
+        authenticationService.authenticateRequest(request, clientAddress);
+
         logger.debug(MessageFormat.format(
                 "Confirming client creation {0}", clientAddress));
 
@@ -87,7 +103,10 @@ public class ClientController {
             consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> commitClientCreation(
             @PathVariable("address") String clientAddress,
-            @RequestBody TransactionHashRequest transactionHashRequest) {
+            @RequestBody TransactionHashRequest transactionHashRequest,
+            HttpServletRequest request) {
+        authenticationService.authenticateRequest(request, clientAddress);
+
         logger.debug(MessageFormat.format(
                 "Committing client creation {0} {1}",
                 clientAddress, transactionHashRequest.getTransactionHash()));

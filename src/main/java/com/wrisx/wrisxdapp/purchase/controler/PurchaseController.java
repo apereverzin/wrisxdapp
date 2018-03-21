@@ -4,6 +4,8 @@ import com.wrisx.wrisxdapp.data.request.PurchaseRequest;
 import com.wrisx.wrisxdapp.data.request.TransactionHashRequest;
 import com.wrisx.wrisxdapp.data.response.PurchaseData;
 import com.wrisx.wrisxdapp.purchase.service.PurchaseService;
+import com.wrisx.wrisxdapp.security.service.AuthenticationService;
+import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,16 +33,22 @@ public class PurchaseController {
     private final Logger logger = LoggerFactory.getLogger(PurchaseController.class);
 
     private final PurchaseService purchaseService;
+    private final AuthenticationService authenticationService;
 
     @Autowired
-    public PurchaseController(PurchaseService purchaseService) {
+    public PurchaseController(PurchaseService purchaseService,
+                              AuthenticationService authenticationService) {
         this.purchaseService = purchaseService;
+        this.authenticationService = authenticationService;
     }
 
     @RequestMapping(value = "/purchase", method = POST,
             consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<PurchaseData> payForResearch(
-            @RequestBody PurchaseRequest purchaseRequest) {
+            @RequestBody PurchaseRequest purchaseRequest,
+            HttpServletRequest request) {
+        String emailAddress = authenticationService.authenticateRequest(request);
+
         logger.debug(MessageFormat.format("Client {0} is paying for {1}",
                 purchaseRequest.getAddress(), purchaseRequest.getUuid()));
 
@@ -50,8 +58,11 @@ public class PurchaseController {
     }
 
     @RequestMapping(value = "/purchase/{id}", method = DELETE)
-    public ResponseEntity<Void> deleteResearch(
-            @PathVariable("id") long purchaseId) {
+    public ResponseEntity<Void> deletePurchase(
+            @PathVariable("id") long purchaseId,
+            HttpServletRequest request) {
+        String emailAddress = authenticationService.authenticateRequest(request);
+
         logger.debug(MessageFormat.format("Deleting purchase {0}", purchaseId));
 
         purchaseService.deletePurchase(purchaseId);
@@ -63,7 +74,10 @@ public class PurchaseController {
             consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> confirmResearch(
             @PathVariable("id") long purchaseId,
-            @RequestBody TransactionHashRequest transactionHashRequest) {
+            @RequestBody TransactionHashRequest transactionHashRequest,
+            HttpServletRequest request) {
+        String emailAddress = authenticationService.authenticateRequest(request);
+
         logger.debug(MessageFormat.format("Confirming purchase {0}", purchaseId));
 
         purchaseService.confirmPurchaseCreation(purchaseId,
@@ -76,7 +90,10 @@ public class PurchaseController {
             consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> commitPurchase(
             @PathVariable("id") long purchaseId,
-            @RequestBody TransactionHashRequest transactionHashRequest) {
+            @RequestBody TransactionHashRequest transactionHashRequest,
+            HttpServletRequest request) {
+        String emailAddress = authenticationService.authenticateRequest(request);
+
         logger.debug(MessageFormat.format(
                 "Committing purchase {0} {1}",
                 purchaseId, transactionHashRequest.getTransactionHash()));
@@ -90,7 +107,10 @@ public class PurchaseController {
     @RequestMapping(value = "/purchase/client/{address}", method = GET)
     public ResponseEntity<List<PurchaseData>> getClientPurchases(
             @PathVariable("address") String clientAddress,
-            Pageable pageable) {
+            Pageable pageable,
+            HttpServletRequest request) {
+        authenticationService.authenticateRequest(request, clientAddress);
+
         logger.debug(MessageFormat.format(
                 "Getting client purchases {0}", clientAddress));
 
@@ -106,7 +126,10 @@ public class PurchaseController {
     @RequestMapping(value = "/purchase/expert/{address}", method = GET)
     public ResponseEntity<List<PurchaseData>> getExpertPurchases(
             @PathVariable("address") String expertAddress,
-            Pageable pageable) {
+            Pageable pageable,
+            HttpServletRequest request) {
+        authenticationService.authenticateRequest(request, expertAddress);
+
         logger.debug(MessageFormat.format(
                 "Getting expert purchases {0}", expertAddress));
 
@@ -122,7 +145,10 @@ public class PurchaseController {
     @RequestMapping(value = "/purchase/research/{uuid}", method = GET)
     public ResponseEntity<List<PurchaseData>> getResearchPurchases(
             @PathVariable("uuid") String uuid,
-            Pageable pageable) {
+            Pageable pageable,
+            HttpServletRequest request) {
+        String emailAddress = authenticationService.authenticateRequest(request);
+
         logger.debug(MessageFormat.format("Client research purchases {0}", uuid));
 
         List<PurchaseData> purchases =

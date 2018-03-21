@@ -3,6 +3,7 @@ package com.wrisx.wrisxdapp.enquirybid.controller;
 import com.wrisx.wrisxdapp.data.request.TransactionHashRequest;
 import com.wrisx.wrisxdapp.data.response.EnquiryBidData;
 import com.wrisx.wrisxdapp.enquirybid.service.EnquiryBidService;
+import com.wrisx.wrisxdapp.security.service.AuthenticationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import java.text.MessageFormat;
 import java.util.List;
 
@@ -31,10 +33,13 @@ public class EnquiryBidController {
     private final Logger logger = LoggerFactory.getLogger(EnquiryBidController.class);
 
     private final EnquiryBidService enquiryBidService;
+    private final AuthenticationService authenticationService;
 
     @Autowired
-    public EnquiryBidController(EnquiryBidService enquiryBidService) {
+    public EnquiryBidController(EnquiryBidService enquiryBidService,
+                                AuthenticationService authenticationService) {
         this.enquiryBidService = enquiryBidService;
+        this.authenticationService = authenticationService;
     }
 
     @RequestMapping(value = "/enquiry/{enquiryId}/bid", method = POST)
@@ -42,7 +47,10 @@ public class EnquiryBidController {
             @PathVariable long enquiryId,
             @RequestParam("address") String expertAddress,
             @RequestParam("bid") int bid,
-            @RequestParam("comment") String comment) {
+            @RequestParam("comment") String comment,
+            HttpServletRequest request) {
+        String emailAddress = authenticationService.authenticateRequest(request);
+
         logger.debug(MessageFormat.format(
                 "Placing bid {0} for research enquiry {1}", bid, enquiryId));
 
@@ -54,7 +62,10 @@ public class EnquiryBidController {
 
     @RequestMapping(value = "/enquiry/bid/{enquiryBidId}/select", method = PUT)
     public ResponseEntity<EnquiryBidData> selectEnquiryBid(
-            @PathVariable long enquiryBidId) {
+            @PathVariable long enquiryBidId,
+            HttpServletRequest request) {
+        String emailAddress = authenticationService.authenticateRequest(request);
+
         logger.debug(MessageFormat.format(
                 "Selecting bid {0} for research enquiry", enquiryBidId));
 
@@ -66,7 +77,10 @@ public class EnquiryBidController {
 
     @RequestMapping(value = "/enquiry/bid/{enquiryBidId}/unselect", method = PUT)
     public ResponseEntity<EnquiryBidData> unselectEnquiryBid(
-            @PathVariable long enquiryBidId) {
+            @PathVariable long enquiryBidId,
+            HttpServletRequest request) {
+        String emailAddress = authenticationService.authenticateRequest(request);
+
         logger.debug(MessageFormat.format(
                 "Unselecting bid {0} for research enquiry", enquiryBidId));
 
@@ -78,7 +92,10 @@ public class EnquiryBidController {
 
     @RequestMapping(value = "/enquiry/bid/{enquiryBidId}", method = DELETE)
     public ResponseEntity<Void> deleteEnquiryBid(
-            @PathVariable long enquiryBidId) {
+            @PathVariable long enquiryBidId,
+            HttpServletRequest request) {
+        String emailAddress = authenticationService.authenticateRequest(request);
+
         logger.debug(MessageFormat.format(
                 "Deleting bid {0} for research enquiry", enquiryBidId));
 
@@ -91,7 +108,10 @@ public class EnquiryBidController {
             consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> confirmEnquiryBidCreation(
             @PathVariable long enquiryBidId,
-            @RequestBody TransactionHashRequest transactionHashRequest) {
+            @RequestBody TransactionHashRequest transactionHashRequest,
+            HttpServletRequest request) {
+        String emailAddress = authenticationService.authenticateRequest(request);
+
         logger.debug(MessageFormat.format(
                 "Confirming bid creation {0} for research enquiry", enquiryBidId));
 
@@ -105,7 +125,10 @@ public class EnquiryBidController {
             consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> commitEnquiryBidCreation(
             @PathVariable long enquiryBidId,
-            @RequestBody TransactionHashRequest transactionHashRequest) {
+            @RequestBody TransactionHashRequest transactionHashRequest,
+            HttpServletRequest request) {
+        String emailAddress = authenticationService.authenticateRequest(request);
+
         logger.debug(MessageFormat.format(
                 "Committing enquiry bid creation {0} {1}",
                 enquiryBidId, transactionHashRequest.getTransactionHash()));
@@ -119,7 +142,10 @@ public class EnquiryBidController {
     @RequestMapping(value = "/enquiry/bid/expert/{expertAddress}", method = GET)
     public ResponseEntity<List<EnquiryBidData>> getExpertEnquiryBids(
             @PathVariable String expertAddress,
-            Pageable pageable) {
+            Pageable pageable,
+            HttpServletRequest request) {
+        authenticationService.authenticateRequest(request, expertAddress);
+
         logger.debug(MessageFormat.format(
                 "Getting expert enquiry bids {0}", expertAddress));
 
@@ -135,7 +161,10 @@ public class EnquiryBidController {
     @RequestMapping(value = "/enquiry/{enquiryId}/bid", method = GET)
     public ResponseEntity<List<EnquiryBidData>> getEnquiryBids(
             @PathVariable long enquiryId,
-            Pageable pageable) {
+            Pageable pageable,
+            HttpServletRequest request) {
+        String emailAddress = authenticationService.authenticateRequest(request);
+
         logger.debug(MessageFormat.format(
                 "Getting bids for research enquiry {0}", enquiryId));
 

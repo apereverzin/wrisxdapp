@@ -3,6 +3,8 @@ package com.wrisx.wrisxdapp.facilitator.controller;
 import com.wrisx.wrisxdapp.data.request.FacilitatorRequest;
 import com.wrisx.wrisxdapp.domain.Facilitator;
 import com.wrisx.wrisxdapp.facilitator.service.FacilitatorService;
+import com.wrisx.wrisxdapp.security.service.AuthenticationService;
+import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,19 +28,24 @@ public class FacilitatorController {
     private final Logger logger = LoggerFactory.getLogger(FacilitatorController.class);
 
     private final FacilitatorService facilitatorService;
+    private final AuthenticationService authenticationService;
 
     @Autowired
-    public FacilitatorController(FacilitatorService facilitatorService) {
+    public FacilitatorController(FacilitatorService facilitatorService,
+                                 AuthenticationService authenticationService) {
         this.facilitatorService = facilitatorService;
+        this.authenticationService = authenticationService;
     }
 
     @RequestMapping(value = "/facilitator", method = POST)
     public ResponseEntity<?> createFacilitator(
-            @RequestBody FacilitatorRequest facilitatorRequest) {
+            @RequestBody FacilitatorRequest facilitatorRequest,
+            HttpServletRequest request) {
         logger.debug(MessageFormat.format("Creating facilitator {0}",
                 facilitatorRequest.getAddress()));
 
-        facilitatorService.createFacilitator(facilitatorRequest);
+        Facilitator facilitator = facilitatorService.createFacilitator(facilitatorRequest);
+        authenticationService.storeUserInSession(request, facilitator.getUser().getEmailAddress());
 
         return ResponseEntity.ok().build();
     }

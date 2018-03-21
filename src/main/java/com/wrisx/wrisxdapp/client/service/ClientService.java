@@ -44,7 +44,7 @@ public class ClientService {
         this.entityProvider = entityProvider;
     }
 
-    public ClientData createClient(ClientRequest clientRequest) {
+    public Client createClient(ClientRequest clientRequest) {
         validateStringArgument(clientRequest.getAddress(), "Address cannot be empty");
         validateStringArguments(clientRequest.getName(),
                 clientRequest.getEmailAddress(),
@@ -69,7 +69,7 @@ public class ClientService {
                     user);
             client = clientDao.save(client);
 
-            return new ClientData(client);
+            return client;
         }
 
         String msg = MessageFormat.format("Client already exists {0}", clientRequest.getAddress());
