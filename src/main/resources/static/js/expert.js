@@ -27,17 +27,21 @@ function registerExpert() {
     address = getAddress();
     var name = $("#expertName").val();
     var emailAddress = $("#expertEmailAddress").val();
+    var password = $("#expertPassword").val();
     var keywords = $("#expertKeywords").val();
+    var profileLink = $("#expertProfileLink").val();
+    var websiteLink = $("#expertWebsiteLink").val();
     var description = $("#expertDescription").val();
-    var secret = getSecret();
 
     var expertRequestData = JSON.stringify({
                                             'name': name,
                                             'address': address,
                                             'emailAddress': emailAddress,
+                                            'password': password,
+                                            'profileLink': profileLink,
+                                            'websiteLink': websiteLink,
                                             'keywords': keywords,
-                                            'description': description,
-                                            'secret': secret
+                                            'description': description
                                             });
 
     $.ajax({
@@ -63,6 +67,10 @@ function registerExpert() {
                                            result);
                         $("#expertName").val('');
                         $("#expertEmailAddress").val('');
+                        $("#expertPassword").val('');
+                        $("#expertRepeatPassword").val('');
+                        $("#expertProfileLink").val('');
+                        $("#expertWebsiteLink").val('');
                         $("#expertKeywords").val('');
                         $("#expertDescription").val('');
                         waitForTransactionToBeMined(result, expertRegistered, result)

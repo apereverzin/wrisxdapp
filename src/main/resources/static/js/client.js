@@ -49,15 +49,17 @@ function registerClient() {
     address = getAddress();
     var name = $("#clientName").val();
     var emailAddress = $("#clientEmailAddress").val();
+    var password = $("#clientPassword").val();
+    var profileLink = $("#expertProfileLink").val();
+    var websiteLink = $("#expertWebsiteLink").val();
     var description = $("#clientDescription").val();
-    var secret = getSecret();
 
     var clientData = JSON.stringify({
                                      'name': name,
                                      'address': address,
                                      'emailAddress': emailAddress,
-                                     'description': description,
-                                     'secret': secret
+                                     'password': password,
+                                     'description': description
                                      });
     var path = contextPath + '/client';
     $.ajax({
@@ -83,6 +85,10 @@ function registerClient() {
                                            result);
                         $("#clientName").val('');
                         $("#clientEmailAddress").val('');
+                        $("#clientPassword").val('');
+                        $("#clientRepeatPassword").val('');
+                        $("#clientProfileLink").val('');
+                        $("#clientWebsiteLink").val('');
                         $("#clientDescription").val('');
                         showMemberData();
                         showMemberBalance();

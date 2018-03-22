@@ -62,14 +62,16 @@ public class ExpertService {
                 user = new User(expertRequest.getAddress(),
                         expertRequest.getName(),
                         expertRequest.getEmailAddress(),
+                        expertRequest.getPassword(),
                         expertRequest.getProfileLink(),
-                        expertRequest.getWebsiteLink(),
-                        expertRequest.getPassword());
+                        expertRequest.getWebsiteLink());
                 user = userDao.save(user);
             }
 
-            expert = new Expert(expertRequest.getAddress(), expertRequest.getKeywords(),
-                    expertRequest.getDescription(), user);
+            expert = new Expert(expertRequest.getAddress(),
+                    expertRequest.getKeywords(),
+                    expertRequest.getDescription(),
+                    user);
             expert = expertDao.save(expert);
 
             return expert;

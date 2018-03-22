@@ -50,9 +50,9 @@ public class FacilitatorService {
                 user = new User(facilitatorRequest.getAddress(),
                         facilitatorRequest.getName(),
                         facilitatorRequest.getEmailAddress(),
+                        facilitatorRequest.getPassword(),
                         facilitatorRequest.getProfileLink(),
-                        facilitatorRequest.getWebsiteLink(),
-                        facilitatorRequest.getPassword());
+                        facilitatorRequest.getWebsiteLink());
                 user = userDao.save(user);
             }
 

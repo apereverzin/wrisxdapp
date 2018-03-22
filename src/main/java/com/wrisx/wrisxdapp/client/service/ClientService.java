@@ -59,13 +59,14 @@ public class ClientService {
                 user = new User(clientRequest.getAddress(),
                         clientRequest.getName(),
                         clientRequest.getEmailAddress(),
+                        clientRequest.getPassword(),
                         clientRequest.getProfileLink(),
-                        clientRequest.getWebsiteLink(),
-                        clientRequest.getPassword());
+                        clientRequest.getWebsiteLink());
                 user = userDao.save(user);
             }
 
-            client = new Client(clientRequest.getAddress(), clientRequest.getDescription(),
+            client = new Client(clientRequest.getAddress(),
+                    clientRequest.getDescription(),
                     user);
             client = clientDao.save(client);
 
