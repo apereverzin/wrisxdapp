@@ -34,8 +34,8 @@
         $(document).ready(function() {
             var newDate = new Date();
             showRolePanels();
-            clientResearchItemsTabClicked();
-            expertEnquiriesTabClicked();
+            <!--clientResearchItemsTabClicked();-->
+            <!--expertEnquiriesTabClicked();-->
             showMemberData();
             showMemberBalance();
         })
@@ -63,6 +63,7 @@
     <ul>
         <li><a href="#roleClientTab" onClick="showClientRoleTab()" id="roleClientTabTitle"></a></li>
         <li><a href="#roleExpertTab" onClick="showExpertRoleTab()" id="roleExpertTabTitle"></a></li>
+        <li><a href="#roleFacilitatorTab" onClick="showFacilitatorRoleTab()" id="roleFacilitatorTabTitle"></a></li>
         <li><a href="#anonymousSearchResearchesTab" onClick="showAnonymousSearchResearchTab()">Find Researches</a></li>
         <li><a href="#anonymousSearchExpertsTab" onClick="showAnonymousSearchExpertTab()">Find Experts</a></li>
     </ul>
@@ -198,6 +199,18 @@
                 <div class="inputTitle">Email address</div>
                 <div class="inputValue">
                     <input class="inputText textDecoration" type="text" id="clientEmailAddress"/>
+                </div>
+            </div>
+            <div>
+                <div class="inputTitle">Password</div>
+                <div class="inputValue">
+                    <input class="inputText textDecoration" type="password" id="clientPassword"/>
+                </div>
+            </div>
+            <div>
+                <div class="inputTitle">Repeat password</div>
+                <div class="inputValue">
+                    <input class="inputText textDecoration" type="password" id="clientRepeatPassword"/>
                 </div>
             </div>
             <div>
@@ -390,6 +403,18 @@
                 </div>
             </div>
             <div>
+                <div class="inputTitle">Password</div>
+                <div class="inputValue">
+                    <input class="inputText textDecoration" type="password" id="expertPassword"/>
+                </div>
+            </div>
+            <div>
+                <div class="inputTitle">Repeat password</div>
+                <div class="inputValue">
+                    <input class="inputText textDecoration" type="password" id="expertRepeatPassword"/>
+                </div>
+            </div>
+            <div>
                 <div class="inputTitle">Key words</div>
                 <div class="inputValue">
                     <input class="inputText textDecoration" type="text" id="expertKeywords"/>
@@ -399,6 +424,61 @@
                 <div class="inputTitle">Description</div>
                 <div class="inputValue">
                     <input class="inputText textDecoration" type="text" id="expertDescription"/>
+                </div>
+            </div>
+            <div>
+                <div class="formEmptyPanel">
+                </div>
+                <div class="formButtonPanel">
+                    <a href="#" onclick="registerExpert()" class="btn btn-primary">Register</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="roleFacilitatorTab">
+        <!--<div id="roleFacilitatorTabs">-->
+            <!--<ul>-->
+                <!--<li><a href="#facilitatorResearchItemsTab" onclick="facilitatorResearchItemsTabClicked()">Researches</a></li>-->
+            <!--</ul>-->
+            <!--<div id="facilitatorResearchItemsTab">-->
+            <!--</div>-->
+        <!--</div>-->
+        <div class="formPanel panelBackground" id="registerFacilitatorPanel">
+            <div>
+                <div class="inputTitle">Name</div>
+                <div class="inputValue">
+                    <input class="inputText textDecoration" type="text" id="facilitatorName"/>
+                </div>
+            </div>
+            <div>
+                <div class="inputTitle">Email address</div>
+                <div class="inputValue">
+                    <input class="inputText textDecoration" type="text" id="facilitatorEmailAddress"/>
+                </div>
+            </div>
+            <div>
+                <div class="inputTitle">Password</div>
+                <div class="inputValue">
+                    <input class="inputText textDecoration" type="password" id="facilitatorPassword"/>
+                </div>
+            </div>
+            <div>
+                <div class="inputTitle">Repeat password</div>
+                <div class="inputValue">
+                    <input class="inputText textDecoration" type="password" id="facilitatorRepeatPassword"/>
+                </div>
+            </div>
+            <div>
+                <div class="inputTitle">Key words</div>
+                <div class="inputValue">
+                    <input class="inputText textDecoration" type="text" id="facilitatorKeywords"/>
+                </div>
+            </div>
+            <div>
+                <div class="inputTitle">Description</div>
+                <div class="inputValue">
+                    <input class="inputText textDecoration" type="text" id="facilitatorDescription"/>
                 </div>
             </div>
             <div>

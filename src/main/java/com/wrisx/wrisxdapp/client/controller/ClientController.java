@@ -58,10 +58,7 @@ public class ClientController {
 
     @RequestMapping(value = "/client/{address}", method = GET)
     public ResponseEntity<ClientData> getClient(
-            @PathVariable("address") String clientAddress,
-            HttpServletRequest request) {
-        authenticationService.authenticateRequest(request, clientAddress);
-
+            @PathVariable("address") String clientAddress) {
         logger.debug(MessageFormat.format("Getting client {0}", clientAddress));
 
         ClientData client = clientService.getClient(clientAddress);

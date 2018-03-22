@@ -59,10 +59,7 @@ public class ExpertController {
 
     @RequestMapping(value = "/expert/{expertAddress}", method = GET)
     public ResponseEntity<ExpertData> getExpert(
-            @PathVariable String expertAddress,
-            HttpServletRequest request) {
-        authenticationService.authenticateRequest(request, expertAddress);
-
+            @PathVariable String expertAddress) {
         logger.debug(MessageFormat.format("Getting expert {0}", expertAddress));
 
         ExpertData expert = expertService.getExpert(expertAddress);

@@ -1,26 +1,26 @@
 function expertEnquiriesTabClicked() {
-    searchEnquiries()
-    showMemberData()
-    showMemberBalance()
+    searchEnquiries();
+    showMemberData();
+    showMemberBalance();
 }
 
 function expertResearchItemsTabClicked() {
-    getExpertResearchItems()
-    showMemberData()
-    showMemberBalance()
-    $("#expertResearchItemPanel").html('')
+    getExpertResearchItems();
+    showMemberData();
+    showMemberBalance();
+    $("#expertResearchItemPanel").html('');
 }
 
 function expertPurchasesTabClicked() {
-    getExpertPurchases()
-    showMemberData()
-    showMemberBalance()
+    getExpertPurchases();
+    showMemberData();
+    showMemberBalance();
 }
 
 function expertBidsTabClicked() {
-    getExpertEnquiryBids()
-    showMemberData()
-    showMemberBalance()
+    getExpertEnquiryBids();
+    showMemberData();
+    showMemberBalance();
 }
 
 function registerExpert() {
@@ -539,8 +539,8 @@ function getResearchPurchases(uuid) {
 }
 
 function searchEnquiries() {
-    address = getAddress()
-    keywords = $("#expertEnquiryKeywords").val()
+    address = getAddress();
+    keywords = $("#expertEnquiryKeywords").val();
 
     if (address != undefined && address != "") {
         $.get({
