@@ -319,7 +319,7 @@ function login() {
             console.log('Success');
         },
         error: function() {
-            console.log('Success');
+            console.log('Error');
         }
     });
 }
