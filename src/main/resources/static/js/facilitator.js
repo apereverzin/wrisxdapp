@@ -27,7 +27,7 @@ function registerFacilitator() {
             'Content-Type': 'application/json'
         },
         success: function (data) {
-            contractInstance.registerFacilitator(secret, {from: address},
+            contractInstance.registerFacilitator({from: address},
                 function(error, result) {
                     if(error) {
                         rollbackTransaction(contextPath + "/facilitator/" + address,

@@ -52,7 +52,7 @@ function registerExpert() {
             'Content-Type': 'application/json'
         },
         success: function (data) {
-            contractInstance.registerExpert(secret, {from: address},
+            contractInstance.registerExpert({from: address},
                 function(error, result) {
                     if(error) {
                         rollbackTransaction(contextPath + "/expert/" + address,

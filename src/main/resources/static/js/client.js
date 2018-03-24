@@ -50,8 +50,8 @@ function registerClient() {
     var name = $("#clientName").val();
     var emailAddress = $("#clientEmailAddress").val();
     var password = $("#clientPassword").val();
-    var profileLink = $("#expertProfileLink").val();
-    var websiteLink = $("#expertWebsiteLink").val();
+    var profileLink = $("#clientProfileLink").val();
+    var websiteLink = $("#clientWebsiteLink").val();
     var description = $("#clientDescription").val();
 
     var clientData = JSON.stringify({
@@ -59,6 +59,8 @@ function registerClient() {
                                      'address': address,
                                      'emailAddress': emailAddress,
                                      'password': password,
+                                     'profileLink': profileLink,
+                                     'websiteLink': websiteLink,
                                      'description': description
                                      });
     var path = contextPath + '/client';
@@ -70,7 +72,7 @@ function registerClient() {
             'Content-Type': 'application/json'
         },
         success: function (data) {
-            contractInstance.registerClient(secret, {from: address},
+            contractInstance.registerClient({from: address},
                 function(error, result) {
                     if(error) {
                         rollbackTransaction(contextPath + "/client/" + address,
