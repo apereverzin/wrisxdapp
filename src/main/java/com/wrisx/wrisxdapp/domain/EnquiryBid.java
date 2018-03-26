@@ -65,8 +65,10 @@ public class EnquiryBid {
         //
     }
 
-    public EnquiryBid(ResearchEnquiry researchEnquiry, Expert expert,
-                      int price, String comment) {
+    public EnquiryBid(ResearchEnquiry researchEnquiry,
+                      Expert expert,
+                      int price,
+                      String comment) {
         this.researchEnquiry = researchEnquiry;
         this.expert = expert;
         this.price = price;

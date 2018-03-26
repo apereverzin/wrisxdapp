@@ -36,7 +36,9 @@ public class ClientService {
     private final EntityProvider entityProvider;
 
     @Autowired
-    public ClientService(ClientDao clientDao, UserService userService, UserDao userDao,
+    public ClientService(ClientDao clientDao,
+                         UserService userService,
+                         UserDao userDao,
                          EntityProvider entityProvider) {
         this.clientDao = clientDao;
         this.userService = userService;

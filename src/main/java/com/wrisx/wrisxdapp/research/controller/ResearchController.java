@@ -69,7 +69,7 @@ public class ResearchController {
     public ResponseEntity<?> setFileAttributes(
             @RequestBody ResearchRequest researchRequest,
             HttpServletRequest request) {
-        String emailAddress = authenticationService.authenticateRequest(request);
+        authenticationService.authenticateRequest(request);
 
         logger.debug(MessageFormat.format("Setting file attributes {0}", researchRequest.getTitle()));
 
@@ -82,7 +82,7 @@ public class ResearchController {
     public ResponseEntity<Void> deleteResearch(
             @PathVariable("uuid") String uuid,
             HttpServletRequest request) {
-        String emailAddress = authenticationService.authenticateRequest(request);
+        authenticationService.authenticateRequest(request);
 
         logger.debug(MessageFormat.format("Deleting research {0}", uuid));
 
@@ -97,7 +97,7 @@ public class ResearchController {
             @PathVariable("uuid") String uuid,
             @RequestBody TransactionHashRequest transactionHashRequest,
             HttpServletRequest request) {
-        String emailAddress = authenticationService.authenticateRequest(request);
+        authenticationService.authenticateRequest(request);
 
         logger.debug(MessageFormat.format("Confirming research creation {0}", uuid));
 
